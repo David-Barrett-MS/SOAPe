@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages">
+  <soap:Body >
+    <m:CreateFolderPath>
+      <m:ParentFolderId>
+        <!--FIELD:ParentFolderId;FolderId-->
+      </m:ParentFolderId>
+      <m:RelativeFolderPath>
+        <t:Folder>
+          <t:DisplayName><!--FIELD:Path Element 1;string;MyFirstLevelFolder--></t:DisplayName>
+        </t:Folder>
+        <t:Folder>
+          <t:DisplayName><!--FIELD:Path Element 2;string;MySecondLevelFolder--></t:DisplayName>
+        </t:Folder>
+        <t:Folder>
+          <t:DisplayName><!--FIELD:Path Element 3;string;MyThirdLevelFolder--></t:DisplayName>
+        </t:Folder>
+      </m:RelativeFolderPath>
+    </m:CreateFolderPath>
+  </soap:Body>
+</soap:Envelope>

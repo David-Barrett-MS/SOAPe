@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages">
+  <soap:Body>
+    <m:UpdateFolder MessageDisposition="SaveOnly" ConflictResolution="AutoResolve">
+      <m:FolderChanges>
+        <t:FolderChange>
+          <!--FIELD:Folder;FolderId-->
+          <t:Updates>
+            <t:SetFolderField>
+              <t:FieldURI FieldURI="folder:DisplayName"/>
+              <t:Folder>
+                <t:DisplayName><!--FIELD:DisplayName;string--></t:DisplayName>
+              </t:Folder>
+            </t:SetFolderField>
+          </t:Updates>
+        </t:FolderChange>
+      </m:FolderChanges>
+    </m:UpdateFolder>
+  </soap:Body>
+</soap:Envelope>

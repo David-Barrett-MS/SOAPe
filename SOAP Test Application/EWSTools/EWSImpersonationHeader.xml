@@ -1,0 +1,5 @@
+﻿<ExchangeImpersonation xmlns="http://schemas.microsoft.com/exchange/services/2006/types">
+  <ConnectingSID>
+    <IMPERSONATIONTAG>%IMPERSONATIONID%</IMPERSONATIONTAG>
+  </ConnectingSID>
+</ExchangeImpersonation>

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">
+  <soap:Body>
+    <CreateItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages" >
+      <SavedItemFolderId>
+        <t:DistinguishedFolderId Id="contacts"/>
+      </SavedItemFolderId>
+      <Items>
+        <t:Contact xmlns="http://schemas.microsoft.com/exchange/services/2006/types">
+          <t:FileAs><!--FIELD:FileAs;string--></t:FileAs>
+          <t:GivenName><!--FIELD:GivenName;string--></t:GivenName>
+          <t:Surname><!--FIELD:Surname;string--></t:Surname>
+          <t:CompanyName><!--FIELD:CompanyName;string--></t:CompanyName>
+          <t:EmailAddresses>
+            <t:Entry Key="EmailAddress1"><!--FIELD:EmailAddress1;string--></t:Entry>
+          </t:EmailAddresses>
+          <t:PhysicalAddresses>
+            <t:Entry Key="Business">
+              <t:Street><!--FIELD:Street;string--></t:Street>
+              <t:City><!--FIELD:City;string--></t:City>
+              <t:State><!--FIELD:State;string--></t:State>
+              <t:CountryOrRegion><!--FIELD:CountryOrRegion;string--></t:CountryOrRegion>
+            </t:Entry>
+          </t:PhysicalAddresses>
+          <t:PhoneNumbers>
+            <t:Entry Key="BusinessPhone"><!--FIELD:BusinessPhone;string--></t:Entry>
+          </t:PhoneNumbers>
+          <t:JobTitle><!--FIELD:JobTitle;string--></t:JobTitle>
+        </t:Contact>
+      </Items>
+    </CreateItem>
+  </soap:Body>
+</soap:Envelope>

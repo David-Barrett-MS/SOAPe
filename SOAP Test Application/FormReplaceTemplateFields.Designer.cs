@@ -1,0 +1,236 @@
+﻿namespace SOAPe
+{
+    partial class FormReplaceTemplateFields
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.buttonClose = new System.Windows.Forms.Button();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.dataGridViewFields = new System.Windows.Forms.DataGridView();
+            this.xmlEditor1 = new SOAPe.XmlEditor();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonLoad = new System.Windows.Forms.Button();
+            this.comboBoxTemplate = new System.Windows.Forms.ComboBox();
+            this.comboBoxTemplateFolder = new System.Windows.Forms.ComboBox();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FieldName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FieldValue = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFields)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // buttonClose
+            // 
+            this.buttonClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClose.Location = new System.Drawing.Point(462, 491);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(75, 23);
+            this.buttonClose.TabIndex = 2;
+            this.buttonClose.Text = "Ok";
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(12, 64);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.dataGridViewFields);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.xmlEditor1);
+            this.splitContainer1.Size = new System.Drawing.Size(606, 418);
+            this.splitContainer1.SplitterDistance = 234;
+            this.splitContainer1.TabIndex = 3;
+            // 
+            // dataGridViewFields
+            // 
+            this.dataGridViewFields.AllowUserToAddRows = false;
+            this.dataGridViewFields.AllowUserToDeleteRows = false;
+            this.dataGridViewFields.AllowUserToResizeRows = false;
+            this.dataGridViewFields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewFields.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.FieldName,
+            this.FieldValue});
+            this.dataGridViewFields.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewFields.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewFields.MultiSelect = false;
+            this.dataGridViewFields.Name = "dataGridViewFields";
+            this.dataGridViewFields.RowHeadersVisible = false;
+            this.dataGridViewFields.Size = new System.Drawing.Size(606, 234);
+            this.dataGridViewFields.TabIndex = 2;
+            this.dataGridViewFields.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewFields_CellValueChanged);
+            this.dataGridViewFields.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFields_DataError);
+            // 
+            // xmlEditor1
+            // 
+            this.xmlEditor1.BackColor = System.Drawing.SystemColors.Control;
+            this.xmlEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.xmlEditor1.IndentXml = true;
+            this.xmlEditor1.Location = new System.Drawing.Point(0, 0);
+            this.xmlEditor1.Name = "xmlEditor1";
+            this.xmlEditor1.ReadOnly = true;
+            this.xmlEditor1.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
+    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.xmlEditor1.SelectionLength = 0;
+            this.xmlEditor1.SelectionStart = 0;
+            this.xmlEditor1.SendItemIdToTemplateEnabled = false;
+            this.xmlEditor1.Size = new System.Drawing.Size(606, 180);
+            this.xmlEditor1.SyntaxHighlight = true;
+            this.xmlEditor1.TabIndex = 0;
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancel.Location = new System.Drawing.Point(543, 491);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.TabIndex = 4;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.buttonLoad);
+            this.groupBox1.Controls.Add(this.comboBoxTemplate);
+            this.groupBox1.Controls.Add(this.comboBoxTemplateFolder);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(606, 46);
+            this.groupBox1.TabIndex = 5;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Template";
+            // 
+            // buttonLoad
+            // 
+            this.buttonLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonLoad.Location = new System.Drawing.Point(525, 18);
+            this.buttonLoad.Name = "buttonLoad";
+            this.buttonLoad.Size = new System.Drawing.Size(75, 23);
+            this.buttonLoad.TabIndex = 2;
+            this.buttonLoad.Text = "Load";
+            this.buttonLoad.UseVisualStyleBackColor = true;
+            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
+            // 
+            // comboBoxTemplate
+            // 
+            this.comboBoxTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTemplate.FormattingEnabled = true;
+            this.comboBoxTemplate.Location = new System.Drawing.Point(131, 19);
+            this.comboBoxTemplate.Name = "comboBoxTemplate";
+            this.comboBoxTemplate.Size = new System.Drawing.Size(388, 21);
+            this.comboBoxTemplate.TabIndex = 1;
+            this.comboBoxTemplate.SelectedIndexChanged += new System.EventHandler(this.comboBoxTemplate_SelectedIndexChanged);
+            // 
+            // comboBoxTemplateFolder
+            // 
+            this.comboBoxTemplateFolder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTemplateFolder.FormattingEnabled = true;
+            this.comboBoxTemplateFolder.Location = new System.Drawing.Point(6, 19);
+            this.comboBoxTemplateFolder.Name = "comboBoxTemplateFolder";
+            this.comboBoxTemplateFolder.Size = new System.Drawing.Size(119, 21);
+            this.comboBoxTemplateFolder.TabIndex = 0;
+            this.comboBoxTemplateFolder.SelectedIndexChanged += new System.EventHandler(this.comboBoxTemplateFolder_SelectedIndexChanged);
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "Field Name";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn1.Width = 200;
+            // 
+            // FieldName
+            // 
+            this.FieldName.HeaderText = "Field Name";
+            this.FieldName.Name = "FieldName";
+            this.FieldName.ReadOnly = true;
+            this.FieldName.Width = 190;
+            // 
+            // FieldValue
+            // 
+            this.FieldValue.HeaderText = "Field Value";
+            this.FieldValue.Name = "FieldValue";
+            this.FieldValue.Width = 395;
+            // 
+            // FormReplaceTemplateFields
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(630, 521);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.buttonCancel);
+            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.buttonClose);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormReplaceTemplateFields";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Open Xml Template";
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFields)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button buttonClose;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.DataGridView dataGridViewFields;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.Button buttonCancel;
+        private XmlEditor xmlEditor1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button buttonLoad;
+        private System.Windows.Forms.ComboBox comboBoxTemplate;
+        private System.Windows.Forms.ComboBox comboBoxTemplateFolder;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FieldName;
+        private System.Windows.Forms.DataGridViewComboBoxColumn FieldValue;
+    }
+}
