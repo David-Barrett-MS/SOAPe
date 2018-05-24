@@ -360,7 +360,7 @@ namespace SOAPe
 
         private void convertIDToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormEWSConvertID oForm = new FormEWSConvertID(textBoxURL.Text, CurrentCredentials, this);
+            FormEWSConvertID oForm = new FormEWSConvertID(textBoxURL.Text, CurrentCredentials, _logger, this);
             oForm.Show();
         }
 

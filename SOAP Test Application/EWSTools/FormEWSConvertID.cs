@@ -33,9 +33,10 @@ namespace SOAPe.EWSTools
         private string _EWSURL = "";
         private ICredentials _credentials = null;
         private string _ConvertIDTemplate = "";
+        private ClassLogger _logger = null;
         
 
-        public FormEWSConvertID(string EWSURL, ICredentials Credentials, IWin32Window Parent=null)
+        public FormEWSConvertID(string EWSURL, ICredentials Credentials, ClassLogger Logger, IWin32Window Parent=null)
         {
             if (Parent != null)
                 this.Owner = (System.Windows.Forms.Form)Parent;
@@ -43,6 +44,7 @@ namespace SOAPe.EWSTools
             
             _EWSURL = EWSURL;
             _credentials = Credentials;
+            _logger = Logger;
             PopulateFormats(comboBoxSourceFormat);
             comboBoxSourceFormat.SelectedIndex = 1;
             PopulateFormats(comboBoxTargetFormat);
@@ -84,7 +86,7 @@ namespace SOAPe.EWSTools
             sRequest = sRequest.Replace("%MAILBOX%", textBoxMailbox.Text);  // We don't care about the SMTP address, and it is not important
 
             // Now send request
-            ClassSOAP oSOAP = new ClassSOAP(_EWSURL, _credentials,null);
+            ClassSOAP oSOAP = new ClassSOAP(_EWSURL, _credentials, _logger);
             string sError = "";
             string sResponse = oSOAP.SendRequest(sRequest, out sError);
 
