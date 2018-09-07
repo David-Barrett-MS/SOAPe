@@ -1,0 +1,54 @@
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\bin\Debug\SOAPe.exe.config
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\bin\Debug\SOAPe.exe
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\bin\Debug\SOAPe.pdb
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.csprojAssemblyReference.cache
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.DataGridViewDateTimeEdit.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.DateTimeEdit.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.Encoding.FormBase64.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.EWSTools.FormEWSAutodiscover.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.EWSTools.FormEWSConvertID.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.EWSTools.FormEWSQuickTest.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.FormAbout.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.FormChooseAuthCertificate.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.FormListener.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.FormLogFilterEdit.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.FormLogViewer.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.FormMain.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.FormReplaceTemplateFields.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.FormUserControlTest.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.Properties.Resources.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.StatusPercentBar.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.XmlEditor.resources
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.csproj.GenerateResource.cache
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.csproj.CoreCompileInputs.cache
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.exe
+C:\Tools\SOAPe\SOAPe\SOAP Test Application\obj\x86\Debug\SOAPe.pdb
+C:\Tools\SOAPe\Source\SOAPe\bin\Debug\SOAPe.exe.config
+C:\Tools\SOAPe\Source\SOAPe\bin\Debug\SOAPe.exe
+C:\Tools\SOAPe\Source\SOAPe\bin\Debug\SOAPe.pdb
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.csprojAssemblyReference.cache
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.DataGridViewDateTimeEdit.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.DateTimeEdit.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.Encoding.FormBase64.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.EWSTools.FormEWSAutodiscover.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.EWSTools.FormEWSConvertID.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.EWSTools.FormEWSQuickTest.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.FormAbout.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.FormChooseAuthCertificate.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.FormListener.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.FormLogFilterEdit.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.FormLogViewer.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.FormMain.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.FormReplaceTemplateFields.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.FormUserControlTest.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.Properties.Resources.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.StatusPercentBar.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.XmlEditor.resources
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.csproj.GenerateResource.cache
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.csproj.CoreCompileInputs.cache
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.exe
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.pdb
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.FormAdvancedLogImport.resources
+C:\Tools\SOAPe\Source\SOAPe\bin\Debug\Microsoft.Identity.Client.dll
+C:\Tools\SOAPe\Source\SOAPe\bin\Debug\Microsoft.Identity.Client.xml
+C:\Tools\SOAPe\Source\SOAPe\obj\x86\Debug\SOAPe.csproj.CopyComplete
