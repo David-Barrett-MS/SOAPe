@@ -12,7 +12,7 @@
         <!--FIELD:Additional Properties;GetAdditionalProperties;Billing Information,Common,34101,String|Business Address PO Box,Address,32842,String|Computer Network Name,14921,String-->
       </ItemShape>
       <ItemIds>
-        <!--FIELD:Item;ItemId-->
+        <!--FIELD:ItemId;ItemId-->
       </ItemIds>
     </GetItem>
   </soap:Body>

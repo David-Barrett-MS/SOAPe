@@ -11,7 +11,7 @@
         <t:IncludeMimeContent>true</t:IncludeMimeContent>
       </ItemShape>
       <ItemIds>
-        <!--FIELD:Item;ItemId-->
+        <!--FIELD:ItemId;ItemId-->
       </ItemIds>
     </GetItem>
   </soap:Body>

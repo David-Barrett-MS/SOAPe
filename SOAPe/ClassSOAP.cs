@@ -196,7 +196,16 @@ namespace SOAPe
             SecurityProtocolType currentSecurityProtocol = ServicePointManager.SecurityProtocol;
             ServicePointManager.SecurityProtocol = _securityProtocol;
             LogSSLSettings();
-            HttpWebRequest oWebRequest = (HttpWebRequest)WebRequest.Create(_targetURL);
+            HttpWebRequest oWebRequest = null;
+            try
+            {
+                oWebRequest = (HttpWebRequest)WebRequest.Create(_targetURL);
+            }
+            catch (Exception ex)
+            {
+                sError = ex.Message;
+                return "";
+            }
             oWebRequest.UserAgent = String.Format("{1}/{0}", Application.ProductVersion, Application.ProductName);
             if (_bypassWebProxy)
                 oWebRequest.Proxy = null;
@@ -340,11 +349,11 @@ namespace SOAPe
                 oWebResponse.Close();
             }
             catch { }
-            Log(sResponse, "Response",true);
+            Log(sResponse, "Response");
             return sResponse;
         }
 
-        private void Log(string Details, string Description = "", bool Flush=false)
+        private void Log(string Details, string Description = "")
         {
             try
             {

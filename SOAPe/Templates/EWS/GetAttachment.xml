@@ -7,7 +7,7 @@
     <GetAttachment xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">
       <AttachmentShape/>
       <AttachmentIds>
-        <!--FIELD:Attachment;AttachmentId-->
+        <!--FIELD:AttachmentId;AttachmentId-->
       </AttachmentIds>
     </GetAttachment>
   </soap:Body>

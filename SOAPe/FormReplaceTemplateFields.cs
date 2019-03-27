@@ -36,7 +36,7 @@ namespace SOAPe
                                                      "recoverableitemsdeletions", "recoverableitemsversions","recoverableitemspurges","archiveroot",
                                                      "archivemsgfolderroot","archivedeleteditems","archiverecoverableitemsroot",
                                                      "archiverecoverableitemsdeletions","archiverecoverableitemsversions",
-                                                     "archiverecoverableitemspurges","syncissues","conflicts","localfailures","serverfailures","receipientcache",
+                                                     "archiverecoverableitemspurges","syncissues","conflicts","localfailures","serverfailures","recipientcache",
                                                      "quickcontacts","conversationhistory","todosearch"};
         private Dictionary<string, string> _fieldType;
         private bool _cancel = false;
@@ -224,7 +224,7 @@ namespace SOAPe
                             }
                             else
                             {
-                                sFieldValue = String.Format("<t:FolderId Id=\"{0}\" />", sId);
+                                sFieldValue = String.Format("<t:{0} Id=\"{1}\" />", sFieldName, sId);
                                 if (((string)oRow.Tag).Equals("FullFolderId"))
                                     sFieldValue = "#SKIP#";
                             }
@@ -233,18 +233,18 @@ namespace SOAPe
                         case "ItemId":
                         case "FullItemId":
                             sId = oRow.Cells[1].Value.ToString();
-                            sFieldValue = "<t:ItemId Id=\"" + sId + "\" />";
+                            sFieldValue = String.Format("<t:{0} Id=\"{1}\" />", sFieldName, sId);
                             if (((string)oRow.Tag).Equals("FullItemId"))
                                 sFieldValue = "#SKIP#";
                             break;
 
                         case "fullitemidChangeKey":
-                            sFieldValue = String.Format("<t:ItemId Id=\"{0}\" ChangeKey=\"{1}\" />", sId, oRow.Cells[1].Value.ToString());
+                            sFieldValue = String.Format("<t:{0} Id=\"{1}\" ChangeKey=\"{2}\" />", sFieldName, sId, oRow.Cells[1].Value.ToString());
                             sFieldName = "ItemId";
                             break;
 
                         case "fullfolderidChangeKey":
-                            sFieldValue = String.Format("<t:FolderId Id=\"{0}\" ChangeKey=\"{1}\" />", sId, oRow.Cells[1].Value.ToString());
+                            sFieldValue = String.Format("<t:{0} Id=\"{1}\" ChangeKey=\"{2}\" />", sFieldName, sId, oRow.Cells[1].Value.ToString());
                             sFieldName = "FolderId";
                             break;
 
@@ -366,8 +366,6 @@ namespace SOAPe
             string[] sFieldSections = sFieldValues.Split(';');
             string sFieldType = sFieldSections[0];
 
-
-
             DataGridViewRow oRow=new DataGridViewRow();
 
             DataGridViewTextBoxCell oTextbox = new DataGridViewTextBoxCell();
@@ -384,6 +382,8 @@ namespace SOAPe
                 case "fullfolderid":
                     
                     oTextbox = new DataGridViewTextBoxCell();
+                    oTextbox.MaxInputLength = 0;  // Remove length limit (otherwise data, e.g. attachment Base64, may get truncated)
+
                     if (sFieldSections.GetUpperBound(0) == 1)
                     {
                         // We have a default value

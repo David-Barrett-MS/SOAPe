@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listViewLogIndex = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -39,6 +40,8 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.xmlEditor1 = new SOAPe.XmlEditor();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonSaveAs = new System.Windows.Forms.Button();
+            this.buttonAdvancedImport = new System.Windows.Forms.Button();
             this.buttonLoadLogFolder = new System.Windows.Forms.Button();
             this.statusPercentBar1 = new SOAPe.StatusPercentBar();
             this.buttonFilter = new System.Windows.Forms.Button();
@@ -46,12 +49,14 @@
             this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonClearLog = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
-            this.buttonAdvancedImport = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -86,6 +91,7 @@
             this.columnHeader5,
             this.columnHeader6,
             this.columnHeader7});
+            this.listViewLogIndex.ContextMenuStrip = this.contextMenuStrip1;
             this.listViewLogIndex.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewLogIndex.FullRowSelect = true;
             this.listViewLogIndex.GridLines = true;
@@ -157,6 +163,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.buttonSaveAs);
             this.panel1.Controls.Add(this.buttonAdvancedImport);
             this.panel1.Controls.Add(this.buttonLoadLogFolder);
             this.panel1.Controls.Add(this.statusPercentBar1);
@@ -171,6 +178,26 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1716, 49);
             this.panel1.TabIndex = 1;
+            // 
+            // buttonSaveAs
+            // 
+            this.buttonSaveAs.Location = new System.Drawing.Point(692, 5);
+            this.buttonSaveAs.Name = "buttonSaveAs";
+            this.buttonSaveAs.Size = new System.Drawing.Size(96, 35);
+            this.buttonSaveAs.TabIndex = 13;
+            this.buttonSaveAs.Text = "Save As...";
+            this.buttonSaveAs.UseVisualStyleBackColor = true;
+            this.buttonSaveAs.Click += new System.EventHandler(this.buttonSaveAs_Click);
+            // 
+            // buttonAdvancedImport
+            // 
+            this.buttonAdvancedImport.Location = new System.Drawing.Point(529, 5);
+            this.buttonAdvancedImport.Name = "buttonAdvancedImport";
+            this.buttonAdvancedImport.Size = new System.Drawing.Size(157, 35);
+            this.buttonAdvancedImport.TabIndex = 12;
+            this.buttonAdvancedImport.Text = "Advanced Import...";
+            this.buttonAdvancedImport.UseVisualStyleBackColor = true;
+            this.buttonAdvancedImport.Click += new System.EventHandler(this.buttonAdvancedImport_Click);
             // 
             // buttonLoadLogFolder
             // 
@@ -188,18 +215,18 @@
             this.statusPercentBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusPercentBar1.BarColour = System.Drawing.Color.PaleGreen;
-            this.statusPercentBar1.Location = new System.Drawing.Point(815, 6);
+            this.statusPercentBar1.Location = new System.Drawing.Point(917, 6);
             this.statusPercentBar1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.statusPercentBar1.Name = "statusPercentBar1";
             this.statusPercentBar1.PercentComplete = 0D;
-            this.statusPercentBar1.Size = new System.Drawing.Size(775, 32);
+            this.statusPercentBar1.Size = new System.Drawing.Size(673, 32);
             this.statusPercentBar1.Status = "";
             this.statusPercentBar1.TabIndex = 10;
             this.statusPercentBar1.Visible = false;
             // 
             // buttonFilter
             // 
-            this.buttonFilter.Location = new System.Drawing.Point(693, 5);
+            this.buttonFilter.Location = new System.Drawing.Point(795, 5);
             this.buttonFilter.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(112, 35);
@@ -253,14 +280,20 @@
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
-            // buttonAdvancedImport
+            // contextMenuStrip1
             // 
-            this.buttonAdvancedImport.Location = new System.Drawing.Point(529, 5);
-            this.buttonAdvancedImport.Name = "buttonAdvancedImport";
-            this.buttonAdvancedImport.Size = new System.Drawing.Size(157, 35);
-            this.buttonAdvancedImport.TabIndex = 12;
-            this.buttonAdvancedImport.Text = "Advanced Import...";
-            this.buttonAdvancedImport.UseVisualStyleBackColor = true;
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteEntryToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(180, 34);
+            // 
+            // deleteEntryToolStripMenuItem
+            // 
+            this.deleteEntryToolStripMenuItem.Name = "deleteEntryToolStripMenuItem";
+            this.deleteEntryToolStripMenuItem.Size = new System.Drawing.Size(179, 30);
+            this.deleteEntryToolStripMenuItem.Text = "Delete entry";
+            this.deleteEntryToolStripMenuItem.Click += new System.EventHandler(this.deleteEntryToolStripMenuItem_Click);
             // 
             // FormLogViewer
             // 
@@ -273,11 +306,13 @@
             this.MinimumSize = new System.Drawing.Size(1219, 431);
             this.Name = "FormLogViewer";
             this.Text = "Log Viewer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormLogViewer_FormClosing);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -303,5 +338,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.Button buttonAdvancedImport;
+        private System.Windows.Forms.Button buttonSaveAs;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem deleteEntryToolStripMenuItem;
     }
 }

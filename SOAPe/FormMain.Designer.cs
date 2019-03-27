@@ -62,12 +62,11 @@
             this.checkBoxTLS1_1 = new System.Windows.Forms.CheckBox();
             this.checkBoxTLS1_0 = new System.Windows.Forms.CheckBox();
             this.tabPageAuth = new System.Windows.Forms.TabPage();
+            this.buttonAcquireOAuthToken = new System.Windows.Forms.Button();
             this.buttonChooseCertificate = new System.Windows.Forms.Button();
-            this.textBoxAuthCertificate = new System.Windows.Forms.TextBox();
             this.radioButtonCertificateAuthentication = new System.Windows.Forms.RadioButton();
             this.radioButtonNoAuth = new System.Windows.Forms.RadioButton();
             this.labelOAuthToken = new System.Windows.Forms.Label();
-            this.textBoxOAuthToken = new System.Windows.Forms.TextBox();
             this.radioButtonOAuth = new System.Windows.Forms.RadioButton();
             this.checkBoxForceBasicAuth = new System.Windows.Forms.CheckBox();
             this.textBoxDomain = new System.Windows.Forms.TextBox();
@@ -78,6 +77,8 @@
             this.textBoxUsername = new System.Windows.Forms.TextBox();
             this.radioButtonSpecificCredentials = new System.Windows.Forms.RadioButton();
             this.radioButtonDefaultCredentials = new System.Windows.Forms.RadioButton();
+            this.textBoxAuthCertificate = new System.Windows.Forms.TextBox();
+            this.textBoxOAuthToken = new System.Windows.Forms.TextBox();
             this.tabPageEWSHeader = new System.Windows.Forms.TabPage();
             this.comboBoxImpersonationMethod = new System.Windows.Forms.ComboBox();
             this.checkBoxUpdateEWSHeader = new System.Windows.Forms.CheckBox();
@@ -107,7 +108,17 @@
             this.listViewHTTPCookies = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tabPageLogging = new System.Windows.Forms.TabPage();
+            this.buttonViewOtherLog = new System.Windows.Forms.Button();
+            this.buttonViewLogFile = new System.Windows.Forms.Button();
+            this.buttonCreateNewLogFile = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBoxLogFileName = new System.Windows.Forms.TextBox();
+            this.buttonBrowseLogFolder = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBoxLogFolder = new System.Windows.Forms.TextBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonAppRegistration = new System.Windows.Forms.Button();
             this.xmlEditorRequest = new SOAPe.XmlEditor();
             this.groupBoxResponse = new SOAPe.GroupBoxHighlight();
             this.xmlEditorResponse = new SOAPe.XmlEditor();
@@ -126,6 +137,7 @@
             this.tabPageEWSHeader.SuspendLayout();
             this.tabPageHTTPHeaders.SuspendLayout();
             this.tabPageCookies.SuspendLayout();
+            this.tabPageLogging.SuspendLayout();
             this.groupBoxResponse.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -333,6 +345,7 @@
             this.tabControl1.Controls.Add(this.tabPageEWSHeader);
             this.tabControl1.Controls.Add(this.tabPageHTTPHeaders);
             this.tabControl1.Controls.Add(this.tabPageCookies);
+            this.tabControl1.Controls.Add(this.tabPageLogging);
             this.tabControl1.Location = new System.Drawing.Point(18, 18);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabControl1.Name = "tabControl1";
@@ -515,12 +528,12 @@
             // 
             // tabPageAuth
             // 
+            this.tabPageAuth.Controls.Add(this.buttonAppRegistration);
+            this.tabPageAuth.Controls.Add(this.buttonAcquireOAuthToken);
             this.tabPageAuth.Controls.Add(this.buttonChooseCertificate);
-            this.tabPageAuth.Controls.Add(this.textBoxAuthCertificate);
             this.tabPageAuth.Controls.Add(this.radioButtonCertificateAuthentication);
             this.tabPageAuth.Controls.Add(this.radioButtonNoAuth);
             this.tabPageAuth.Controls.Add(this.labelOAuthToken);
-            this.tabPageAuth.Controls.Add(this.textBoxOAuthToken);
             this.tabPageAuth.Controls.Add(this.radioButtonOAuth);
             this.tabPageAuth.Controls.Add(this.checkBoxForceBasicAuth);
             this.tabPageAuth.Controls.Add(this.textBoxDomain);
@@ -531,6 +544,8 @@
             this.tabPageAuth.Controls.Add(this.textBoxUsername);
             this.tabPageAuth.Controls.Add(this.radioButtonSpecificCredentials);
             this.tabPageAuth.Controls.Add(this.radioButtonDefaultCredentials);
+            this.tabPageAuth.Controls.Add(this.textBoxAuthCertificate);
+            this.tabPageAuth.Controls.Add(this.textBoxOAuthToken);
             this.tabPageAuth.Location = new System.Drawing.Point(4, 29);
             this.tabPageAuth.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPageAuth.Name = "tabPageAuth";
@@ -540,25 +555,26 @@
             this.tabPageAuth.Text = "Authentication";
             this.tabPageAuth.UseVisualStyleBackColor = true;
             // 
+            // buttonAcquireOAuthToken
+            // 
+            this.buttonAcquireOAuthToken.Location = new System.Drawing.Point(920, 34);
+            this.buttonAcquireOAuthToken.Name = "buttonAcquireOAuthToken";
+            this.buttonAcquireOAuthToken.Size = new System.Drawing.Size(93, 34);
+            this.buttonAcquireOAuthToken.TabIndex = 27;
+            this.buttonAcquireOAuthToken.Text = "Acquire...";
+            this.buttonAcquireOAuthToken.UseVisualStyleBackColor = true;
+            this.buttonAcquireOAuthToken.Click += new System.EventHandler(this.buttonAcquireOAuthToken_Click);
+            // 
             // buttonChooseCertificate
             // 
-            this.buttonChooseCertificate.Location = new System.Drawing.Point(966, 35);
+            this.buttonChooseCertificate.Location = new System.Drawing.Point(1058, 34);
             this.buttonChooseCertificate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonChooseCertificate.Name = "buttonChooseCertificate";
-            this.buttonChooseCertificate.Size = new System.Drawing.Size(112, 31);
+            this.buttonChooseCertificate.Size = new System.Drawing.Size(112, 34);
             this.buttonChooseCertificate.TabIndex = 26;
             this.buttonChooseCertificate.Text = "Choose...";
             this.buttonChooseCertificate.UseVisualStyleBackColor = true;
             this.buttonChooseCertificate.Click += new System.EventHandler(this.buttonChooseCertificate_Click);
-            // 
-            // textBoxAuthCertificate
-            // 
-            this.textBoxAuthCertificate.Location = new System.Drawing.Point(266, 35);
-            this.textBoxAuthCertificate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBoxAuthCertificate.Name = "textBoxAuthCertificate";
-            this.textBoxAuthCertificate.ReadOnly = true;
-            this.textBoxAuthCertificate.Size = new System.Drawing.Size(698, 26);
-            this.textBoxAuthCertificate.TabIndex = 25;
             // 
             // radioButtonCertificateAuthentication
             // 
@@ -594,14 +610,6 @@
             this.labelOAuthToken.Size = new System.Drawing.Size(57, 20);
             this.labelOAuthToken.TabIndex = 22;
             this.labelOAuthToken.Text = "Token:";
-            // 
-            // textBoxOAuthToken
-            // 
-            this.textBoxOAuthToken.Location = new System.Drawing.Point(303, 35);
-            this.textBoxOAuthToken.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBoxOAuthToken.Name = "textBoxOAuthToken";
-            this.textBoxOAuthToken.Size = new System.Drawing.Size(714, 26);
-            this.textBoxOAuthToken.TabIndex = 21;
             // 
             // radioButtonOAuth
             // 
@@ -715,6 +723,23 @@
             this.radioButtonDefaultCredentials.Text = "Current user";
             this.radioButtonDefaultCredentials.UseVisualStyleBackColor = true;
             this.radioButtonDefaultCredentials.CheckedChanged += new System.EventHandler(this.radioButtonDefaultCredentials_CheckedChanged);
+            // 
+            // textBoxAuthCertificate
+            // 
+            this.textBoxAuthCertificate.Location = new System.Drawing.Point(266, 35);
+            this.textBoxAuthCertificate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxAuthCertificate.Name = "textBoxAuthCertificate";
+            this.textBoxAuthCertificate.ReadOnly = true;
+            this.textBoxAuthCertificate.Size = new System.Drawing.Size(784, 26);
+            this.textBoxAuthCertificate.TabIndex = 25;
+            // 
+            // textBoxOAuthToken
+            // 
+            this.textBoxOAuthToken.Location = new System.Drawing.Point(303, 35);
+            this.textBoxOAuthToken.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxOAuthToken.Name = "textBoxOAuthToken";
+            this.textBoxOAuthToken.Size = new System.Drawing.Size(610, 26);
+            this.textBoxOAuthToken.TabIndex = 21;
             // 
             // tabPageEWSHeader
             // 
@@ -1064,6 +1089,108 @@
             this.columnHeader2.Text = "Value";
             this.columnHeader2.Width = 238;
             // 
+            // tabPageLogging
+            // 
+            this.tabPageLogging.Controls.Add(this.buttonViewOtherLog);
+            this.tabPageLogging.Controls.Add(this.buttonViewLogFile);
+            this.tabPageLogging.Controls.Add(this.buttonCreateNewLogFile);
+            this.tabPageLogging.Controls.Add(this.label3);
+            this.tabPageLogging.Controls.Add(this.textBoxLogFileName);
+            this.tabPageLogging.Controls.Add(this.buttonBrowseLogFolder);
+            this.tabPageLogging.Controls.Add(this.label2);
+            this.tabPageLogging.Controls.Add(this.textBoxLogFolder);
+            this.tabPageLogging.Location = new System.Drawing.Point(4, 29);
+            this.tabPageLogging.Name = "tabPageLogging";
+            this.tabPageLogging.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageLogging.Size = new System.Drawing.Size(1176, 82);
+            this.tabPageLogging.TabIndex = 6;
+            this.tabPageLogging.Text = "Logging";
+            this.tabPageLogging.UseVisualStyleBackColor = true;
+            // 
+            // buttonViewOtherLog
+            // 
+            this.buttonViewOtherLog.Location = new System.Drawing.Point(673, 38);
+            this.buttonViewOtherLog.Name = "buttonViewOtherLog";
+            this.buttonViewOtherLog.Size = new System.Drawing.Size(274, 32);
+            this.buttonViewOtherLog.TabIndex = 7;
+            this.buttonViewOtherLog.Text = "Open other log in Log Viewer...";
+            this.buttonViewOtherLog.UseVisualStyleBackColor = true;
+            this.buttonViewOtherLog.Click += new System.EventHandler(this.buttonViewOtherLog_Click);
+            // 
+            // buttonViewLogFile
+            // 
+            this.buttonViewLogFile.Location = new System.Drawing.Point(486, 38);
+            this.buttonViewLogFile.Name = "buttonViewLogFile";
+            this.buttonViewLogFile.Size = new System.Drawing.Size(181, 32);
+            this.buttonViewLogFile.TabIndex = 6;
+            this.buttonViewLogFile.Text = "Open in Log Viewer...";
+            this.buttonViewLogFile.UseVisualStyleBackColor = true;
+            this.buttonViewLogFile.Click += new System.EventHandler(this.buttonViewLogFile_Click);
+            // 
+            // buttonCreateNewLogFile
+            // 
+            this.buttonCreateNewLogFile.Location = new System.Drawing.Point(363, 38);
+            this.buttonCreateNewLogFile.Name = "buttonCreateNewLogFile";
+            this.buttonCreateNewLogFile.Size = new System.Drawing.Size(117, 32);
+            this.buttonCreateNewLogFile.TabIndex = 5;
+            this.buttonCreateNewLogFile.Text = "Create new...";
+            this.buttonCreateNewLogFile.UseVisualStyleBackColor = true;
+            this.buttonCreateNewLogFile.Click += new System.EventHandler(this.buttonCreateNewLogFile_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 43);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(64, 20);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Log file:";
+            // 
+            // textBoxLogFileName
+            // 
+            this.textBoxLogFileName.Location = new System.Drawing.Point(96, 40);
+            this.textBoxLogFileName.Name = "textBoxLogFileName";
+            this.textBoxLogFileName.ReadOnly = true;
+            this.textBoxLogFileName.Size = new System.Drawing.Size(261, 26);
+            this.textBoxLogFileName.TabIndex = 3;
+            // 
+            // buttonBrowseLogFolder
+            // 
+            this.buttonBrowseLogFolder.Location = new System.Drawing.Point(985, 6);
+            this.buttonBrowseLogFolder.Name = "buttonBrowseLogFolder";
+            this.buttonBrowseLogFolder.Size = new System.Drawing.Size(185, 34);
+            this.buttonBrowseLogFolder.TabIndex = 2;
+            this.buttonBrowseLogFolder.Text = "Open in File Explorer...";
+            this.buttonBrowseLogFolder.UseVisualStyleBackColor = true;
+            this.buttonBrowseLogFolder.Click += new System.EventHandler(this.buttonBrowseLogFolder_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 11);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(84, 20);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Log folder:";
+            // 
+            // textBoxLogFolder
+            // 
+            this.textBoxLogFolder.Location = new System.Drawing.Point(96, 8);
+            this.textBoxLogFolder.Name = "textBoxLogFolder";
+            this.textBoxLogFolder.ReadOnly = true;
+            this.textBoxLogFolder.Size = new System.Drawing.Size(883, 26);
+            this.textBoxLogFolder.TabIndex = 0;
+            // 
+            // buttonAppRegistration
+            // 
+            this.buttonAppRegistration.Location = new System.Drawing.Point(1020, 34);
+            this.buttonAppRegistration.Name = "buttonAppRegistration";
+            this.buttonAppRegistration.Size = new System.Drawing.Size(145, 34);
+            this.buttonAppRegistration.TabIndex = 28;
+            this.buttonAppRegistration.Text = "App registration...";
+            this.buttonAppRegistration.UseVisualStyleBackColor = true;
+            this.buttonAppRegistration.Click += new System.EventHandler(this.buttonAppRegistration_Click);
+            // 
             // xmlEditorRequest
             // 
             this.xmlEditorRequest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1160,6 +1287,8 @@
             this.tabPageHTTPHeaders.PerformLayout();
             this.tabPageCookies.ResumeLayout(false);
             this.tabPageCookies.PerformLayout();
+            this.tabPageLogging.ResumeLayout(false);
+            this.tabPageLogging.PerformLayout();
             this.groupBoxResponse.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1250,6 +1379,17 @@
         private System.Windows.Forms.TextBox textBoxAuthCertificate;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox checkBoxIgnoreCertErrors;
+        private System.Windows.Forms.TabPage tabPageLogging;
+        private System.Windows.Forms.Button buttonViewLogFile;
+        private System.Windows.Forms.Button buttonCreateNewLogFile;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBoxLogFileName;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBoxLogFolder;
+        private System.Windows.Forms.Button buttonBrowseLogFolder;
+        private System.Windows.Forms.Button buttonAcquireOAuthToken;
+        private System.Windows.Forms.Button buttonViewOtherLog;
+        private System.Windows.Forms.Button buttonAppRegistration;
     }
 }
 

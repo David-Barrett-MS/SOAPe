@@ -22,6 +22,7 @@ using System.Text;
 using System.Xml;
 using System.Windows.Forms;
 using System.Threading;
+using System.IO;
 
 namespace SOAPe
 {
@@ -33,8 +34,29 @@ namespace SOAPe
         private bool _checkingForErrors = false;
         private string[] _filters = null;
         private bool _haveLoadedLog = false;
+        private bool _suppressUIUpdates = false;
 
 
+        public FormLogViewer()
+        {
+            // If we are opening without a Logger, then we prompt to open log file
+            InitializeComponent();
+
+            string logFile = OpenExistingLogFile();
+            if (String.IsNullOrEmpty(logFile))
+            {
+                this.Close();
+                return;
+            }
+
+            listViewLogIndex.Items.Clear();
+            xmlEditor1.Text = "Please select a log to view.";
+            this.Text = String.Format("Log Viewer - {0}", logFile);
+            ShowStatus("Processing...");
+            ThreadPool.QueueUserWorkItem(new WaitCallback(LoadLogFile), logFile);
+            _syntaxHighlighter = new ClassSyntaxHighlighter(xmlEditor1);
+            _filters = new string[0];
+        }
 
         public FormLogViewer(ClassLogger Logger)
         {
@@ -48,6 +70,8 @@ namespace SOAPe
             ThreadPool.QueueUserWorkItem(new WaitCallback(ShowLogList), null);
             statusPercentBar1.PercentComplete = 0;
             statusPercentBar1.Visible = false;
+            listViewLogIndex.ContextMenuStrip = contextMenuStrip1;
+            ToggleButtons(true);
         }
 
         void _logger_ProgressChanged(object sender, ProgressEventArgs e)
@@ -175,7 +199,7 @@ namespace SOAPe
 
         private void buttonClose_Click(object sender, EventArgs e)
         {
-            this.Dispose();
+            this.Close();
         }
 
         void _logger_LogAdded(object sender, LogAddedEventArgs e)
@@ -210,6 +234,9 @@ namespace SOAPe
 
         private void listViewLogIndex_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_suppressUIUpdates)
+                return;
+
             string sDetails = "Please select a log to view.";
             if (listViewLogIndex.FocusedItem != null)
             {
@@ -242,7 +269,7 @@ namespace SOAPe
             ThreadPool.QueueUserWorkItem(new WaitCallback(ReloadLogFile), null);
         }
 
-        private void buttonLoad_Click(object sender, EventArgs e)
+        private string OpenExistingLogFile()
         {
             OpenFileDialog oDialog = new OpenFileDialog();
             oDialog.Filter = "Log files (*.log)|*.log|XML files (*.xml)|*.xml|Text files (*.txt)|*.txt|All Files|*.*";
@@ -250,13 +277,22 @@ namespace SOAPe
             oDialog.Title = "Select log/trace file to open";
             oDialog.CheckFileExists = true;
             if (oDialog.ShowDialog() != DialogResult.OK)
+                return String.Empty;
+
+            return oDialog.FileName;
+        }
+
+        private void buttonLoad_Click(object sender, EventArgs e)
+        {
+            string loadLogFilename = OpenExistingLogFile();
+            if (String.IsNullOrEmpty(loadLogFilename))
                 return;
 
             listViewLogIndex.Items.Clear();
             xmlEditor1.Text = "Please select a log to view.";
-            this.Text = String.Format("Log Viewer - {0}", oDialog.FileName);
+            this.Text = String.Format("Log Viewer - {0}", loadLogFilename);
             ShowStatus("Processing...");
-            ThreadPool.QueueUserWorkItem(new WaitCallback(LoadLogFile), oDialog.FileName);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(LoadLogFile), loadLogFilename);
         }
 
         private static void ToggleButton(bool Enabled, Control Button)
@@ -276,7 +312,7 @@ namespace SOAPe
             ToggleButton(Enabled, buttonLoadLogFolder);
             ToggleButton(Enabled, buttonReload);
             ToggleButton(Enabled, buttonFilter);
-            ToggleButton(Enabled, buttonAdvancedImport);
+            ToggleButton(false, buttonAdvancedImport);
         }
 
         private void ShowStatus(string Status, double PercentComplete = 0, Color? Colour = null)
@@ -329,8 +365,11 @@ namespace SOAPe
         {
             ToggleButtons(false);
             // Unsubscribe from events of current logger
-            _logger.LogAdded -= _logger_LogAdded;
-            _logger.ProgressChanged -= _logger_ProgressChanged;
+            if (_logger != null)
+            {
+                _logger.LogAdded -= _logger_LogAdded;
+                _logger.ProgressChanged -= _logger_ProgressChanged;
+            }
 
             // Create new logger so as not to interfere with SOAPe's log
             _logger = new ClassLogger((string)e, false);
@@ -517,6 +556,120 @@ namespace SOAPe
             ShowLogIndex();
             ToggleButtons(true);
             ShowStatus(null);
+        }
+
+        private void buttonAdvancedImport_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void deleteEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Delete the selected entry/ies
+
+            if (listViewLogIndex.SelectedItems.Count == 0) return;
+
+            _suppressUIUpdates = true;
+            listViewLogIndex.BeginUpdate();
+            foreach (ListViewItem item in listViewLogIndex.SelectedItems)
+            {
+                try
+                {
+                    item.Remove();
+                }
+                catch { }
+            }
+            listViewLogIndex.EndUpdate();
+            _suppressUIUpdates = false;
+            listViewLogIndex_SelectedIndexChanged(null, null);
+        }
+
+        private string GetTraceFromListItem(int Index)
+        {
+            // Return full <trace> xml for given ListViewItem
+
+            if (Index >= listViewLogIndex.Items.Count)
+                return null;
+            ListViewItem listViewItem = listViewLogIndex.Items[Index];
+
+            StringBuilder trace = new StringBuilder("<Trace ");
+
+            try
+            {
+                trace.Append("Tag=\"");
+                trace.Append(listViewItem.SubItems[1].Text);
+                trace.Append("\" ");
+            }
+            catch { }
+
+            try { 
+                trace.Append("Tid=\"");
+                trace.Append(listViewItem.SubItems[2].Text);
+                trace.Append("\" ");
+            }
+            catch { }
+
+            try
+            { 
+                trace.Append("Time=\"");
+                trace.Append(listViewItem.SubItems[0].Text);
+                trace.Append("\" ");
+            }
+            catch { }
+
+            trace.Append("Application=\"SOAPe[Export]\" ");
+            trace.Append("Version=\"");
+            trace.Append(Application.ProductVersion);
+            trace.Append("\" ");
+
+            trace.AppendLine(">");
+
+            trace.Append(listViewItem.Tag.ToString());
+            trace.AppendLine("</Trace>");
+
+            return trace.ToString();
+        }
+
+        private void buttonSaveAs_Click(object sender, EventArgs e)
+        {
+            // Save the log to file
+
+            SaveFileDialog oDialog = new SaveFileDialog();
+            oDialog.Filter = "Log files (*.log)|*.log|XML files (*.xml)|*.xml|Text files (*.txt)|*.txt|All Files|*.*";
+            oDialog.DefaultExt = "log";
+            oDialog.Title = "Save log as";
+            oDialog.CheckFileExists = false;
+            if (oDialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            if (File.Exists(oDialog.FileName))
+            {
+                try
+                {
+                    File.Delete(oDialog.FileName);
+                }
+                catch { }
+            }
+
+            ShowStatus("Saving to " + oDialog.FileName,0);
+            using (StreamWriter logStreamWriter = File.CreateText(oDialog.FileName))
+            {
+                for (int i=0; i<listViewLogIndex.Items.Count; i++)
+                {
+                    ShowStatus("Saving to " + oDialog.FileName, i / listViewLogIndex.Items.Count);
+                    logStreamWriter.WriteLine(GetTraceFromListItem(i));
+                    logStreamWriter.WriteLine();
+                }
+            }
+            ShowStatus(null);
+        }
+
+        private void FormLogViewer_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_haveLoadedLog)
+            {
+                _logger.Dispose();
+            }
         }
     }
 }

@@ -38,8 +38,7 @@ namespace SOAPe
                 }
             }
 
-            ClassLogger logger = new ClassLogger(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\SOAPe.log", bDebug);
-            Application.Run(new FormMain(logger));
+            Application.Run(new FormMain(bDebug));
         }
     }
 }

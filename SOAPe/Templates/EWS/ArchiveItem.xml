@@ -10,7 +10,7 @@
         <!--FIELD:FolderId;FolderId-->
       </ArchiveSourceFolderId>
       <ItemIds>
-        <!--FIELD:Item;ItemId-->
+        <!--FIELD:ItemId;ItemId-->
       </ItemIds>
     </ArchiveItem>
   </soap:Body>

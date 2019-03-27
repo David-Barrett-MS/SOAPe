@@ -41,25 +41,30 @@ namespace SOAPe
         private ClassLogger _logger = null;
         private string _userSMTPAddress = "";
         private static bool _ignoreSSLErrors = false;
-        private bool _suppressPasswordWarning = false;
         private X509Certificate2 _authCertificate = null;
         private ClassFormConfig _formConfig = null;
+        private Auth.FormAzureApplicationRegistration _oAuthAppRegForm=null;
 
-        public FormMain(ClassLogger Logger)
+        public FormMain(bool DebugLogging)
         {
             InitializeComponent();
             _formConfig = new ClassFormConfig(this);
+
+            // Configure log file
+            if (String.IsNullOrEmpty(textBoxLogFolder.Text)) textBoxLogFolder.Text = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+            if (String.IsNullOrEmpty(textBoxLogFileName.Text)) textBoxLogFileName.Text = "SOAPe.log";
+            _logger = new ClassLogger(LogFileName(), DebugLogging);
+
             LoadCertificate(textBoxAuthCertificate.Text);
 
             this.Text = Application.ProductName + " v" + Application.ProductVersion;
-            _logger = Logger;
             _logger.DebugLog(this.Text);
 
             // Hook up the cert callback.  
             ServicePointManager.ServerCertificateValidationCallback = ValidateCertificate;
 
             GetUserSMTPAddress();
-            UpdateTextBoxState();
+            UpdateAuthUI();
             UpdateHTTPHeaderControls();
             UpdateHTTPCookieControls();
             xmlEditorResponse.XmlValidationComplete += xmlEditorResponse_XmlValidationComplete;
@@ -73,6 +78,12 @@ namespace SOAPe
              */
         }
 
+        private string LogFileName()
+        {
+            // Return the full log filename
+
+            return String.Format("{0}\\{1}", textBoxLogFolder.Text, textBoxLogFileName.Text);
+        }
 
         private static bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
@@ -334,7 +345,7 @@ namespace SOAPe
             return requestCookies;
         }
 
-        private void UpdateTextBoxState()
+        private void UpdateAuthUI()
         {
             bool bOAuthVisible = radioButtonOAuth.Checked;
             bool bUserCredsVisible = radioButtonSpecificCredentials.Checked;
@@ -353,6 +364,16 @@ namespace SOAPe
             // Hide/show OAuth
             textBoxOAuthToken.Visible = bOAuthVisible;
             labelOAuthToken.Visible = bOAuthVisible;
+            buttonAcquireOAuthToken.Visible = bOAuthVisible;
+            buttonAppRegistration.Visible = bOAuthVisible;
+            if (bOAuthVisible)
+            {
+                // Ensure that we have our form loaded for application settings
+                if (_oAuthAppRegForm is null)
+                {
+                    _oAuthAppRegForm = new Auth.FormAzureApplicationRegistration();
+                }
+            }
 
             // Hide/show certificate auth
             textBoxAuthCertificate.Visible = bCertAuthVisible;
@@ -468,17 +489,17 @@ namespace SOAPe
 
         private void radioButtonDefaultCredentials_CheckedChanged(object sender, EventArgs e)
         {
-            UpdateTextBoxState();
+            UpdateAuthUI();
         }
 
         private void radioButtonSpecificCredentials_CheckedChanged(object sender, EventArgs e)
         {
-            UpdateTextBoxState();
+            UpdateAuthUI();
         }
 
         private void checkBoxForceBasicAuth_CheckedChanged(object sender, EventArgs e)
         {
-            UpdateTextBoxState();
+            UpdateAuthUI();
         }
 
         private void base64ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -554,7 +575,7 @@ namespace SOAPe
             catch { }
         }
 
-        private void logViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenLogViewer()
         {
             if (_logViewer == null)
             {
@@ -585,6 +606,11 @@ namespace SOAPe
             catch { }
             _logViewer = new FormLogViewer(_logger);
             _logViewer.Show();
+        }
+
+        private void logViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenLogViewer();
         }
 
         private void checkBoxIgnoreCertErrors_CheckedChanged(object sender, EventArgs e)
@@ -833,7 +859,7 @@ namespace SOAPe
 
         private void radioButtonOAuth_CheckedChanged(object sender, EventArgs e)
         {
-            UpdateTextBoxState();
+            UpdateAuthUI();
         }
 
         private void UpdateUrl()
@@ -873,12 +899,12 @@ namespace SOAPe
 
         private void radioButtonCertificateAuthentication_CheckedChanged(object sender, EventArgs e)
         {
-            UpdateTextBoxState();
+            UpdateAuthUI();
         }
 
         private void buttonChooseCertificate_Click(object sender, EventArgs e)
         {
-            FormChooseAuthCertificate oForm = new FormChooseAuthCertificate();
+            Auth.FormChooseAuthCertificate oForm = new Auth.FormChooseAuthCertificate();
             DialogResult result = oForm.ShowDialog(this);
             if (result == DialogResult.Cancel)
                 return;
@@ -887,5 +913,41 @@ namespace SOAPe
             textBoxAuthCertificate.Text = _authCertificate.Subject;
         }
 
+        private void buttonViewLogFile_Click(object sender, EventArgs e)
+        {
+            OpenLogViewer();
+        }
+
+        private void buttonCreateNewLogFile_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonBrowseLogFolder_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(textBoxLogFolder.Text);
+            }
+            catch { }
+        }
+
+        private void buttonAcquireOAuthToken_Click(object sender, EventArgs e)
+        {
+            if (_oAuthAppRegForm.AcquireNativeAppToken())
+                textBoxOAuthToken.Text = _oAuthAppRegForm.AccessToken;
+        }
+
+        private void buttonViewOtherLog_Click(object sender, EventArgs e)
+        {
+            FormLogViewer logViewer = new FormLogViewer();
+            if (!logViewer.IsDisposed)
+                logViewer.Show();
+        }
+
+        private void buttonAppRegistration_Click(object sender, EventArgs e)
+        {
+            _oAuthAppRegForm.ShowDialog();
+        }
     }
 }

@@ -7,10 +7,10 @@ xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">
     <MoveItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages"
     xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">
       <ToFolderId>
-        <!--FIELD:Folder;FolderId-->
+        <!--FIELD:FolderId;FolderId-->
       </ToFolderId>
       <ItemIds>
-        <!--FIELD:Item;ItemId-->
+        <!--FIELD:ItemId;ItemId-->
       </ItemIds>
     </MoveItem>
   </soap:Body>

@@ -144,8 +144,7 @@ namespace SOAPe.EWSTools
         private string SMTPDomain()
         {
             if (!(_SMTPAddress.Contains('@'))) return "";
-            int i = _SMTPAddress.IndexOf('@');
-            return _SMTPAddress.Substring(i + 1);
+            return _SMTPAddress.Substring(_SMTPAddress.IndexOf('@') + 1);
         }
 
         public bool Autodiscover(bool SkipSCPAutodiscover = false)
@@ -174,31 +173,34 @@ namespace SOAPe.EWSTools
 
             // Attempt DNS autodiscovery
             Log("Starting DNS autodiscover");
-            string sDomain = SMTPDomain();
-            if (String.IsNullOrEmpty(sDomain))
+            //string sDomain = SMTPDomain();
+            if (String.IsNullOrEmpty(SMTPDomain()))
             {
                 WriteLog();
                 return false;
             }
 
-            // Check SRV records (_autodiscover._tcp.domain)
-            ClassDnsSrvQuery srvQuery = new ClassDnsSrvQuery();
-            List<SRVRecord> srvDnsRecords = srvQuery.SRVRecords(String.Format("_autodiscover._tcp.{0}", sDomain));
-
-            // Try direct method using two common URLs (based on domain)
-            if (TestXmlAutodiscoverUrl("https://" + sDomain + "/AutoDiscover/AutoDiscover.xml"))
+            string originalSMTPAddress;
+            do
             {
-                ServicePointManager.ServerCertificateValidationCallback = oOriginalCallback;
-                WriteLog();
-                return true;
-            }
+                originalSMTPAddress = _SMTPAddress;
 
-            if (TestXmlAutodiscoverUrl("https://autodiscover." + sDomain + "/AutoDiscover/AutoDiscover.xml"))
-            {
-                ServicePointManager.ServerCertificateValidationCallback = oOriginalCallback;
-                WriteLog();
-                return true;
-            }
+                // Try direct method using two common URLs (based on domain)
+                if (TestXmlAutodiscoverUrl("https://" + SMTPDomain() + "/AutoDiscover/AutoDiscover.xml"))
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = oOriginalCallback;
+                    WriteLog();
+                    return true;
+                }
+
+                if (TestXmlAutodiscoverUrl("https://autodiscover." + SMTPDomain() + "/AutoDiscover/AutoDiscover.xml"))
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = oOriginalCallback;
+                    WriteLog();
+                    return true;
+                }
+                if (String.IsNullOrEmpty(_SMTPAddress)) _SMTPAddress = originalSMTPAddress;
+            } while (originalSMTPAddress != _SMTPAddress); // To catch if we are redirected based on email address
 
             // That failed, so try redirect method
             string sAutodiscoverUrl = AutoDiscoverRedirectUrl();
@@ -438,7 +440,17 @@ namespace SOAPe.EWSTools
             }
 
             // Check for redirect address
-
+            string sRedirectAddress = ReadElement("RedirectAddr");
+            if (!String.IsNullOrEmpty(sRedirectAddress))
+            {
+                // We have been given a redirect address
+                if (!_SMTPAddress.Equals(sRedirectAddress))
+                {
+                    Log(String.Format("Autodiscover redirected: {0}", sRedirectAddress));
+                    _SMTPAddress = sRedirectAddress;
+                    return false;
+                }
+            }
 
             Log("Autodiscover XML was found, but no EWS URL was present");
 

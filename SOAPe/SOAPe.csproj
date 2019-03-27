@@ -66,16 +66,36 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Identity.Client, Version=1.1.4.0, Culture=neutral, PublicKeyToken=0a613f4dd989e8ae, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Identity.Client.1.1.4-preview0002\lib\net45\Microsoft.Identity.Client.dll</HintPath>
+    <Reference Include="Microsoft.Identity.Client, Version=2.7.1.0, Culture=neutral, PublicKeyToken=0a613f4dd989e8ae, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Identity.Client.2.7.1\lib\net45\Microsoft.Identity.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=4.5.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.4.5.1\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.4.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.4.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.4.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.4.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -85,12 +105,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth\FormAzureApplicationRegistration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Auth\FormAzureApplicationRegistration.Designer.cs">
+      <DependentUpon>FormAzureApplicationRegistration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Auth\FormGetUserPermission.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Auth\FormGetUserPermission.designer.cs">
+      <DependentUpon>FormGetUserPermission.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Auth\FormTokenViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Auth\FormTokenViewer.designer.cs">
+      <DependentUpon>FormTokenViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Auth\OAuthHelper.cs" />
+    <Compile Include="Auth\EncryptedTokenCache.cs" />
     <Compile Include="ClassFormConfig.cs" />
+    <Compile Include="FormAcquireToken.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAcquireToken.Designer.cs">
+      <DependentUpon>FormAcquireToken.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormAdvancedLogImport.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormAdvancedLogImport.Designer.cs">
       <DependentUpon>FormAdvancedLogImport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormCreateLogFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCreateLogFile.Designer.cs">
+      <DependentUpon>FormCreateLogFile.cs</DependentUpon>
     </Compile>
     <Compile Include="StatusPercentBar.cs">
       <SubType>UserControl</SubType>
@@ -148,10 +200,10 @@
     <Compile Include="FormAbout.Designer.cs">
       <DependentUpon>FormAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormChooseAuthCertificate.cs">
+    <Compile Include="Auth\FormChooseAuthCertificate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormChooseAuthCertificate.Designer.cs">
+    <Compile Include="Auth\FormChooseAuthCertificate.Designer.cs">
       <DependentUpon>FormChooseAuthCertificate.cs</DependentUpon>
     </Compile>
     <Compile Include="FormListener.cs">
@@ -202,6 +254,15 @@
     <Compile Include="XmlEditor.Designer.cs">
       <DependentUpon>XmlEditor.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Auth\FormAzureApplicationRegistration.resx">
+      <DependentUpon>FormAzureApplicationRegistration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Auth\FormGetUserPermission.resx">
+      <DependentUpon>FormGetUserPermission.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Auth\FormTokenViewer.resx">
+      <DependentUpon>FormTokenViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataGridViewDateTimeEdit.resx">
       <DependentUpon>DataGridViewDateTimeEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -223,11 +284,17 @@
     <EmbeddedResource Include="FormAbout.resx">
       <DependentUpon>FormAbout.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormAcquireToken.resx">
+      <DependentUpon>FormAcquireToken.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormAdvancedLogImport.resx">
       <DependentUpon>FormAdvancedLogImport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormChooseAuthCertificate.resx">
+    <EmbeddedResource Include="Auth\FormChooseAuthCertificate.resx">
       <DependentUpon>FormChooseAuthCertificate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCreateLogFile.resx">
+      <DependentUpon>FormCreateLogFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormListener.resx">
       <DependentUpon>FormListener.cs</DependentUpon>
@@ -496,6 +563,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

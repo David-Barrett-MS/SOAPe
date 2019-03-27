@@ -4,10 +4,10 @@
   <soap:Body>
     <CopyItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">
       <ToFolderId>
-        <!--FIELD:ToFolderId;FolderId-->
+        <!--FIELD:FolderId;FolderId-->
       </ToFolderId>
       <ItemIds>
-        <!--FIELD:Item;ItemId-->
+        <!--FIELD:ItemId;ItemId-->
       </ItemIds>
     </CopyItem>
   </soap:Body>

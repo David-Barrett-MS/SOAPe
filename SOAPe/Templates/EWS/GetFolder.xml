@@ -9,7 +9,7 @@
         <t:BaseShape>Default</t:BaseShape>
       </FolderShape>
       <FolderIds>
-        <!--FIELD:Folder;FolderId-->
+        <!--FIELD:FolderId;FolderId-->
       </FolderIds>
     </GetFolder>
   </soap:Body>

@@ -28,6 +28,8 @@ namespace SOAPe
         private Form _form = null;
         private string _configFile = String.Empty;
         private bool _encryptData = true;
+        private bool _storeButtonInfo = false;
+        static Dictionary<string, string> _formsConfig = null;
 
         public ClassFormConfig(System.Windows.Forms.Form form)
         {
@@ -66,8 +68,95 @@ namespace SOAPe
             // If we can't get user's SID, then we just use a generic name
             if (String.IsNullOrEmpty(_configFile))
                 _configFile = @".\config.dat";
-            ReadFormValues(_configFile);
+            if (_formsConfig == null)
+                ReadFormDataFromFile(_configFile);
+            RestoreFormValues();
             _form.FormClosing += _form_FormClosing;
+        }
+
+        private string Decode(string FormData)
+        {
+            // Decode the data back to our form config
+
+            byte[] encodedFormData = null;
+            try
+            {
+                encodedFormData = System.Convert.FromBase64String(FormData);
+                return System.Text.Encoding.UTF8.GetString(encodedFormData);
+            }
+            catch { }
+            return String.Empty;
+        }
+
+        private string Encode(string FormData)
+        {
+            // Encode the data so that it is a single (long) line
+            // Simplest way is to Base64 encode it...
+
+            byte[] formDataBytes = System.Text.Encoding.UTF8.GetBytes(FormData);
+            return System.Convert.ToBase64String(formDataBytes);
+        }
+
+        private void ReadFormDataFromFile(string ConfigFile)
+        {
+            // Read configuration data from the file to our dictionary object
+            _formsConfig = new Dictionary<string, string>();
+            if (!File.Exists(ConfigFile)) return;
+
+            String appSettings = String.Empty;
+            try
+            {
+                appSettings = System.Text.Encoding.Unicode.GetString(ProtectedData.Unprotect(File.ReadAllBytes(ConfigFile), null,
+                                                             DataProtectionScope.CurrentUser));
+            }
+            catch { }
+
+            // Config files that support multiple forms start with v2, so we just check for the v identifier (any present implies support)
+
+            if (!appSettings.StartsWith("FormConfigv"))
+            {
+                // Try reading unencrypted
+                try
+                {
+                    appSettings = System.Text.Encoding.Unicode.GetString(File.ReadAllBytes(ConfigFile));
+                }
+                catch { }
+            }
+            if (!appSettings.StartsWith("FormConfigv"))
+                return;
+
+
+            using (StringReader reader = new StringReader(appSettings))
+            {
+                string sLine = "";
+                while (sLine != null)
+                {
+                    // Each "line" should be a complete configuration blob for a single form
+                    sLine = reader.ReadLine();
+                    if (!String.IsNullOrEmpty(sLine))
+                    {
+                        if (!sLine.StartsWith("FormConfig"))
+                        {
+                            int splitLocation = sLine.IndexOf(':');
+                            if (splitLocation > 0)
+                            {
+                                string formName = sLine.Substring(0, splitLocation);
+                                string formData = sLine.Substring(splitLocation + 1);
+                                if (!String.IsNullOrEmpty(formName))
+                                {
+                                    _formsConfig.Add(formName, Decode(formData));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public bool StoreButtonInfo
+        {
+            get { return _storeButtonInfo; }
+            set { _storeButtonInfo = value; }
         }
 
         private void SaveControlProperties(Control control, ref StringBuilder appSettings)
@@ -79,6 +168,9 @@ namespace SOAPe
                 if (control.Tag.Equals("NoConfigSave"))
                     return;  // This control isn't being stored
             }
+
+            if (!_storeButtonInfo && (control.GetType().ToString() == "System.Windows.Forms.Button"))
+                return;
 
             appSettings.AppendLine(control.Name + ":Text:" + control.Text);
 
@@ -115,36 +207,38 @@ namespace SOAPe
             foreach (Control control in _form.Controls)
                 RecurseControls(control, ref appSettings);
 
+            if (_formsConfig.ContainsKey(_form.Name))
+                _formsConfig.Remove(_form.Name);
+
+            _formsConfig.Add(_form.Name, Encode(appSettings.ToString()));
+
+            StringBuilder allAppSettings = new StringBuilder("FormConfigv2");
+            allAppSettings.AppendLine();
+
+            foreach (string formName in _formsConfig.Keys)
+            {
+                allAppSettings.Append(formName);
+                allAppSettings.Append(":");
+                allAppSettings.AppendLine(Encode(_formsConfig[formName]));
+            }
+
             if (_encryptData)
             {
-                File.WriteAllBytes(Filename, ProtectedData.Protect(System.Text.Encoding.Unicode.GetBytes(appSettings.ToString()), null, DataProtectionScope.CurrentUser));
+                File.WriteAllBytes(Filename, ProtectedData.Protect(System.Text.Encoding.Unicode.GetBytes(allAppSettings.ToString()), null, DataProtectionScope.CurrentUser));
             }
             else
-                File.WriteAllBytes(Filename, System.Text.Encoding.Unicode.GetBytes(appSettings.ToString()));
+                File.WriteAllBytes(Filename, System.Text.Encoding.Unicode.GetBytes(allAppSettings.ToString()));
         }
 
-        private void ReadFormValues(string Filename)
+        private void RestoreFormValues()
         {
             // Read our saved control values from the file, and restore
 
-            if (!File.Exists(Filename)) return;
-
             String appSettings = String.Empty;
-            try
-            {
-                appSettings = System.Text.Encoding.Unicode.GetString(ProtectedData.Unprotect(File.ReadAllBytes(Filename), null,
-                                                             DataProtectionScope.CurrentUser));
-            }
-            catch { }
-            if (!appSettings.StartsWith("FormConfig:"))
-            {
-                // Try reading unencrypted
-                try
-                {
-                    appSettings = System.Text.Encoding.Unicode.GetString(File.ReadAllBytes(Filename));
-                }
-                catch { }
-            }
+            if (_formsConfig.ContainsKey(_form.Name))
+                appSettings = Decode(_formsConfig[_form.Name]);
+            if (String.IsNullOrEmpty(appSettings)) return;
+
             if (!appSettings.StartsWith("FormConfig:"))
                 return;
 

@@ -145,14 +145,18 @@ namespace SOAPe
             set
             {
                 _updating = true;
-                richTextBoxXml.Invoke(new MethodInvoker(delegate()
+                try
                 {
-                    richTextBoxXml.Rtf = "";
-                    richTextBoxXml.Text = value;
-                    richTextBoxXml.Tag = value; // We store this so that we can restore original text if indenting is turned off
-                }));
-                _validated = false;
-                ApplySyntaxHighlight();
+                    richTextBoxXml.Invoke(new MethodInvoker(delegate ()
+                    {
+                        richTextBoxXml.Rtf = "";
+                        richTextBoxXml.Text = value;
+                        richTextBoxXml.Tag = value; // We store this so that we can restore original text if indenting is turned off
+                    }));
+                    _validated = false;
+                    ApplySyntaxHighlight();
+                }
+                catch { }
                 _updating = false;
             }
         }

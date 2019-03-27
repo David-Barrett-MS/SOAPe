@@ -9,7 +9,7 @@
         <t:BaseShape><!--FIELD:BaseShape;list;Default,IdOnly,AllProperties--></t:BaseShape>
       </FolderShape>
       <ParentFolderIds>
-        <!--FIELD:Folder;FolderId-->
+        <!--FIELD:FolderId;FolderId-->
       </ParentFolderIds>
     </FindFolder>
   </soap:Body>

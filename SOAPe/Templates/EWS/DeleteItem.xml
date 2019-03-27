@@ -6,7 +6,7 @@
   <soap:Body>
     <DeleteItem DeleteType="<!--FIELD:DeleteType;list;HardDelete,MoveToDeletedItems,SoftDelete-->" xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">
       <ItemIds>
-        <!--FIELD:Item;ItemId-->
+        <!--FIELD:ItemId;ItemId-->
       </ItemIds>
     </DeleteItem>
   </soap:Body>
