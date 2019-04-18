@@ -95,24 +95,42 @@ namespace SOAPe.Auth
         {
             // Return true if all the application information is present and valid
 
-            if (String.IsNullOrEmpty(textBoxTenantId.Text)) return false;
-            if (String.IsNullOrEmpty(comboBoxResourceUrl.Text)) return false;
-            if (String.IsNullOrEmpty(textBoxRedirectUrl.Text)) return false;
-            if (String.IsNullOrEmpty(comboBoxAuthenticationUrl.Text)) return false;
-            if (String.IsNullOrEmpty(textBoxApplicationId.Text)) return false;
-            return true;
+            StringBuilder sAppInfoErrors = new StringBuilder();
+
+            if (String.IsNullOrEmpty(textBoxTenantId.Text)) { sAppInfoErrors.AppendLine("Tenant Id must be specified (e.g. tenant.onmicrosoft.com)"); }
+            if (String.IsNullOrEmpty(comboBoxResourceUrl.Text)) { sAppInfoErrors.AppendLine("Resource Url must be specified (e.g. https://outlook.office365.com)"); }
+            if (String.IsNullOrEmpty(textBoxRedirectUrl.Text)) { sAppInfoErrors.AppendLine("Redirect Url must be specified (e.g. http://localhost/code)"); }
+            if (String.IsNullOrEmpty(comboBoxAuthenticationUrl.Text)) { sAppInfoErrors.AppendLine("Authentication Url must be specified (e.g. https://login.microsoftonline.com/common)"); }
+            if (String.IsNullOrEmpty(textBoxApplicationId.Text)) { sAppInfoErrors.AppendLine("Application Id must be specified (as registered in Azure AD)"); }
+
+            if (sAppInfoErrors.Length<1)
+                return true;
+
+            if (this.Visible)
+            {
+                sAppInfoErrors.AppendLine("Please fix invalid configuration and try again.");
+                System.Windows.Forms.MessageBox.Show(this, sAppInfoErrors.ToString(), "Application Configuration Invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return false;
         }
 
         public bool AcquireNativeAppToken()
         {
             if (!HaveValidAppConfig())
-                this.ShowDialog();
+            {
+                if (!this.Visible)
+                { 
+                    this.ShowDialog();
+                    HaveValidAppConfig(); // Do this to show the invalid configuration to the user
+                }
+                return false;
+            }
 
             try
             {
                 AuthenticationContext authenticationContext = new AuthenticationContext(comboBoxAuthenticationUrl.Text, _oAuthHelper.TokenCache);
                 _lastAuthResult = authenticationContext.AcquireTokenAsync(comboBoxResourceUrl.Text, textBoxApplicationId.Text, new Uri(textBoxRedirectUrl.Text), new PlatformParameters(PromptBehavior.Always)).Result;
-                return true;// authenticationResult.AccessToken;
+                return true;
             }
             catch (Exception ex)
             {
@@ -163,6 +181,11 @@ namespace SOAPe.Auth
         {
             FormTokenViewer formTokenViewer = new FormTokenViewer(_oAuthHelper.TokenCache);
             formTokenViewer.Show(this);
+        }
+
+        private void buttonRegisterApplication_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

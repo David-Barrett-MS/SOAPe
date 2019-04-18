@@ -29,6 +29,7 @@ namespace SOAPe
         private string _configFile = String.Empty;
         private bool _encryptData = true;
         private bool _storeButtonInfo = false;
+        private bool _storeLabelInfo = false;
         static Dictionary<string, string> _formsConfig = null;
 
         public ClassFormConfig(System.Windows.Forms.Form form)
@@ -159,20 +160,32 @@ namespace SOAPe
             set { _storeButtonInfo = value; }
         }
 
+        public bool StoreLabelInfo
+        {
+            get { return _storeLabelInfo; }
+            set { _storeLabelInfo = value; }
+        }
+
         private void SaveControlProperties(Control control, ref StringBuilder appSettings)
         {
             // Write the control's properties to our config file
 
+            if ((control is Label) && !_storeLabelInfo) return;
+            if ((control is Button) && !_storeButtonInfo) return;
             if (control.Tag != null)
             {
                 if (control.Tag.Equals("NoConfigSave"))
                     return;  // This control isn't being stored
             }
 
-            if (!_storeButtonInfo && (control.GetType().ToString() == "System.Windows.Forms.Button"))
-                return;
 
-            appSettings.AppendLine(control.Name + ":Text:" + control.Text);
+            if (control.Tag != null)
+            {
+                if (!control.Tag.Equals("NoTextSave"))
+                    appSettings.AppendLine(control.Name + ":Text:" + control.Text);
+            }
+            else
+                appSettings.AppendLine(control.Name + ":Text:" + control.Text);
 
             PropertyInfo prop = control.GetType().GetProperty("SelectedIndex", BindingFlags.Public | BindingFlags.Instance);
             if (prop != null && prop.CanWrite)

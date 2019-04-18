@@ -403,36 +403,138 @@ namespace SOAPe
 
         private void UpdateSOAPHeader()
         {
-            // Add or replace the existing SOAP header with the new one
-            string sSOAPRequest = xmlEditorRequest.Text;
+            // Update the SOAP header as required
 
-            if (sSOAPRequest.ToLower().Contains("<soap:header"))
+            // We want to just update the ExchangeVersion and ApplicationImpersonation values, and leave anything else alone
+            XmlDocument xmlRequest = new XmlDocument();
+            try
             {
-                // A header already exists, so we need to remove it
-                int iHeaderStart = sSOAPRequest.ToLower().IndexOf("<soap:header");
-                int iHeaderEnd = sSOAPRequest.ToLower().IndexOf("</soap:header>") + 14;
-                while (sSOAPRequest[iHeaderEnd] == '\n' || sSOAPRequest[iHeaderEnd] == '\r')
-                    iHeaderEnd++;
-                if (iHeaderStart > 0 && iHeaderEnd > 0)
-                    sSOAPRequest = sSOAPRequest.Substring(0, iHeaderStart) + sSOAPRequest.Substring(iHeaderEnd);
+                xmlRequest.LoadXml(xmlEditorRequest.Text);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(this, String.Format("Failed to load request Xml: {0}{1}", Environment.NewLine, ex.Message), "Error updating header", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
-            string sHeader = EWSHeader();
-
-            if (!String.IsNullOrEmpty(sHeader))
+            XmlNodeList headerNodeList = xmlRequest.GetElementsByTagName("soap:Header");
+            XmlNode headerNode;
+            if (headerNodeList.Count>1)
             {
-                // Add the SOAP header to this request
-                // Need to inject it just before the <soap:Body> tag
-                int iBodyTag = sSOAPRequest.ToLower().IndexOf("<soap:body");
-                if (iBodyTag > 0)
+                // We have more than one header - we can't do anything here
+                System.Windows.Forms.MessageBox.Show(this, "Multiple <Header> elements found.", "Error updating header", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (headerNodeList.Count < 1)
+            {
+                // We don't currently have a header, so add one
+                headerNode = xmlRequest.CreateNode(XmlNodeType.Element, "soap", "Header","");
+            }
+            else
+            {
+                headerNode = headerNodeList[0];
+            }
+
+            // Create RequestedServerVersion node
+            XmlNode requestServerVersionNode = xmlRequest.CreateNode(XmlNodeType.Element, "RequestServerVersion", "http://schemas.microsoft.com/exchange/services/2006/types");
+            if (comboBoxRequestServerVersion.SelectedIndex>0)
+            {
+                XmlAttribute xmlAttribute = xmlRequest.CreateAttribute("RequestServerVersion");
+                xmlAttribute.Value = comboBoxRequestServerVersion.Text;
+                requestServerVersionNode.Attributes.Append(xmlAttribute);
+            }
+            else
+                requestServerVersionNode = null;
+
+            // Create ExchangeImpersonation node
+            XmlNode exchangeImpersonationNode = xmlRequest.CreateNode(XmlNodeType.Element, "ExchangeImpersonation", "http://schemas.microsoft.com/exchange/services/2006/types");
+            XmlNode connectingSID = xmlRequest.CreateNode(XmlNodeType.Element, "ConnectingSID", "http://schemas.microsoft.com/exchange/services/2006/types");
+            XmlNode impersonatedId = null;
+            switch (comboBoxImpersonationMethod.SelectedIndex)
+            {
+                case 0:
+                    {
+                        impersonatedId = xmlRequest.CreateNode(XmlNodeType.Element, "PrimarySmtpAddress", "http://schemas.microsoft.com/exchange/services/2006/types");
+                        break;
+                    }
+
+                case 1:
+                    {
+                        impersonatedId = xmlRequest.CreateNode(XmlNodeType.Element, "PrincipalName", "http://schemas.microsoft.com/exchange/services/2006/types");
+                        break;
+                    }
+
+                case 2:
+                    {
+                        impersonatedId = xmlRequest.CreateNode(XmlNodeType.Element, "SID", "http://schemas.microsoft.com/exchange/services/2006/types");
+                        break;
+                    }
+
+                default:
+                    break;
+            }
+            if (impersonatedId==null)
+            {
+                System.Windows.Forms.MessageBox.Show(this, "Invalid impersonation type", "Error updating header", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            impersonatedId.InnerText = textBoxImpersonationSID.Text;
+            connectingSID.AppendChild(impersonatedId);
+            exchangeImpersonationNode.AppendChild(connectingSID);
+
+
+            // Delete the existing Xml elements (if they exist)
+            List<XmlNode> nodesToDelete = new List<XmlNode>();
+            foreach (XmlNode xmlNode in headerNode.ChildNodes)
+            {
+                if (xmlNode.Name.ToLower().EndsWith("requestserverversion") || xmlNode.Name.ToLower().EndsWith("exchangeimpersonation"))
                 {
-                    sSOAPRequest = sSOAPRequest.Substring(0, iBodyTag) + sHeader + sSOAPRequest.Substring(iBodyTag);
-                    xmlEditorRequest.Text = sSOAPRequest;
+                    nodesToDelete.Add(xmlNode);
+                }
+            }
+            foreach (XmlNode xmlNode in nodesToDelete)
+                headerNode.RemoveChild(xmlNode);
+
+            // Add the updated Xml elements
+            if (requestServerVersionNode != null)
+            {
+                // This should be the first element, so we need to insert it if there are other elements already present
+                if (headerNode.HasChildNodes)
+                {
+                    headerNode.InsertBefore(requestServerVersionNode, headerNode.FirstChild);
                 }
                 else
-                    System.Windows.Forms.MessageBox.Show("Unable to apply impersonation header - please enter valid request", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    headerNode.AppendChild(requestServerVersionNode);
             }
+            if (exchangeImpersonationNode != null)
+            {
+                // This should be the last element, so we can just append
+                headerNode.AppendChild(exchangeImpersonationNode);
+            }
+
+            if (headerNodeList.Count == 1)
+            {
+                // Replace the header
+                xmlRequest.FirstChild.NextSibling.ReplaceChild(headerNode, headerNodeList[0]);
+            }
+            else
+            {
+                // Add a header (one doesn't currently exist)
+                XmlNode envelopeNode = xmlRequest.FirstChild.NextSibling;
+                if (envelopeNode.Name.ToLower().EndsWith("envelope"))
+                {
+                    envelopeNode.InsertBefore(headerNode, envelopeNode.FirstChild);
+                }
+                else
+                {
+                    // We don't appear to have a soap envelope, which is fatal
+                    System.Windows.Forms.MessageBox.Show(this, "Couldn't find <envelope> in SOAP request.", "Error updating header", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
+            // Apply the updated header to the document
+            xmlEditorRequest.Text = xmlRequest.OuterXml;
         }
 
         private string EWSHeader()
@@ -948,6 +1050,11 @@ namespace SOAPe
         private void buttonAppRegistration_Click(object sender, EventArgs e)
         {
             _oAuthAppRegForm.ShowDialog();
+        }
+
+        private void buttonUpdateEWSHeader_Click(object sender, EventArgs e)
+        {
+            UpdateSOAPHeader();
         }
     }
 }

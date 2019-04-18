@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
@@ -328,6 +329,6 @@ namespace SOAPe.Auth
             }
             return authenticationResult;
         }
-    }
 
+    }
 }

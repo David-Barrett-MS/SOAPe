@@ -162,7 +162,7 @@ namespace SOAPe
 
         private void LogSSLSettings()
         {
-            StringBuilder sSSL = new StringBuilder("SSL/TLS requested: ");
+            StringBuilder sSSL = new StringBuilder("SSL/TLS protocols available: ");
 
             // Build list of protocols that are enabled
             List<string> protocols = new List<string>();
