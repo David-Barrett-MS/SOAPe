@@ -49,6 +49,7 @@ namespace SOAPe
         {
             InitializeComponent();
             _formConfig = new ClassFormConfig(this);
+            _formConfig.AddControlTypeRecurseExclusion("SOAPe.XmlEditor");
 
             // Configure log file
             if (String.IsNullOrEmpty(textBoxLogFolder.Text)) textBoxLogFolder.Text = System.IO.Path.GetDirectoryName(Application.ExecutablePath);

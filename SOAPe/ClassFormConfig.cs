@@ -31,6 +31,7 @@ namespace SOAPe
         private bool _storeButtonInfo = false;
         private bool _storeLabelInfo = false;
         static Dictionary<string, string> _formsConfig = null;
+        private List<string> _controlTypesExcludedFromRecursion = new List<string>();
 
         public ClassFormConfig(System.Windows.Forms.Form form)
         {
@@ -47,6 +48,14 @@ namespace SOAPe
         {
             _configFile = configFile;
             Initialise(form);
+        }
+
+        public void AddControlTypeRecurseExclusion(string ExcludedType)
+        {
+            // If controls contain other controls, this can cause odd issues with the recursion process
+            // Particularly with multiple instances of user controls that include another control
+            // Any types added here won't be recursed
+            _controlTypesExcludedFromRecursion.Add(ExcludedType);
         }
 
         private void _form_FormClosing(object sender, FormClosingEventArgs e)
@@ -178,14 +187,18 @@ namespace SOAPe
                     return;  // This control isn't being stored
             }
 
+            if (control.Name.ToLower().Contains("xml"))
+            {
+                int x = 1;
+            }
 
             if (control.Tag != null)
             {
                 if (!control.Tag.Equals("NoTextSave"))
-                    appSettings.AppendLine(control.Name + ":Text:" + control.Text);
+                    appSettings.AppendLine(control.Name + ":Text:" + Encode(control.Text));
             }
             else
-                appSettings.AppendLine(control.Name + ":Text:" + control.Text);
+                appSettings.AppendLine(control.Name + ":Text:" + Encode(control.Text));
 
             PropertyInfo prop = control.GetType().GetProperty("SelectedIndex", BindingFlags.Public | BindingFlags.Instance);
             if (prop != null && prop.CanWrite)
@@ -203,6 +216,9 @@ namespace SOAPe
             SaveControlProperties(ParentControl, ref appSettings);
             if (!ParentControl.HasChildren)
                 return;
+
+            if ( _controlTypesExcludedFromRecursion.Contains(ParentControl.GetType().ToString()) )// == "SOAPe.XmlEditor")
+                return;  // Don't recurse into this control
 
             foreach (Control control in ParentControl.Controls)
             {
@@ -277,7 +293,20 @@ namespace SOAPe
                         Control control = null;
                         try
                         {
-                            control = _form.Controls.Find(controlSetting[0].Trim(), true)[0];
+                            Control[] matchingControls = _form.Controls.Find(controlSetting[0].Trim(), true);
+                            if (matchingControls.Length>1)
+                            {
+                                foreach (Control matchingControl in matchingControls)
+                                {
+                                    if (matchingControl.Name == controlSetting[0].Trim())
+                                    {
+                                        control = matchingControl;
+                                        break;
+                                    }
+                                }
+                            }
+                            else if (matchingControls.Length == 1)
+                                control = matchingControls[0];
                         }
                         catch { }
                         if (control != null)
@@ -290,6 +319,10 @@ namespace SOAPe
                             if (bRestore)
                             {
                                 PropertyInfo prop = control.GetType().GetProperty(controlSetting[1].Trim(), BindingFlags.Public | BindingFlags.Instance);
+                                if (controlSetting[1].Trim().Equals("Text"))
+                                {
+                                    controlSetting[2] = Decode(controlSetting[2]);
+                                }
                                 if (prop != null && prop.CanWrite)
                                 {
                                     try
