@@ -87,6 +87,7 @@ namespace SOAPe
                     {
                         // In case we are running directly from bin folder, we'll try looking for files
                         // where they would be in development environment
+                        // Note: we shouldn't hit this check anymore as I've updated the templates so that they are copied during build
                         sPath = Path.GetDirectoryName(Application.ExecutablePath);
                         sPath = Directory.GetParent(sPath).FullName;
                         sPath = Directory.GetParent(sPath).FullName + "\\Templates";

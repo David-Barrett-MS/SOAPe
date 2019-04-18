@@ -344,9 +344,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SOAPe_TemporaryKey.pfx" />
-    <None Include="Templates\EWS\CreateItem %28Task%29.xml">
+    <Content Include="Templates\EWS\CreateItem %28Task%29.xml">
       <SubType>Designer</SubType>
-    </None>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EWSTools\EWSImpersonationHeader.xml">
@@ -354,21 +355,27 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Templates\EWS\CreateItem %28Message%29.xml">
+    <Content Include="Templates\EWS\CreateItem %28Message%29.xml">
       <SubType>Designer</SubType>
-    </None>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EWSTools\EWSSendNotificationResult.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Templates\EWS\PushSubscriptionRequest.xml" />
+    <Content Include="Templates\EWS\PushSubscriptionRequest.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Templates\EWS\GetFolder.xml">
+    <Content Include="Templates\EWS\GetFolder.xml">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Templates\EWS\GetItem %28Email%29.xml" />
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS\GetItem %28Email%29.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EWSTools\EWSAutodiscoverRequest.xml">
@@ -379,165 +386,410 @@
     <EmbeddedResource Include="EWSTools\EWSAutodiscoverSOAPRequest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Templates\EWS %28raw%29\AddDistributionGroupToImList.xml" />
-    <Content Include="Templates\EWS %28raw%29\AddImContactToGroup.xml" />
-    <Content Include="Templates\EWS %28raw%29\AddImGroup.xml" />
-    <Content Include="Templates\EWS %28raw%29\AddNewImContactToGroup.xml" />
-    <Content Include="Templates\EWS %28raw%29\AddNewTelUriContactToGroup.xml" />
-    <Content Include="Templates\EWS %28raw%29\ApplyConversationAction.xml" />
-    <Content Include="Templates\EWS\ArchiveItem.xml" />
-    <Content Include="Templates\EWS %28raw%29\Autodiscover - POX .xml" />
+    <Content Include="Templates\EWS %28raw%29\AddDistributionGroupToImList.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\AddImContactToGroup.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\AddImGroup.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\AddNewImContactToGroup.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\AddNewTelUriContactToGroup.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\ApplyConversationAction.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS\ArchiveItem.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\Autodiscover - POX .xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\CopyFolder.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\EWS %28raw%29\CopyItem.xml" />
-    <Content Include="Templates\EWS %28raw%29\CreateAttachment.xml" />
+    <Content Include="Templates\EWS %28raw%29\CopyItem.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\CreateAttachment.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\CopyItem.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\EWS\CreateFolderPath.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\EWS %28raw%29\CreateItem - accept meeting request.xml" />
-    <Content Include="Templates\EWS %28raw%29\CreateItem - AcceptSharingInvitation.xml" />
-    <Content Include="Templates\EWS %28raw%29\CreateItem - calendar item.xml" />
-    <Content Include="Templates\EWS %28raw%29\CreateItem - contact.xml" />
-    <Content Include="Templates\EWS %28raw%29\CreateItem - email message.xml" />
-    <Content Include="Templates\EWS %28raw%29\CreateItem - task.xml" />
-    <Content Include="Templates\EWS %28raw%29\CreateManagedFolder.xml" />
-    <Content Include="Templates\EWS %28raw%29\CreateUserConfiguration.xml" />
-    <Content Include="Templates\EWS %28raw%29\DeleteAttachment.xml" />
+    <Content Include="Templates\EWS %28raw%29\CreateItem - accept meeting request.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\CreateItem - AcceptSharingInvitation.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\CreateItem - calendar item.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\CreateItem - contact.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\CreateItem - email message.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\CreateItem - task.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\CreateManagedFolder.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\CreateUserConfiguration.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\DeleteAttachment.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\CreateItem %28Contact%29.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\EWS\CreateItem %28PostItem%29.xml" />
-    <Content Include="Templates\EWS\CreateOrUpdateFocusedOtherOverride.xml" />
-    <Content Include="Templates\EWS\DeleteFocusedOtherOverride.xml" />
-    <Content Include="Templates\EWS\DeleteFolder.xml" />
-    <Content Include="Templates\EWS %28raw%29\DeleteItem.xml" />
-    <Content Include="Templates\EWS %28raw%29\DeleteUserConfiguration.xml" />
-    <Content Include="Templates\EWS %28raw%29\DisableApp.xml" />
-    <Content Include="Templates\EWS %28raw%29\DisconnectPhoneCall.xml" />
-    <Content Include="Templates\EWS %28raw%29\EmptyFolder - HardDelete - SubFolders.xml" />
-    <Content Include="Templates\EWS %28raw%29\ExpandDL.xml" />
-    <Content Include="Templates\EWS %28raw%29\ExportItems.xml" />
-    <Content Include="Templates\EWS %28raw%29\FindConversation.xml" />
-    <Content Include="Templates\EWS %28raw%29\FindFolder.xml" />
-    <Content Include="Templates\EWS %28raw%29\FindItem - CalendarView.xml" />
-    <Content Include="Templates\EWS %28raw%29\FindPeople - AQS Search against GAL and return specified properties.xml" />
-    <Content Include="Templates\EWS %28raw%29\FindPeople.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetAppManifests.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetAppMarketplaceUrl.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetAttachment.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetClientAccessToken.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetConversationItems.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetDelegate.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetDiscoverySearchConfiguration.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetEvents.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetFolder - MsgRootFolder.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetFolder.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetHoldOnMailboxes.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetImItemList.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetImItems.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetInboxRules.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetItem - AllKnownProperties.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetItem - calendar.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetItem - contact.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetItem - email message.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetItem - task.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetItem.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetMailTips.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetNonIndexableItemDetails.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetNonIndexableItemStatistics.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetPasswordExpirationDate.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetPersona.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetPhoneCallInformation.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetReminders.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetRoomLists .xml" />
-    <Content Include="Templates\EWS %28raw%29\GetRooms.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetSearchableMailboxes.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetServerTimeZones.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetServiceConfiguration.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetSharingFolder.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetStreamingEvents.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetUserAvailability.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetUserConfiguration.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetUserOOFSettings.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetUserPhoto.xml" />
-    <Content Include="Templates\EWS %28raw%29\GetUserRetentionPolicyTags .xml" />
-    <Content Include="Templates\EWS %28raw%29\GetUserSettings - for autodiscover.svc.xml" />
-    <Content Include="Templates\EWS %28raw%29\InstallApp.xml" />
-    <Content Include="Templates\EWS %28raw%29\MarkAllItemsAsRead.xml" />
-    <Content Include="Templates\EWS %28raw%29\MoveFolder.xml" />
-    <Content Include="Templates\EWS %28raw%29\MoveItem.xml" />
-    <Content Include="Templates\EWS %28raw%29\PlayOnPhone.xml" />
-    <Content Include="Templates\EWS %28raw%29\RemoveContactFromImList.xml" />
-    <Content Include="Templates\EWS %28raw%29\RemoveDelegate .xml" />
-    <Content Include="Templates\EWS %28raw%29\RemoveDistributionGroupFromImList.xml" />
-    <Content Include="Templates\EWS %28raw%29\RemoveImContactFromGroup.xml" />
-    <Content Include="Templates\EWS %28raw%29\RemoveImGroup.xml" />
-    <Content Include="Templates\EWS %28raw%29\ResolveNames.xml" />
-    <Content Include="Templates\EWS %28raw%29\SearchMailboxes.xml" />
-    <Content Include="Templates\EWS %28raw%29\SendItem.xml" />
-    <Content Include="Templates\EWS %28raw%29\SetHoldOnMailboxes.xml" />
-    <Content Include="Templates\EWS %28raw%29\SetImGroup.xml" />
-    <Content Include="Templates\EWS %28raw%29\SetUserOOFSettings.xml" />
-    <Content Include="Templates\EWS %28raw%29\Subscribe - PullSubscriptionRequest.xml" />
-    <Content Include="Templates\EWS %28raw%29\Subscribe - PushSubscriptionRequest.xml" />
-    <Content Include="Templates\EWS %28raw%29\SyncFolderHierarchy.xml" />
-    <Content Include="Templates\EWS %28raw%29\SyncFolderItems.xml" />
-    <Content Include="Templates\EWS %28raw%29\UninstallApp.xml" />
-    <Content Include="Templates\EWS %28raw%29\Unsubscribe.xml" />
-    <Content Include="Templates\EWS %28raw%29\UpdateDelegate.xml" />
-    <Content Include="Templates\EWS %28raw%29\UpdateFolder.xml" />
-    <Content Include="Templates\EWS %28raw%29\UpdateInboxRules.xml" />
-    <Content Include="Templates\EWS %28raw%29\UpdateItem - Contact.xml" />
-    <Content Include="Templates\EWS %28raw%29\UpdateItem - Item.xml" />
-    <Content Include="Templates\EWS %28raw%29\UpdateUserConfiguration.xml" />
-    <Content Include="Templates\EWS %28raw%29\UploadItems.xml" />
+    <Content Include="Templates\EWS\CreateItem %28PostItem%29.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS\CreateOrUpdateFocusedOtherOverride.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS\DeleteFocusedOtherOverride.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS\DeleteFolder.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\DeleteItem.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\DeleteUserConfiguration.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\DisableApp.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\DisconnectPhoneCall.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\EmptyFolder - HardDelete - SubFolders.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\ExpandDL.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\ExportItems.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\FindConversation.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\FindFolder.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\FindItem - CalendarView.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\FindPeople - AQS Search against GAL and return specified properties.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\FindPeople.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetAppManifests.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetAppMarketplaceUrl.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetAttachment.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetClientAccessToken.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetConversationItems.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetDelegate.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetDiscoverySearchConfiguration.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetEvents.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetFolder - MsgRootFolder.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetFolder.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetHoldOnMailboxes.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetImItemList.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetImItems.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetInboxRules.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetItem - AllKnownProperties.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetItem - calendar.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetItem - contact.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetItem - email message.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetItem - task.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetItem.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetMailTips.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetNonIndexableItemDetails.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetNonIndexableItemStatistics.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetPasswordExpirationDate.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetPersona.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetPhoneCallInformation.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetReminders.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetRoomLists .xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetRooms.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetSearchableMailboxes.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetServerTimeZones.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetServiceConfiguration.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetSharingFolder.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetStreamingEvents.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetUserAvailability.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetUserConfiguration.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetUserOOFSettings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetUserPhoto.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetUserRetentionPolicyTags .xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\GetUserSettings - for autodiscover.svc.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\InstallApp.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\MarkAllItemsAsRead.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\MoveFolder.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\MoveItem.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\PlayOnPhone.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\RemoveContactFromImList.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\RemoveDelegate .xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\RemoveDistributionGroupFromImList.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\RemoveImContactFromGroup.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\RemoveImGroup.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\ResolveNames.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\SearchMailboxes.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\SendItem.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\SetHoldOnMailboxes.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\SetImGroup.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\SetUserOOFSettings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\Subscribe - PullSubscriptionRequest.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\Subscribe - PushSubscriptionRequest.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\SyncFolderHierarchy.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\SyncFolderItems.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\UninstallApp.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\Unsubscribe.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\UpdateDelegate.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\UpdateFolder.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\UpdateInboxRules.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\UpdateItem - Contact.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\UpdateItem - Item.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\UpdateUserConfiguration.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS %28raw%29\UploadItems.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\AddDelegate.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\EWS\CreateFolder.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\EWS\CreateItem %28CalendarItem%29.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\EWS\CustomFieldTest.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\EWS\DeleteItem.xml" />
-    <Content Include="Templates\EWS\FindFolder.xml" />
-    <Content Include="Templates\EWS\FindItem %28AQS%29.xml" />
+    <Content Include="Templates\EWS\DeleteItem.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS\FindFolder.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS\FindItem %28AQS%29.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\FindItem.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\EWS\GetAttachment.xml" />
+    <Content Include="Templates\EWS\GetAttachment.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\GetDelegate.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\EWS\GetFocusedOtherOverrides.xml" />
+    <Content Include="Templates\EWS\GetFocusedOtherOverrides.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\GetInboxRules.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\EWS\GetItem %28Appointment%29.xml" />
+    <Content Include="Templates\EWS\GetItem %28Appointment%29.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\GetItem %28Contact%29.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\EWS\GetUserAvailability.xml" />
+    <Content Include="Templates\EWS\GetUserAvailability.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\GetUserOOFSettings.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\EWS\MoveItem.xml" />
-    <Content Include="Templates\EWS\PushSubscriptionRequest %28All Folders%29.xml" />
-    <Content Include="Templates\EWS\SyncFolderItems.xml" />
-    <Content Include="Templates\EWS\UpdateFolder.xml" />
+    <Content Include="Templates\EWS\MoveItem.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS\PushSubscriptionRequest %28All Folders%29.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS\SyncFolderItems.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\EWS\UpdateFolder.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\UpdateInboxRules %28Create Rule%29.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\EWS\UpdateItem %28Message%29.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
