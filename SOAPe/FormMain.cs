@@ -417,7 +417,10 @@ namespace SOAPe
                 return;
             }
 
-            XmlNodeList headerNodeList = xmlRequest.GetElementsByTagName("soap:Header");
+            XmlNodeList headerNodeList = xmlRequest.GetElementsByTagName("Header", "http://schemas.xmlsoap.org/soap/envelope/");
+            if (headerNodeList.Count==0)
+                headerNodeList = xmlRequest.GetElementsByTagName("soap:Header");
+
             XmlNode headerNode;
             if (headerNodeList.Count>1)
             {
@@ -428,7 +431,7 @@ namespace SOAPe
             if (headerNodeList.Count < 1)
             {
                 // We don't currently have a header, so add one
-                headerNode = xmlRequest.CreateNode(XmlNodeType.Element, "soap", "Header","");
+                headerNode = xmlRequest.CreateNode(XmlNodeType.Element, "Header", "http://schemas.xmlsoap.org/soap/envelope/");
             }
             else
             {
@@ -439,7 +442,7 @@ namespace SOAPe
             XmlNode requestServerVersionNode = xmlRequest.CreateNode(XmlNodeType.Element, "RequestServerVersion", "http://schemas.microsoft.com/exchange/services/2006/types");
             if (comboBoxRequestServerVersion.SelectedIndex>0)
             {
-                XmlAttribute xmlAttribute = xmlRequest.CreateAttribute("RequestServerVersion");
+                XmlAttribute xmlAttribute = xmlRequest.CreateAttribute("Version");
                 xmlAttribute.Value = comboBoxRequestServerVersion.Text;
                 requestServerVersionNode.Attributes.Append(xmlAttribute);
             }
@@ -447,41 +450,45 @@ namespace SOAPe
                 requestServerVersionNode = null;
 
             // Create ExchangeImpersonation node
-            XmlNode exchangeImpersonationNode = xmlRequest.CreateNode(XmlNodeType.Element, "ExchangeImpersonation", "http://schemas.microsoft.com/exchange/services/2006/types");
-            XmlNode connectingSID = xmlRequest.CreateNode(XmlNodeType.Element, "ConnectingSID", "http://schemas.microsoft.com/exchange/services/2006/types");
-            XmlNode impersonatedId = null;
-            switch (comboBoxImpersonationMethod.SelectedIndex)
+            XmlNode exchangeImpersonationNode = null;
+            if (!String.IsNullOrEmpty(textBoxImpersonationSID.Text))
             {
-                case 0:
-                    {
-                        impersonatedId = xmlRequest.CreateNode(XmlNodeType.Element, "PrimarySmtpAddress", "http://schemas.microsoft.com/exchange/services/2006/types");
-                        break;
-                    }
+                exchangeImpersonationNode = xmlRequest.CreateNode(XmlNodeType.Element, "ExchangeImpersonation", "http://schemas.microsoft.com/exchange/services/2006/types");
+                XmlNode connectingSID = xmlRequest.CreateNode(XmlNodeType.Element, "ConnectingSID", "http://schemas.microsoft.com/exchange/services/2006/types");
+                XmlNode impersonatedId = null;
 
-                case 1:
-                    {
-                        impersonatedId = xmlRequest.CreateNode(XmlNodeType.Element, "PrincipalName", "http://schemas.microsoft.com/exchange/services/2006/types");
-                        break;
-                    }
+                switch (comboBoxImpersonationMethod.SelectedIndex)
+                {
+                    case 0:
+                        {
+                            impersonatedId = xmlRequest.CreateNode(XmlNodeType.Element, "PrimarySmtpAddress", "http://schemas.microsoft.com/exchange/services/2006/types");
+                            break;
+                        }
 
-                case 2:
-                    {
-                        impersonatedId = xmlRequest.CreateNode(XmlNodeType.Element, "SID", "http://schemas.microsoft.com/exchange/services/2006/types");
-                        break;
-                    }
+                    case 1:
+                        {
+                            impersonatedId = xmlRequest.CreateNode(XmlNodeType.Element, "PrincipalName", "http://schemas.microsoft.com/exchange/services/2006/types");
+                            break;
+                        }
 
-                default:
-                    break;
+                    case 2:
+                        {
+                            impersonatedId = xmlRequest.CreateNode(XmlNodeType.Element, "SID", "http://schemas.microsoft.com/exchange/services/2006/types");
+                            break;
+                        }
+
+                    default:
+                        break;
+                }
+                if (impersonatedId == null)
+                {
+                    System.Windows.Forms.MessageBox.Show(this, "Invalid impersonation type", "Error updating header", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                impersonatedId.InnerText = textBoxImpersonationSID.Text;
+                connectingSID.AppendChild(impersonatedId);
+                exchangeImpersonationNode.AppendChild(connectingSID);
             }
-            if (impersonatedId==null)
-            {
-                System.Windows.Forms.MessageBox.Show(this, "Invalid impersonation type", "Error updating header", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            impersonatedId.InnerText = textBoxImpersonationSID.Text;
-            connectingSID.AppendChild(impersonatedId);
-            exchangeImpersonationNode.AppendChild(connectingSID);
-
 
             // Delete the existing Xml elements (if they exist)
             List<XmlNode> nodesToDelete = new List<XmlNode>();
