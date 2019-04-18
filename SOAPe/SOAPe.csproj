@@ -123,10 +123,10 @@
     <Compile Include="Auth\OAuthHelper.cs" />
     <Compile Include="Auth\EncryptedTokenCache.cs" />
     <Compile Include="ClassFormConfig.cs" />
-    <Compile Include="FormAcquireToken.cs">
+    <Compile Include="Auth\FormAcquireToken.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAcquireToken.Designer.cs">
+    <Compile Include="Auth\FormAcquireToken.Designer.cs">
       <DependentUpon>FormAcquireToken.cs</DependentUpon>
     </Compile>
     <Compile Include="FormAdvancedLogImport.cs">
@@ -135,10 +135,10 @@
     <Compile Include="FormAdvancedLogImport.Designer.cs">
       <DependentUpon>FormAdvancedLogImport.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormCreateLogFile.cs">
+    <Compile Include="Logging\FormCreateLogFile.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormCreateLogFile.Designer.cs">
+    <Compile Include="Logging\FormCreateLogFile.Designer.cs">
       <DependentUpon>FormCreateLogFile.cs</DependentUpon>
     </Compile>
     <Compile Include="StatusPercentBar.cs">
@@ -147,12 +147,12 @@
     <Compile Include="StatusPercentBar.Designer.cs">
       <DependentUpon>StatusPercentBar.cs</DependentUpon>
     </Compile>
-    <Compile Include="TraceElement.cs" />
+    <Compile Include="Logging\TraceElement.cs" />
     <Compile Include="ClassSOAP.cs" />
     <Compile Include="ClassSyntaxHighlightColours.cs" />
     <Compile Include="ClassSyntaxHighlighter.cs" />
     <Compile Include="ClassTemplateReader.cs" />
-    <Compile Include="ClassLogger.cs" />
+    <Compile Include="Logging\ClassLogger.cs" />
     <Compile Include="DataGridViewDateTimeEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -209,16 +209,16 @@
     <Compile Include="FormListener.Designer.cs">
       <DependentUpon>FormListener.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormLogFilterEdit.cs">
+    <Compile Include="Logging\FormLogFilterEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormLogFilterEdit.Designer.cs">
+    <Compile Include="Logging\FormLogFilterEdit.Designer.cs">
       <DependentUpon>FormLogFilterEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormLogViewer.cs">
+    <Compile Include="Logging\FormLogViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormLogViewer.Designer.cs">
+    <Compile Include="Logging\FormLogViewer.Designer.cs">
       <DependentUpon>FormLogViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="FormMain.cs">
@@ -281,7 +281,7 @@
     <EmbeddedResource Include="FormAbout.resx">
       <DependentUpon>FormAbout.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAcquireToken.resx">
+    <EmbeddedResource Include="Auth\FormAcquireToken.resx">
       <DependentUpon>FormAcquireToken.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormAdvancedLogImport.resx">
@@ -290,16 +290,16 @@
     <EmbeddedResource Include="Auth\FormChooseAuthCertificate.resx">
       <DependentUpon>FormChooseAuthCertificate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormCreateLogFile.resx">
+    <EmbeddedResource Include="Logging\FormCreateLogFile.resx">
       <DependentUpon>FormCreateLogFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormListener.resx">
       <DependentUpon>FormListener.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormLogFilterEdit.resx">
+    <EmbeddedResource Include="Logging\FormLogFilterEdit.resx">
       <DependentUpon>FormLogFilterEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormLogViewer.resx">
+    <EmbeddedResource Include="Logging\FormLogViewer.resx">
       <DependentUpon>FormLogViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
