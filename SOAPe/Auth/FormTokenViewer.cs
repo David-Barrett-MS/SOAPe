@@ -62,7 +62,7 @@ namespace SOAPe.Auth
             try
             {
                 TokenCacheItem tokenCacheItem = (TokenCacheItem)listBoxTokens.SelectedItem;
-                string elementToView = comboBoxTokenElementToShow.Text.Replace(" ", "");
+                string elementToView = listBoxTokenElementToShow.Text.Replace(" ", "");
                 PropertyInfo prop = tokenCacheItem.GetType().GetProperty(elementToView, BindingFlags.Public | BindingFlags.Instance);
                 if (prop != null)
                 {
@@ -103,7 +103,6 @@ namespace SOAPe.Auth
 
         private void comboBoxTokenElementToShow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ShowTokenInfo();
         }
 
         private void radioButtonViewRaw_CheckedChanged(object sender, EventArgs e)
@@ -112,6 +111,11 @@ namespace SOAPe.Auth
         }
 
         private void radioButtonViewAsJSON_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowTokenInfo();
+        }
+
+        private void ListBoxTokenElementToShow_SelectedIndexChanged(object sender, EventArgs e)
         {
             ShowTokenInfo();
         }

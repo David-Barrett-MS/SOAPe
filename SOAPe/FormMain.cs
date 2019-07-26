@@ -1057,7 +1057,7 @@ namespace SOAPe
 
         private void buttonAppRegistration_Click(object sender, EventArgs e)
         {
-            _oAuthAppRegForm.ShowDialog();
+            _oAuthAppRegForm.ShowDialog(this);
         }
 
         private void buttonUpdateEWSHeader_Click(object sender, EventArgs e)

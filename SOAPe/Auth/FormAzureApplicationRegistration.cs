@@ -180,7 +180,7 @@ namespace SOAPe.Auth
         private void buttonManageTokens_Click(object sender, EventArgs e)
         {
             FormTokenViewer formTokenViewer = new FormTokenViewer(_oAuthHelper.TokenCache);
-            formTokenViewer.Show(this);
+            formTokenViewer.Show();
         }
 
         private void buttonRegisterApplication_Click(object sender, EventArgs e)
