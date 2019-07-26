@@ -87,6 +87,7 @@ namespace SOAPe
         private string _currentProgress = "";
         private DataTable _logDataTable = null;
         private static Dictionary<string, int> _threadNameToNumber;
+        private readonly object _lockObject = new object();
 
         // Events
         public delegate void LogAddedEventHandler(object sender, LogAddedEventArgs e);
@@ -100,9 +101,7 @@ namespace SOAPe
             {
                 if (!File.Exists(LogFile))
                 {
-#pragma warning disable CS0642 // Possible mistaken empty statement
                     using (StreamWriter logStreamWriter = File.CreateText(LogFile));
-#pragma warning restore CS0642 // Possible mistaken empty statement
                 }
                 if (File.Exists(LogFile))
                 {
@@ -185,15 +184,9 @@ namespace SOAPe
 
         public void ClearHistory()
         {
-            //_threadLog = new Dictionary<int, List<TraceElement>>();
-            //_database.ClearData();
+
             InitDataTable();
         }
-
-        /*public ClassDatabase LogDatabase
-        {
-            get { return _database; }
-        }*/
 
         public DataTable LogDataTable
         {
@@ -256,32 +249,6 @@ namespace SOAPe
             row["Data"] = Data;
             row["Size"] = Data.Length;
             _logDataTable.Rows.Add(row);
-            
-            /*
-            System.Data.Common.DbCommand sqlCommand = _database.SqlCommand("INSERT INTO Logs (Tag, Tid, Time, Version, Application, SOAPMethod, Data) VALUES (@Tag, @Tid, @Time, @Version, @Application, @SOAPMethod, @Data)");
-            if (sqlCommand == null)
-                return;
-
-            _database.AddCommandParameter(sqlCommand, "@Tag", Tag);
-            _database.AddCommandParameter(sqlCommand, "@Tid", ThreadId);
-            _database.AddCommandParameter(sqlCommand, "@Time", LogTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-            _database.AddCommandParameter(sqlCommand, "@Version", LogVersion);
-            _database.AddCommandParameter(sqlCommand, "@Application", LogApplication);
-            _database.AddCommandParameter(sqlCommand, "@SOAPMethod", ReadMethodFromRequest(Data));
-            _database.AddCommandParameter(sqlCommand, "@Data", Data);
-
-            DebugLog(String.Format("Adding {0} data to database", Tag));
-
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                DebugLog("Data added successfully");
-            }
-            catch (Exception ex)
-            {
-                DebugLog(String.Format("Error occurred: ", ex.Message));
-            }
-            */
         }
 
         public void Log(string Details, string Description)
@@ -310,9 +277,7 @@ namespace SOAPe
             sTrace.Append(Environment.NewLine);
             sTrace.Append("</Trace>");
 
-            //AddThreadLog(ThreadId, sTrace.ToString());
-
-            lock (this)
+            lock (_lockObject)
             {
                 if (!SuppressLogToFile)
                 {
@@ -354,7 +319,7 @@ namespace SOAPe
             if (_debugLogStream == null)
                 return;
 
-            lock (this)
+            lock (_lockObject)
             {
                 try
                 {

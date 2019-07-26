@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormListener));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBoxListenerURi = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -151,8 +152,9 @@
             this.xmlEditor1.Location = new System.Drawing.Point(0, 0);
             this.xmlEditor1.Name = "xmlEditor1";
             this.xmlEditor1.ReadOnly = false;
-            this.xmlEditor1.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
-    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.xmlEditor1.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.xmlEditor1.SelectionLength = 0;
             this.xmlEditor1.SelectionStart = 0;
             this.xmlEditor1.SendItemIdToTemplateEnabled = false;
@@ -167,6 +169,7 @@
             this.ClientSize = new System.Drawing.Size(633, 351);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormListener";
             this.Text = "HTTP Listener";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormListener_FormClosing);

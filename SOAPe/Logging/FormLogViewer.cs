@@ -35,6 +35,7 @@ namespace SOAPe
         private string[] _filters = null;
         private bool _haveLoadedLog = false;
         private bool _suppressUIUpdates = false;
+        private const string _fileFilter = "Log files (*.log)|*.log|XML files (*.xml)|*.xml|Text files (*.txt)|*.txt|Trace files (*.trace)|*.trace|All Files|*.*";
 
 
         public FormLogViewer()
@@ -272,7 +273,7 @@ namespace SOAPe
         private string OpenExistingLogFile()
         {
             OpenFileDialog oDialog = new OpenFileDialog();
-            oDialog.Filter = "Log files (*.log)|*.log|XML files (*.xml)|*.xml|Text files (*.txt)|*.txt|All Files|*.*";
+            oDialog.Filter = _fileFilter;
             oDialog.DefaultExt = "log";
             oDialog.Title = "Select log/trace file to open";
             oDialog.CheckFileExists = true;
@@ -635,7 +636,7 @@ namespace SOAPe
             // Save the log to file
 
             SaveFileDialog oDialog = new SaveFileDialog();
-            oDialog.Filter = "Log files (*.log)|*.log|XML files (*.xml)|*.xml|Text files (*.txt)|*.txt|All Files|*.*";
+            oDialog.Filter = _fileFilter;
             oDialog.DefaultExt = "log";
             oDialog.Title = "Save log as";
             oDialog.CheckFileExists = false;

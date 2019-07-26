@@ -64,6 +64,9 @@
   <PropertyGroup>
     <ManifestKeyFile>SOAPe_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>v1 multisize.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=4.5.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -343,6 +346,7 @@
     <EmbeddedResource Include="EWSTools\EWSConvertIDTemplate.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="v1 multisize.ico" />
     <None Include="SOAPe_TemporaryKey.pfx" />
     <Content Include="Templates\EWS\CreateItem %28Task%29.xml">
       <SubType>Designer</SubType>

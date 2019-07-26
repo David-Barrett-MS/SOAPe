@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReplaceTemplateFields));
             this.buttonClose = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.dataGridViewFields = new System.Windows.Forms.DataGridView();
+            this.FieldName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FieldValue = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.xmlEditor1 = new SOAPe.XmlEditor();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -38,8 +41,6 @@
             this.comboBoxTemplate = new System.Windows.Forms.ComboBox();
             this.comboBoxTemplateFolder = new System.Windows.Forms.ComboBox();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FieldName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FieldValue = new System.Windows.Forms.DataGridViewComboBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -98,6 +99,19 @@
             this.dataGridViewFields.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewFields_CellValueChanged);
             this.dataGridViewFields.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFields_DataError);
             // 
+            // FieldName
+            // 
+            this.FieldName.HeaderText = "Field Name";
+            this.FieldName.Name = "FieldName";
+            this.FieldName.ReadOnly = true;
+            this.FieldName.Width = 190;
+            // 
+            // FieldValue
+            // 
+            this.FieldValue.HeaderText = "Field Value";
+            this.FieldValue.Name = "FieldValue";
+            this.FieldValue.Width = 395;
+            // 
             // xmlEditor1
             // 
             this.xmlEditor1.BackColor = System.Drawing.SystemColors.Control;
@@ -106,8 +120,9 @@
             this.xmlEditor1.Location = new System.Drawing.Point(0, 0);
             this.xmlEditor1.Name = "xmlEditor1";
             this.xmlEditor1.ReadOnly = true;
-            this.xmlEditor1.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
-    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.xmlEditor1.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.xmlEditor1.SelectionLength = 0;
             this.xmlEditor1.SelectionStart = 0;
             this.xmlEditor1.SendItemIdToTemplateEnabled = false;
@@ -181,19 +196,6 @@
             this.dataGridViewTextBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewTextBoxColumn1.Width = 200;
             // 
-            // FieldName
-            // 
-            this.FieldName.HeaderText = "Field Name";
-            this.FieldName.Name = "FieldName";
-            this.FieldName.ReadOnly = true;
-            this.FieldName.Width = 190;
-            // 
-            // FieldValue
-            // 
-            this.FieldValue.HeaderText = "Field Value";
-            this.FieldValue.Name = "FieldValue";
-            this.FieldValue.Width = 395;
-            // 
             // FormReplaceTemplateFields
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -203,6 +205,7 @@
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.buttonClose);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormReplaceTemplateFields";

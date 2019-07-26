@@ -82,6 +82,7 @@
             this.textBoxAuthCertificate = new System.Windows.Forms.TextBox();
             this.textBoxOAuthToken = new System.Windows.Forms.TextBox();
             this.tabPageEWSHeader = new System.Windows.Forms.TabPage();
+            this.buttonUpdateEWSHeader = new System.Windows.Forms.Button();
             this.comboBoxImpersonationMethod = new System.Windows.Forms.ComboBox();
             this.checkBoxUpdateEWSHeader = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -120,7 +121,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxLogFolder = new System.Windows.Forms.TextBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonUpdateEWSHeader = new System.Windows.Forms.Button();
             this.xmlEditorRequest = new SOAPe.XmlEditor();
             this.groupBoxResponse = new SOAPe.GroupBoxHighlight();
             this.xmlEditorResponse = new SOAPe.XmlEditor();
@@ -261,7 +261,7 @@
             this.encodingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.base64ToolStripMenuItem});
             this.encodingToolStripMenuItem.Name = "encodingToolStripMenuItem";
-            this.encodingToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.encodingToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.encodingToolStripMenuItem.Text = "Encoding";
             // 
             // base64ToolStripMenuItem
@@ -278,7 +278,7 @@
             this.convertIDToolStripMenuItem,
             this.testsToolStripMenuItem});
             this.eWSToolStripMenuItem.Name = "eWSToolStripMenuItem";
-            this.eWSToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.eWSToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.eWSToolStripMenuItem.Text = "EWS";
             // 
             // autodiscoverToolStripMenuItem
@@ -305,26 +305,26 @@
             // hTTPListenerToolStripMenuItem
             // 
             this.hTTPListenerToolStripMenuItem.Name = "hTTPListenerToolStripMenuItem";
-            this.hTTPListenerToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.hTTPListenerToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.hTTPListenerToolStripMenuItem.Text = "HTTP Listener";
             this.hTTPListenerToolStripMenuItem.Click += new System.EventHandler(this.hTTPListenerToolStripMenuItem_Click);
             // 
             // logViewerToolStripMenuItem
             // 
             this.logViewerToolStripMenuItem.Name = "logViewerToolStripMenuItem";
-            this.logViewerToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.logViewerToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.logViewerToolStripMenuItem.Text = "Log Viewer";
             this.logViewerToolStripMenuItem.Click += new System.EventHandler(this.logViewerToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(145, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -730,6 +730,16 @@
             this.tabPageEWSHeader.Text = "EWS Header";
             this.tabPageEWSHeader.UseVisualStyleBackColor = true;
             // 
+            // buttonUpdateEWSHeader
+            // 
+            this.buttonUpdateEWSHeader.Location = new System.Drawing.Point(700, 5);
+            this.buttonUpdateEWSHeader.Name = "buttonUpdateEWSHeader";
+            this.buttonUpdateEWSHeader.Size = new System.Drawing.Size(75, 22);
+            this.buttonUpdateEWSHeader.TabIndex = 18;
+            this.buttonUpdateEWSHeader.Text = "Update Now";
+            this.buttonUpdateEWSHeader.UseVisualStyleBackColor = true;
+            this.buttonUpdateEWSHeader.Click += new System.EventHandler(this.buttonUpdateEWSHeader_Click);
+            // 
             // comboBoxImpersonationMethod
             // 
             this.comboBoxImpersonationMethod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -901,6 +911,7 @@
             this.listViewHTTPHeaders.FullRowSelect = true;
             this.listViewHTTPHeaders.GridLines = true;
             this.listViewHTTPHeaders.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listViewHTTPHeaders.HideSelection = false;
             this.listViewHTTPHeaders.Location = new System.Drawing.Point(0, 1);
             this.listViewHTTPHeaders.MultiSelect = false;
             this.listViewHTTPHeaders.Name = "listViewHTTPHeaders";
@@ -1018,6 +1029,7 @@
             this.listViewHTTPCookies.FullRowSelect = true;
             this.listViewHTTPCookies.GridLines = true;
             this.listViewHTTPCookies.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listViewHTTPCookies.HideSelection = false;
             this.listViewHTTPCookies.Location = new System.Drawing.Point(0, 1);
             this.listViewHTTPCookies.MultiSelect = false;
             this.listViewHTTPCookies.Name = "listViewHTTPCookies";
@@ -1138,16 +1150,6 @@
             this.textBoxLogFolder.Size = new System.Drawing.Size(586, 20);
             this.textBoxLogFolder.TabIndex = 0;
             // 
-            // buttonUpdateEWSHeader
-            // 
-            this.buttonUpdateEWSHeader.Location = new System.Drawing.Point(700, 5);
-            this.buttonUpdateEWSHeader.Name = "buttonUpdateEWSHeader";
-            this.buttonUpdateEWSHeader.Size = new System.Drawing.Size(75, 22);
-            this.buttonUpdateEWSHeader.TabIndex = 18;
-            this.buttonUpdateEWSHeader.Text = "Update Now";
-            this.buttonUpdateEWSHeader.UseVisualStyleBackColor = true;
-            this.buttonUpdateEWSHeader.Click += new System.EventHandler(this.buttonUpdateEWSHeader_Click);
-            // 
             // xmlEditorRequest
             // 
             this.xmlEditorRequest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1159,8 +1161,9 @@
             this.xmlEditorRequest.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.xmlEditorRequest.Name = "xmlEditorRequest";
             this.xmlEditorRequest.ReadOnly = false;
-            this.xmlEditorRequest.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
-    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.xmlEditorRequest.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.xmlEditorRequest.SelectionLength = 0;
             this.xmlEditorRequest.SelectionStart = 0;
             this.xmlEditorRequest.SendItemIdToTemplateEnabled = false;
@@ -1193,8 +1196,9 @@
             this.xmlEditorResponse.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.xmlEditorResponse.Name = "xmlEditorResponse";
             this.xmlEditorResponse.ReadOnly = true;
-            this.xmlEditorResponse.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
-    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.xmlEditorResponse.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.xmlEditorResponse.SelectionLength = 0;
             this.xmlEditorResponse.SelectionStart = 0;
             this.xmlEditorResponse.SendItemIdToTemplateEnabled = true;

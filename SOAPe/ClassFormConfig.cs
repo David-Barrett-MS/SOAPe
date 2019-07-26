@@ -52,8 +52,8 @@ namespace SOAPe
 
         public void AddControlTypeRecurseExclusion(string ExcludedType)
         {
-            // If controls contain other controls, this can cause odd issues with the recursion process
-            // Particularly with multiple instances of user controls that include another control
+            // If controls contain other controls, this can cause odd issues with the recursion process,
+            // particularly with multiple instances of user controls that include another control.
             // Any types added here won't be recursed
             _controlTypesExcludedFromRecursion.Add(ExcludedType);
         }
