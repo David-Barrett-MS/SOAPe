@@ -40,7 +40,7 @@ namespace SOAPe
         {
             try
             {
-                System.Diagnostics.Process.Start("http://soape.codeplex.com");
+                System.Diagnostics.Process.Start("https://github.com/David-Barrett-MS/SOAPe");
             }
             catch { }
         }
