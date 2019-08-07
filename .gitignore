@@ -4,5 +4,6 @@
 
 /.vs/SOAPe/v15/Server/sqlite3/db.lock
 /.vs/SOAPe
+/.vs/config
 /SOAPe/bin
 /SOAPe/obj
