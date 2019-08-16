@@ -101,7 +101,9 @@ namespace SOAPe
             {
                 if (!File.Exists(LogFile))
                 {
-                    using (StreamWriter logStreamWriter = File.CreateText(LogFile));
+#pragma warning disable CS0642 // Possible mistaken empty statement
+                    using (StreamWriter logStreamWriter = File.CreateText(LogFile)) ;
+#pragma warning restore CS0642 // Possible mistaken empty statement
                 }
                 if (File.Exists(LogFile))
                 {
