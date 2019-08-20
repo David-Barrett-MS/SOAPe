@@ -88,6 +88,7 @@ namespace SOAPe
         private DataTable _logDataTable = null;
         private static Dictionary<string, int> _threadNameToNumber;
         private readonly object _lockObject = new object();
+        private DateTime _lastKnownEventTime = DateTime.MinValue; // This is used to get the responses in the correct order for EWSEditor logs (to work around EWSEditor bug)
 
         // Events
         public delegate void LogAddedEventHandler(object sender, LogAddedEventArgs e);
@@ -396,14 +397,16 @@ namespace SOAPe
                 long streamLength = readLogFileStream.Length;
                 long readBytes = 0;
                 float percentComplete = 0;
-                bool bFoundTraceTag = false;
                 bool bFoundXmlTag = false;
+                bool bFoundTraceTag = false;
+                bool bInXml = false;
 
                 using (StreamReader logFileReader = new StreamReader(readLogFileStream))
                 {
                     StringBuilder sTrace = new StringBuilder();
                     StringBuilder sTag=null;
                     bool bCollectTag = false;
+                    bool bInTraceTag = false;
                     int i = 1;
 
                     while (!logFileReader.EndOfStream)
@@ -424,30 +427,64 @@ namespace SOAPe
                                         OnProgressChanged(new ProgressEventArgs(String.Format("Processing {0}", i++), percentComplete));
                                     ParseTrace(sTrace.ToString());
                                     sTrace = new StringBuilder();
+                                    bInTraceTag = false;
                                 }
                                 else if (sTag.ToString().ToLower().StartsWith("<trace"))
                                 {
+                                    if (bInXml)
+                                    {
+                                        // We have been collecting Xml that has occured outside trace tags
+                                        // As we've now found another trace tag, we try to parse everything we have collected in between as Xml
+
+                                        if (ShowProgress)
+                                            OnProgressChanged(new ProgressEventArgs(String.Format("Processing {0}", i++), percentComplete));
+                                        sTrace.Remove(sTrace.Length - sTag.Length, sTag.Length);
+
+                                        // Now we remove any trailing characters until we reach a > (which should be the closing tag of the Xml)
+                                        string xmlData = sTrace.ToString();
+                                        int closingTag = xmlData.LastIndexOf(">");
+                                        if (closingTag>0)
+                                        {
+                                            xmlData = xmlData.Substring(0, closingTag+1);
+                                        }
+                                        ParseGenericRequest(xmlData);
+                                        bInXml = false;
+                                    }
                                     sTrace = new StringBuilder(sTag.ToString());
                                     bFoundTraceTag = true;
+                                    bFoundXmlTag = false; // We need to ensure this is false if we find a trace tag so that trace tags take priority
+                                    bInTraceTag = true;
                                 }
                                 else if (sTag.ToString().ToLower().StartsWith("<?xml"))
                                 {
-                                    if (!bFoundTraceTag)
+                                    if (!bInTraceTag)
                                     {
-                                        // We've found the xml opening tag without having found <trace>, assume we don't have trace tags
+                                        // We've found the xml opening tag outside <trace> tag.  EWSEditor has a bug that causes some responses
+                                        // to be presented this way, so we'll capture this Xml
                                         if (bFoundXmlTag)
                                         {
                                             // We've already found one Xml tag, so this file must contain more than one xml dump
-                                            // We  process this one
+                                            // We  process the collected trace as Xml
                                             if (ShowProgress)
                                                 OnProgressChanged(new ProgressEventArgs(String.Format("Processing {0}", i++), percentComplete));
                                             sTrace.Remove(sTrace.Length - 4, 4);
                                             ParseGenericRequest(sTrace.ToString());
-                                            sTrace = new StringBuilder(sTag.ToString());
                                         }
                                         else
-                                            sTrace = new StringBuilder(sTag.ToString());
-                                        bFoundXmlTag = true;
+                                        {
+                                            if (!bFoundTraceTag)
+                                            {
+                                                bFoundXmlTag = true;
+                                            }
+                                            else
+                                            {
+                                                // We only get here when we have Xml mixed in with Trace
+                                                // We should be able to collect everything up to the next Trace or Xml tag and then parse that
+
+                                            }
+                                        }
+                                        sTrace = new StringBuilder(sTag.ToString());
+                                        bInXml = true;
                                     }
                                 }
                                 bCollectTag = false;
@@ -565,12 +602,13 @@ namespace SOAPe
 
                 // Read the trace information
                 string sTag = xml.FirstChild.Attributes["Tag"].Value.ToString();
-                DateTime logTime = DateTime.Now;
+                DateTime logTime = _lastKnownEventTime.AddTicks(1);
                 try
                 {
                     logTime = DateTime.Parse(xml.FirstChild.Attributes["Time"].Value);
                 }
                 catch { }
+                _lastKnownEventTime = logTime;
                 int threadId = -1;
                 try
                 {
@@ -638,14 +676,15 @@ namespace SOAPe
                 }
 
                 // Read the trace information
-                DateTime logTime = DateTime.Now;
+                DateTime logTime = _lastKnownEventTime.AddTicks(1);
                 try
                 {
                     logTime = DateTime.Parse(xml.FirstChild.Attributes["Time"].Value);
                 }
                 catch { }
+                _lastKnownEventTime = logTime;
 
-                LogToDatabase(Request, sTag, logTime, -1, "Unknown", "Unknown");
+                LogToDatabase(Request, sTag, logTime, 1, "Unknown", "Unknown");
             }
             catch { }
         }

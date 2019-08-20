@@ -639,7 +639,7 @@ namespace SOAPe
         {
             if (!NativeMethods.IsRunAsAdmin())
             {
-                if (MessageBox.Show("Creating an HTTP listener requires elevation - restart application?", "Elevation required", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                if (MessageBox.Show(this, "Creating an HTTP listener requires elevation - restart application?", "Elevation required", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                     return;
                 // Launch SOAPe with elevated permissions
                 ProcessStartInfo proc = new ProcessStartInfo();

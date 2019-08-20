@@ -282,6 +282,11 @@ namespace SOAPe
                                 try
                                 {
                                     sFieldValuePart = oRow.Cells[1].Value.ToString();
+                                    if (FieldType(sFieldName).Equals("elementcheckedlist"))
+                                    {
+                                        if (sFieldValuePart.ToLower().Equals("false"))
+                                            sFieldValuePart = String.Empty;
+                                    }
                                 }
                                 catch { }
                                 i++;
@@ -505,10 +510,12 @@ namespace SOAPe
                         oRow.Cells.Add(oTextbox);
                         DataGridViewCheckBoxCell oCheckCell = new DataGridViewCheckBoxCell();
                         oCheckCell.TrueValue = "<" + sFieldSections[1] + ">" + sListItems[i] + "</" + sFieldSections[1] + ">";
+                        oCheckCell.FalseValue = String.Empty;
                         oCheckCell.Value = false;
                         oRow.Cells.Add(oCheckCell);
                         dataGridViewFields.Rows.Add(oRow);
                     }
+                    _fieldType.Add(sFieldName, "elementcheckedlist");
                     return;
 
                 // <!--FIELD:Additional Properties;GetAdditionalProperties;Name,PropertySetId,PropertyId,PropertyType|Name,PropertySetId,PropertyId,PropertyType-->
@@ -600,11 +607,17 @@ namespace SOAPe
         {
             try
             {
+                if (!NativeMethods.IsRunAsAdmin())
+                {
+                    // We can't start a listener without admin rights
+                    ButtonOpenHTTPListener_Click(this, null);
+                    return String.Empty;
+                }
                 return (_owner as FormMain).HTTPListener.URi;
             }
             catch
             {
-                return "";
+                return String.Empty;
             }
         }
 
@@ -669,7 +682,7 @@ namespace SOAPe
 
             if (!NativeMethods.IsRunAsAdmin())
             {
-                if (MessageBox.Show("Creating an HTTP listener requires elevation - restart application?", "Elevation required", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                if (MessageBox.Show(this, "Creating an HTTP listener requires elevation - restart application?", "Elevation required", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                     return;
                 // Launch SOAPe with elevated permissions
                 ProcessStartInfo proc = new ProcessStartInfo();

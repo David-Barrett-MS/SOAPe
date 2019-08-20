@@ -35,7 +35,10 @@
             this.checkBoxPersistCookies = new System.Windows.Forms.CheckBox();
             this.buttonLoadTemplate = new System.Windows.Forms.Button();
             this.buttonSend = new System.Windows.Forms.Button();
+            this.xmlEditorRequest = new SOAPe.XmlEditor();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.groupBoxResponse = new SOAPe.GroupBoxHighlight();
+            this.xmlEditorResponse = new SOAPe.XmlEditor();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.encodingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -121,14 +124,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxLogFolder = new System.Windows.Forms.TextBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
-            this.xmlEditorRequest = new SOAPe.XmlEditor();
-            this.groupBoxResponse = new SOAPe.GroupBoxHighlight();
-            this.xmlEditorResponse = new SOAPe.XmlEditor();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.groupBoxResponse.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPageUrl.SuspendLayout();
@@ -140,7 +141,6 @@
             this.tabPageHTTPHeaders.SuspendLayout();
             this.tabPageCookies.SuspendLayout();
             this.tabPageLogging.SuspendLayout();
-            this.groupBoxResponse.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox2
@@ -207,6 +207,28 @@
             this.buttonSend.UseVisualStyleBackColor = true;
             this.buttonSend.Click += new System.EventHandler(this.buttonSend_Click);
             // 
+            // xmlEditorRequest
+            // 
+            this.xmlEditorRequest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.xmlEditorRequest.BackColor = System.Drawing.SystemColors.Window;
+            this.xmlEditorRequest.IndentXml = true;
+            this.xmlEditorRequest.Location = new System.Drawing.Point(3, 48);
+            this.xmlEditorRequest.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.xmlEditorRequest.Name = "xmlEditorRequest";
+            this.xmlEditorRequest.ReadOnly = false;
+            this.xmlEditorRequest.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
+            this.xmlEditorRequest.SelectionLength = 0;
+            this.xmlEditorRequest.SelectionStart = 0;
+            this.xmlEditorRequest.SendItemIdToTemplateEnabled = false;
+            this.xmlEditorRequest.Size = new System.Drawing.Size(780, 186);
+            this.xmlEditorRequest.SyntaxHighlight = true;
+            this.xmlEditorRequest.TabIndex = 7;
+            this.xmlEditorRequest.Tag = "";
+            // 
             // splitContainer1
             // 
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -226,6 +248,42 @@
             this.splitContainer1.Size = new System.Drawing.Size(786, 502);
             this.splitContainer1.SplitterDistance = 240;
             this.splitContainer1.TabIndex = 2;
+            // 
+            // groupBoxResponse
+            // 
+            this.groupBoxResponse.Controls.Add(this.xmlEditorResponse);
+            this.groupBoxResponse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxResponse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxResponse.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.groupBoxResponse.HighlightColour = System.Drawing.Color.Red;
+            this.groupBoxResponse.Highlighted = false;
+            this.groupBoxResponse.Location = new System.Drawing.Point(0, 0);
+            this.groupBoxResponse.Name = "groupBoxResponse";
+            this.groupBoxResponse.Size = new System.Drawing.Size(786, 258);
+            this.groupBoxResponse.TabIndex = 0;
+            this.groupBoxResponse.TabStop = false;
+            this.groupBoxResponse.Text = "Response";
+            // 
+            // xmlEditorResponse
+            // 
+            this.xmlEditorResponse.BackColor = System.Drawing.SystemColors.Window;
+            this.xmlEditorResponse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.xmlEditorResponse.IndentXml = false;
+            this.xmlEditorResponse.Location = new System.Drawing.Point(3, 16);
+            this.xmlEditorResponse.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.xmlEditorResponse.Name = "xmlEditorResponse";
+            this.xmlEditorResponse.ReadOnly = true;
+            this.xmlEditorResponse.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
+            this.xmlEditorResponse.SelectionLength = 0;
+            this.xmlEditorResponse.SelectionStart = 0;
+            this.xmlEditorResponse.SendItemIdToTemplateEnabled = true;
+            this.xmlEditorResponse.Size = new System.Drawing.Size(780, 239);
+            this.xmlEditorResponse.SyntaxHighlight = true;
+            this.xmlEditorResponse.TabIndex = 0;
+            this.xmlEditorResponse.Tag = "NoConfigSave";
+            this.xmlEditorResponse.SendItemIdToTemplate += new SOAPe.XmlEditor.SendItemIdEventHandler(this.xmlEditorResponse_SendItemIdToTemplate);
             // 
             // menuStrip1
             // 
@@ -1150,64 +1208,6 @@
             this.textBoxLogFolder.Size = new System.Drawing.Size(586, 20);
             this.textBoxLogFolder.TabIndex = 0;
             // 
-            // xmlEditorRequest
-            // 
-            this.xmlEditorRequest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.xmlEditorRequest.BackColor = System.Drawing.SystemColors.Window;
-            this.xmlEditorRequest.IndentXml = true;
-            this.xmlEditorRequest.Location = new System.Drawing.Point(3, 48);
-            this.xmlEditorRequest.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.xmlEditorRequest.Name = "xmlEditorRequest";
-            this.xmlEditorRequest.ReadOnly = false;
-            this.xmlEditorRequest.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
-    "d\\f0\\fs17\\par\r\n}\r\n";
-            this.xmlEditorRequest.SelectionLength = 0;
-            this.xmlEditorRequest.SelectionStart = 0;
-            this.xmlEditorRequest.SendItemIdToTemplateEnabled = false;
-            this.xmlEditorRequest.Size = new System.Drawing.Size(780, 186);
-            this.xmlEditorRequest.SyntaxHighlight = true;
-            this.xmlEditorRequest.TabIndex = 7;
-            this.xmlEditorRequest.Tag = "";
-            // 
-            // groupBoxResponse
-            // 
-            this.groupBoxResponse.Controls.Add(this.xmlEditorResponse);
-            this.groupBoxResponse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxResponse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxResponse.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBoxResponse.HighlightColour = System.Drawing.Color.Red;
-            this.groupBoxResponse.Highlighted = false;
-            this.groupBoxResponse.Location = new System.Drawing.Point(0, 0);
-            this.groupBoxResponse.Name = "groupBoxResponse";
-            this.groupBoxResponse.Size = new System.Drawing.Size(786, 258);
-            this.groupBoxResponse.TabIndex = 0;
-            this.groupBoxResponse.TabStop = false;
-            this.groupBoxResponse.Text = "Response";
-            // 
-            // xmlEditorResponse
-            // 
-            this.xmlEditorResponse.BackColor = System.Drawing.SystemColors.Window;
-            this.xmlEditorResponse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xmlEditorResponse.IndentXml = false;
-            this.xmlEditorResponse.Location = new System.Drawing.Point(3, 16);
-            this.xmlEditorResponse.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.xmlEditorResponse.Name = "xmlEditorResponse";
-            this.xmlEditorResponse.ReadOnly = true;
-            this.xmlEditorResponse.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
-    "d\\f0\\fs17\\par\r\n}\r\n";
-            this.xmlEditorResponse.SelectionLength = 0;
-            this.xmlEditorResponse.SelectionStart = 0;
-            this.xmlEditorResponse.SendItemIdToTemplateEnabled = true;
-            this.xmlEditorResponse.Size = new System.Drawing.Size(780, 239);
-            this.xmlEditorResponse.SyntaxHighlight = true;
-            this.xmlEditorResponse.TabIndex = 0;
-            this.xmlEditorResponse.Tag = "NoConfigSave";
-            this.xmlEditorResponse.SendItemIdToTemplate += new SOAPe.XmlEditor.SendItemIdEventHandler(this.xmlEditorResponse_SendItemIdToTemplate);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1227,6 +1227,7 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.groupBoxResponse.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -1248,7 +1249,6 @@
             this.tabPageCookies.PerformLayout();
             this.tabPageLogging.ResumeLayout(false);
             this.tabPageLogging.PerformLayout();
-            this.groupBoxResponse.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
