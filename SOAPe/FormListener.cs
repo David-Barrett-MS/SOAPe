@@ -109,9 +109,10 @@ namespace SOAPe
 
         public void ListenerCallback(IAsyncResult result)
         {
-            //try
-            //{
+            try
+            {
                 HttpListener listener = (HttpListener)result.AsyncState;
+                
                 HttpListenerContext context = listener.EndGetContext(result);
                 HttpListenerRequest request = context.Request;
                 string sRequest = "";
@@ -124,8 +125,8 @@ namespace SOAPe
 
                 DetermineResponse(sRequest, context.Response);
                 _Listener.BeginGetContext(new AsyncCallback(ListenerCallback), _Listener);
-            //}
-            //catch { }
+            }
+            catch { }
         }
 
         private void DetermineResponse(string Request, HttpListenerResponse Response)

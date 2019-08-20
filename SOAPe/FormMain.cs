@@ -26,6 +26,7 @@ using System.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Reflection;
+using System.Diagnostics;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using SOAPe.EWSTools;
@@ -70,6 +71,16 @@ namespace SOAPe
             UpdateHTTPCookieControls();
             xmlEditorResponse.XmlValidationComplete += xmlEditorResponse_XmlValidationComplete;
             _logger.DebugLog("Initialisation complete");
+
+            try
+            {
+                if (!NativeMethods.IsProcessElevated())
+                {
+                    // The HTTP listener requires elevation, check if we have this  hTTPListenerToolStripMenuItem
+                    hTTPListenerToolStripMenuItem.Image = NativeMethods.GetStockIcon(NativeMethods.SHSTOCKICONID.SIID_SHIELD, NativeMethods.SHGSI.SHGSI_ICON).ToBitmap();
+                }
+            }
+            catch { }
             /*
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -626,6 +637,30 @@ namespace SOAPe
 
         private void hTTPListenerToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!NativeMethods.IsRunAsAdmin())
+            {
+                if (MessageBox.Show("Creating an HTTP listener requires elevation - restart application?", "Elevation required", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    return;
+                // Launch SOAPe with elevated permissions
+                ProcessStartInfo proc = new ProcessStartInfo();
+                proc.UseShellExecute = true;
+                proc.WorkingDirectory = Environment.CurrentDirectory;
+                proc.FileName = Application.ExecutablePath;
+                proc.Verb = "runas";
+
+                try
+                {
+                    Process.Start(proc);
+                }
+                catch
+                {
+                    // The user refused the elevation.
+                    // Do nothing and return directly ...
+                    return;
+                }
+
+                Application.Exit();  // Quit itself
+            }
             this.HTTPListener.Show();
         }
 

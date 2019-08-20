@@ -146,6 +146,7 @@
     <Compile Include="Auth\FormAcquireToken.Designer.cs">
       <DependentUpon>FormAcquireToken.cs</DependentUpon>
     </Compile>
+    <Compile Include="CSUACSelfElevation.cs" />
     <Compile Include="FormAdvancedLogImport.cs">
       <SubType>Form</SubType>
     </Compile>

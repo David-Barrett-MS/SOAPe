@@ -21,6 +21,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Security.Principal;
 
 namespace SOAPe
 {
@@ -43,12 +46,26 @@ namespace SOAPe
         private string _itemId = "";
         private string _folderId = "";
 
+
         public FormReplaceTemplateFields()
         {
             InitializeComponent();
             _fieldType = new Dictionary<string, string>();
             buttonLoad.Enabled = false;
             InitFolderCombo();
+
+            try
+            {
+                if (!NativeMethods.IsProcessElevated())
+                {
+                    // The HTTP listener requires elevation, check if we have this
+                    this.buttonOpenHTTPListener.FlatStyle = FlatStyle.System;
+                    NativeMethods.SendMessage(buttonOpenHTTPListener.Handle,
+                        NativeMethods.BCM_SETSHIELD, 0,
+                        false ? IntPtr.Zero : (IntPtr)1);
+                }
+            }
+            catch { }
         }
 
         public FormReplaceTemplateFields(string ItemId, string FolderId=""): this()
@@ -646,6 +663,37 @@ namespace SOAPe
             buttonLoad.Enabled = false;
         }
 
+        private void ButtonOpenHTTPListener_Click(object sender, EventArgs e)
+        {
+            // Elevate the process if it is not run as administrator.
+
+            if (!NativeMethods.IsRunAsAdmin())
+            {
+                if (MessageBox.Show("Creating an HTTP listener requires elevation - restart application?", "Elevation required", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    return;
+                // Launch SOAPe with elevated permissions
+                ProcessStartInfo proc = new ProcessStartInfo();
+                proc.UseShellExecute = true;
+                proc.WorkingDirectory = Environment.CurrentDirectory;
+                proc.FileName = Application.ExecutablePath;
+                proc.Verb = "runas";
+
+                try
+                {
+                    Process.Start(proc);
+                }
+                catch
+                {
+                    // The user refused the elevation.
+                    // Do nothing and return directly ...
+                    return;
+                }
+
+                Application.Exit();  // Quit itself
+            }
+
+            string sUri = (_owner as FormMain).HTTPListener.URi; // This will open the listener if not already open
+        }
     }
 
 

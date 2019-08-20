@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReplaceTemplateFields));
             this.buttonClose = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -41,6 +43,7 @@
             this.comboBoxTemplate = new System.Windows.Forms.ComboBox();
             this.comboBoxTemplateFolder = new System.Windows.Forms.ComboBox();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonOpenHTTPListener = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -85,10 +88,26 @@
             this.dataGridViewFields.AllowUserToAddRows = false;
             this.dataGridViewFields.AllowUserToDeleteRows = false;
             this.dataGridViewFields.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewFields.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewFields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFields.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.FieldName,
             this.FieldValue});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewFields.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewFields.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewFields.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewFields.MultiSelect = false;
@@ -196,11 +215,23 @@
             this.dataGridViewTextBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewTextBoxColumn1.Width = 200;
             // 
+            // buttonOpenHTTPListener
+            // 
+            this.buttonOpenHTTPListener.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonOpenHTTPListener.Location = new System.Drawing.Point(12, 491);
+            this.buttonOpenHTTPListener.Name = "buttonOpenHTTPListener";
+            this.buttonOpenHTTPListener.Size = new System.Drawing.Size(159, 23);
+            this.buttonOpenHTTPListener.TabIndex = 6;
+            this.buttonOpenHTTPListener.Text = "Open HTTP Listener";
+            this.buttonOpenHTTPListener.UseVisualStyleBackColor = true;
+            this.buttonOpenHTTPListener.Click += new System.EventHandler(this.ButtonOpenHTTPListener_Click);
+            // 
             // FormReplaceTemplateFields
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(630, 521);
+            this.Controls.Add(this.buttonOpenHTTPListener);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.splitContainer1);
@@ -235,5 +266,6 @@
         private System.Windows.Forms.ComboBox comboBoxTemplateFolder;
         private System.Windows.Forms.DataGridViewTextBoxColumn FieldName;
         private System.Windows.Forms.DataGridViewComboBoxColumn FieldValue;
+        private System.Windows.Forms.Button buttonOpenHTTPListener;
     }
 }
