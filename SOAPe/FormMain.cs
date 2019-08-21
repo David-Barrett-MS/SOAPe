@@ -405,6 +405,7 @@ namespace SOAPe
             FormReplaceTemplateFields oForm = new FormReplaceTemplateFields(ItemId, FolderId);
             sTemplateContent = oForm.ReadTemplate(this);
             oForm.Dispose();
+            this.Activate(); // To stop the main window from disappearing behind other applications (Windows 10 z-order issues)
 
             if (String.IsNullOrEmpty(sTemplateContent))
                 return xmlEditorRequest.Text;
@@ -1099,5 +1100,6 @@ namespace SOAPe
         {
             UpdateSOAPHeader();
         }
+
     }
 }

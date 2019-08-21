@@ -643,6 +643,8 @@ namespace SOAPe
         {
             _cancel = true;
             this.Hide();
+            if (_owner != null)
+                _owner.Activate(); // Needed to prevent main SOAPe window from disappearing (though doesn't always work).  Windows 10 appears to have issues maintaining z-order.
         }
 
         private void comboBoxTemplateFolder_SelectedIndexChanged(object sender, EventArgs e)

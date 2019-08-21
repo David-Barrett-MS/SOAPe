@@ -38,6 +38,7 @@
             this.hScrollBarReceived = new System.Windows.Forms.HScrollBar();
             this.buttonClearEvents = new System.Windows.Forms.Button();
             this.xmlEditor1 = new SOAPe.XmlEditor();
+            this.buttonEditListenUrl = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -49,6 +50,7 @@
             // groupBox1
             // 
             this.groupBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.groupBox1.Controls.Add(this.buttonEditListenUrl);
             this.groupBox1.Controls.Add(this.textBoxListenerURi);
             this.groupBox1.Location = new System.Drawing.Point(12, 10);
             this.groupBox1.Name = "groupBox1";
@@ -62,7 +64,7 @@
             this.textBoxListenerURi.Location = new System.Drawing.Point(6, 22);
             this.textBoxListenerURi.Name = "textBoxListenerURi";
             this.textBoxListenerURi.ReadOnly = true;
-            this.textBoxListenerURi.Size = new System.Drawing.Size(594, 20);
+            this.textBoxListenerURi.Size = new System.Drawing.Size(520, 20);
             this.textBoxListenerURi.TabIndex = 0;
             // 
             // groupBox2
@@ -162,6 +164,15 @@
             this.xmlEditor1.SyntaxHighlight = true;
             this.xmlEditor1.TabIndex = 0;
             // 
+            // buttonEditListenUrl
+            // 
+            this.buttonEditListenUrl.Location = new System.Drawing.Point(527, 20);
+            this.buttonEditListenUrl.Name = "buttonEditListenUrl";
+            this.buttonEditListenUrl.Size = new System.Drawing.Size(75, 24);
+            this.buttonEditListenUrl.TabIndex = 1;
+            this.buttonEditListenUrl.Text = "Edit...";
+            this.buttonEditListenUrl.UseVisualStyleBackColor = true;
+            // 
             // FormListener
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -196,5 +207,6 @@
         private System.Windows.Forms.Button buttonClearEvents;
         private XmlEditor xmlEditor1;
         private System.Windows.Forms.TextBox textBoxReceivedShowing;
+        private System.Windows.Forms.Button buttonEditListenUrl;
     }
 }

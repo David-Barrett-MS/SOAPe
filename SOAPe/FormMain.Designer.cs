@@ -46,7 +46,6 @@
             this.eWSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autodiscoverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hTTPListenerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -312,77 +311,69 @@
             this.aboutToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(91, 22);
-            this.toolsToolStripMenuItem.Text = "Tools...";
+            this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // encodingToolStripMenuItem
             // 
             this.encodingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.base64ToolStripMenuItem});
             this.encodingToolStripMenuItem.Name = "encodingToolStripMenuItem";
-            this.encodingToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.encodingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.encodingToolStripMenuItem.Text = "Encoding";
             // 
             // base64ToolStripMenuItem
             // 
             this.base64ToolStripMenuItem.Name = "base64ToolStripMenuItem";
-            this.base64ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
-            this.base64ToolStripMenuItem.Text = "Base64";
+            this.base64ToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.base64ToolStripMenuItem.Text = "Base64...";
             this.base64ToolStripMenuItem.Click += new System.EventHandler(this.base64ToolStripMenuItem_Click);
             // 
             // eWSToolStripMenuItem
             // 
             this.eWSToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.autodiscoverToolStripMenuItem,
-            this.convertIDToolStripMenuItem,
-            this.testsToolStripMenuItem});
+            this.convertIDToolStripMenuItem});
             this.eWSToolStripMenuItem.Name = "eWSToolStripMenuItem";
-            this.eWSToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.eWSToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.eWSToolStripMenuItem.Text = "EWS";
             // 
             // autodiscoverToolStripMenuItem
             // 
             this.autodiscoverToolStripMenuItem.Name = "autodiscoverToolStripMenuItem";
-            this.autodiscoverToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.autodiscoverToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.autodiscoverToolStripMenuItem.Text = "Autodiscover...";
             this.autodiscoverToolStripMenuItem.Click += new System.EventHandler(this.autodiscoverToolStripMenuItem_Click);
             // 
             // convertIDToolStripMenuItem
             // 
             this.convertIDToolStripMenuItem.Name = "convertIDToolStripMenuItem";
-            this.convertIDToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.convertIDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.convertIDToolStripMenuItem.Text = "ConvertID...";
             this.convertIDToolStripMenuItem.Click += new System.EventHandler(this.convertIDToolStripMenuItem_Click);
-            // 
-            // testsToolStripMenuItem
-            // 
-            this.testsToolStripMenuItem.Enabled = false;
-            this.testsToolStripMenuItem.Name = "testsToolStripMenuItem";
-            this.testsToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.testsToolStripMenuItem.Text = "Tests...";
             // 
             // hTTPListenerToolStripMenuItem
             // 
             this.hTTPListenerToolStripMenuItem.Name = "hTTPListenerToolStripMenuItem";
-            this.hTTPListenerToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.hTTPListenerToolStripMenuItem.Text = "HTTP Listener";
+            this.hTTPListenerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.hTTPListenerToolStripMenuItem.Text = "HTTP Listener...";
             this.hTTPListenerToolStripMenuItem.Click += new System.EventHandler(this.hTTPListenerToolStripMenuItem_Click);
             // 
             // logViewerToolStripMenuItem
             // 
             this.logViewerToolStripMenuItem.Name = "logViewerToolStripMenuItem";
-            this.logViewerToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.logViewerToolStripMenuItem.Text = "Log Viewer";
+            this.logViewerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.logViewerToolStripMenuItem.Text = "Log Viewer...";
             this.logViewerToolStripMenuItem.Click += new System.EventHandler(this.logViewerToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -1270,7 +1261,6 @@
         private System.Windows.Forms.ToolStripMenuItem hTTPListenerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem logViewerToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBoxPersistCookies;
-        private System.Windows.Forms.ToolStripMenuItem testsToolStripMenuItem;
         private XmlEditor xmlEditorResponse;
         private XmlEditor xmlEditorRequest;
         private System.Windows.Forms.TabControl tabControl1;

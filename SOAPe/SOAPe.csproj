@@ -147,10 +147,10 @@
       <DependentUpon>FormAcquireToken.cs</DependentUpon>
     </Compile>
     <Compile Include="CSUACSelfElevation.cs" />
-    <Compile Include="FormAdvancedLogImport.cs">
+    <Compile Include="Logging\FormAdvancedLogImport.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAdvancedLogImport.Designer.cs">
+    <Compile Include="Logging\FormAdvancedLogImport.Designer.cs">
       <DependentUpon>FormAdvancedLogImport.cs</DependentUpon>
     </Compile>
     <Compile Include="Logging\FormCreateLogFile.cs">
@@ -302,7 +302,7 @@
     <EmbeddedResource Include="Auth\FormAcquireToken.resx">
       <DependentUpon>FormAcquireToken.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAdvancedLogImport.resx">
+    <EmbeddedResource Include="Logging\FormAdvancedLogImport.resx">
       <DependentUpon>FormAdvancedLogImport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Auth\FormChooseAuthCertificate.resx">

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAzureApplicationRegistration));
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.comboBoxAuthenticationUrl = new System.Windows.Forms.ComboBox();
             this.comboBoxResourceUrl = new System.Windows.Forms.ComboBox();
@@ -211,7 +212,7 @@
             this.radioButtonAuthAsNativeApp.AutoSize = true;
             this.radioButtonAuthAsNativeApp.Checked = true;
             this.radioButtonAuthAsNativeApp.Location = new System.Drawing.Point(7, 16);
-            this.radioButtonAuthAsNativeApp.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radioButtonAuthAsNativeApp.Margin = new System.Windows.Forms.Padding(2);
             this.radioButtonAuthAsNativeApp.Name = "radioButtonAuthAsNativeApp";
             this.radioButtonAuthAsNativeApp.Size = new System.Drawing.Size(384, 17);
             this.radioButtonAuthAsNativeApp.TabIndex = 32;
@@ -281,9 +282,9 @@
             this.groupBox5.Controls.Add(this.buttonManageTokens);
             this.groupBox5.Controls.Add(this.buttonAcquireToken);
             this.groupBox5.Location = new System.Drawing.Point(12, 309);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox5.Size = new System.Drawing.Size(238, 42);
             this.groupBox5.TabIndex = 48;
             this.groupBox5.TabStop = false;
@@ -292,7 +293,7 @@
             // buttonManageTokens
             // 
             this.buttonManageTokens.Location = new System.Drawing.Point(104, 16);
-            this.buttonManageTokens.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonManageTokens.Margin = new System.Windows.Forms.Padding(2);
             this.buttonManageTokens.Name = "buttonManageTokens";
             this.buttonManageTokens.Size = new System.Drawing.Size(119, 22);
             this.buttonManageTokens.TabIndex = 38;
@@ -303,7 +304,7 @@
             // buttonAcquireToken
             // 
             this.buttonAcquireToken.Location = new System.Drawing.Point(7, 16);
-            this.buttonAcquireToken.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonAcquireToken.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAcquireToken.Name = "buttonAcquireToken";
             this.buttonAcquireToken.Size = new System.Drawing.Size(92, 22);
             this.buttonAcquireToken.TabIndex = 37;
@@ -316,9 +317,9 @@
             this.groupBox4.Controls.Add(this.buttonAppConsent);
             this.groupBox4.Controls.Add(this.buttonUserConsent);
             this.groupBox4.Location = new System.Drawing.Point(12, 263);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox4.Size = new System.Drawing.Size(238, 42);
             this.groupBox4.TabIndex = 47;
             this.groupBox4.TabStop = false;
@@ -328,7 +329,7 @@
             // 
             this.buttonAppConsent.Enabled = false;
             this.buttonAppConsent.Location = new System.Drawing.Point(7, 16);
-            this.buttonAppConsent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonAppConsent.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAppConsent.Name = "buttonAppConsent";
             this.buttonAppConsent.Size = new System.Drawing.Size(124, 22);
             this.buttonAppConsent.TabIndex = 36;
@@ -339,7 +340,7 @@
             // 
             this.buttonUserConsent.Enabled = false;
             this.buttonUserConsent.Location = new System.Drawing.Point(135, 16);
-            this.buttonUserConsent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonUserConsent.Margin = new System.Windows.Forms.Padding(2);
             this.buttonUserConsent.Name = "buttonUserConsent";
             this.buttonUserConsent.Size = new System.Drawing.Size(92, 22);
             this.buttonUserConsent.TabIndex = 35;
@@ -350,7 +351,7 @@
             // 
             this.buttonRegisterApplication.Enabled = false;
             this.buttonRegisterApplication.Location = new System.Drawing.Point(392, 279);
-            this.buttonRegisterApplication.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonRegisterApplication.Margin = new System.Windows.Forms.Padding(2);
             this.buttonRegisterApplication.Name = "buttonRegisterApplication";
             this.buttonRegisterApplication.Size = new System.Drawing.Size(155, 21);
             this.buttonRegisterApplication.TabIndex = 49;
@@ -361,7 +362,7 @@
             // buttonClose
             // 
             this.buttonClose.Location = new System.Drawing.Point(497, 331);
-            this.buttonClose.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonClose.Margin = new System.Windows.Forms.Padding(2);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(50, 21);
             this.buttonClose.TabIndex = 50;
@@ -381,6 +382,7 @@
             this.Controls.Add(this.groupBoxAuth);
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormAzureApplicationRegistration";

@@ -187,11 +187,6 @@ namespace SOAPe
                     return;  // This control isn't being stored
             }
 
-            if (control.Name.ToLower().Contains("xml"))
-            {
-                int x = 1;
-            }
-
             if (control.Tag != null)
             {
                 if (!control.Tag.Equals("NoTextSave"))
