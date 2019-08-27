@@ -1093,7 +1093,9 @@ namespace SOAPe
 
         private void buttonAppRegistration_Click(object sender, EventArgs e)
         {
+            _oAuthAppRegForm.TokenTextBox = textBoxOAuthToken; // So that the app reg form knows where to send any acquired tokens
             _oAuthAppRegForm.ShowDialog(this);
+            this.Activate();
         }
 
         private void buttonUpdateEWSHeader_Click(object sender, EventArgs e)

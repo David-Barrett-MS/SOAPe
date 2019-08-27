@@ -29,6 +29,7 @@ namespace SOAPe.Auth
         private ClassFormConfig _formConfig = null;
         private AuthenticationResult _lastAuthResult = null;
         private ClassOAuthHelper _oAuthHelper = new ClassOAuthHelper();
+        private TextBox _tokenTextBox = null;
 
         public FormAzureApplicationRegistration()
         {
@@ -70,6 +71,12 @@ namespace SOAPe.Auth
         public string ApplicationId
         {
             get { return textBoxApplicationId.Text; }
+        }
+
+        public TextBox TokenTextBox
+        {
+            get { return _tokenTextBox; }
+            set { _tokenTextBox = value; }
         }
 
         private void UpdateAuthUI()
@@ -114,6 +121,26 @@ namespace SOAPe.Auth
             return false;
         }
 
+        private void UpdateTokenTextbox()
+        {
+            // If we have a textbox for the access token, update it with our current token
+            if (_tokenTextBox == null)
+                return;
+            try
+            {
+                if (_tokenTextBox.InvokeRequired)
+                {
+                    _tokenTextBox.Invoke(new MethodInvoker(delegate ()
+                    {
+                        _tokenTextBox.Text = _lastAuthResult.AccessToken;
+                    }));
+                }
+                else
+                    _tokenTextBox.Text = _lastAuthResult.AccessToken;
+            }
+            catch { }
+        }
+
         public bool AcquireNativeAppToken()
         {
             if (!HaveValidAppConfig())
@@ -130,6 +157,7 @@ namespace SOAPe.Auth
             {
                 AuthenticationContext authenticationContext = new AuthenticationContext(comboBoxAuthenticationUrl.Text, _oAuthHelper.TokenCache);
                 _lastAuthResult = authenticationContext.AcquireTokenAsync(comboBoxResourceUrl.Text, textBoxApplicationId.Text, new Uri(textBoxRedirectUrl.Text), new PlatformParameters(PromptBehavior.Always)).Result;
+                UpdateTokenTextbox();
                 return true;
             }
             catch (Exception ex)

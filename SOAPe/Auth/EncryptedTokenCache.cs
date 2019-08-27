@@ -29,8 +29,17 @@ namespace SOAPe.Auth
 
         // Initializes the cache against a local file.
         // If the file is already present, it loads its content in the ADAL cache
-        public EncryptedTokenCache(string filePath = @".\TokenCache.dat")
+        public EncryptedTokenCache(string filePath = "")
         {
+            // If no config file is specified, then we use one based on current user's SID
+            try
+            {
+                if (String.IsNullOrEmpty(filePath))
+                {
+                    filePath = @".\" + System.Security.Principal.WindowsIdentity.GetCurrent().User.Value + ".tokens";
+                }
+            }
+            catch { }
             cacheFilePath = filePath;
             this.AfterAccess = AfterAccessNotification;
             this.BeforeAccess = BeforeAccessNotification;

@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormListener));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonEditListenUrl = new System.Windows.Forms.Button();
             this.textBoxListenerURi = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -38,7 +39,6 @@
             this.hScrollBarReceived = new System.Windows.Forms.HScrollBar();
             this.buttonClearEvents = new System.Windows.Forms.Button();
             this.xmlEditor1 = new SOAPe.XmlEditor();
-            this.buttonEditListenUrl = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -58,6 +58,16 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Listener URL";
+            // 
+            // buttonEditListenUrl
+            // 
+            this.buttonEditListenUrl.Enabled = false;
+            this.buttonEditListenUrl.Location = new System.Drawing.Point(527, 20);
+            this.buttonEditListenUrl.Name = "buttonEditListenUrl";
+            this.buttonEditListenUrl.Size = new System.Drawing.Size(75, 24);
+            this.buttonEditListenUrl.TabIndex = 1;
+            this.buttonEditListenUrl.Text = "Edit...";
+            this.buttonEditListenUrl.UseVisualStyleBackColor = true;
             // 
             // textBoxListenerURi
             // 
@@ -163,15 +173,6 @@
             this.xmlEditor1.Size = new System.Drawing.Size(603, 218);
             this.xmlEditor1.SyntaxHighlight = true;
             this.xmlEditor1.TabIndex = 0;
-            // 
-            // buttonEditListenUrl
-            // 
-            this.buttonEditListenUrl.Location = new System.Drawing.Point(527, 20);
-            this.buttonEditListenUrl.Name = "buttonEditListenUrl";
-            this.buttonEditListenUrl.Size = new System.Drawing.Size(75, 24);
-            this.buttonEditListenUrl.TabIndex = 1;
-            this.buttonEditListenUrl.Text = "Edit...";
-            this.buttonEditListenUrl.UseVisualStyleBackColor = true;
             // 
             // FormListener
             // 
