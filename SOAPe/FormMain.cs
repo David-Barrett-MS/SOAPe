@@ -401,11 +401,11 @@ namespace SOAPe
         private string LoadTemplate(string ItemId = "", string FolderId = "")
         {
             // Reads the XML template
-            string sTemplateContent = "";
+            string sTemplateContent = String.Empty;
             FormReplaceTemplateFields oForm = new FormReplaceTemplateFields(ItemId, FolderId);
             sTemplateContent = oForm.ReadTemplate(this);
-            oForm.Dispose();
             this.Activate(); // To stop the main window from disappearing behind other applications (Windows 10 z-order issues)
+            oForm.Dispose();
 
             if (String.IsNullOrEmpty(sTemplateContent))
                 return xmlEditorRequest.Text;

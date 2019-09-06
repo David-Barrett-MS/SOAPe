@@ -169,6 +169,8 @@ namespace SOAPe
                 item.SubItems.Add(logRows[i]["Tid"].ToString());
                 item.SubItems.Add(logRows[i]["SOAPMethod"].ToString());
                 item.SubItems.Add(((Int64)logRows[i]["Size"]).ToString("0,0"));
+                item.SubItems.Add(logRows[i]["Mailbox"].ToString());
+                item.SubItems.Add(logRows[i]["ExchangeImpersonation"].ToString());
                 if (listViewLogIndex.InvokeRequired)
                 {
                     listViewLogIndex.Invoke(new MethodInvoker(delegate()
@@ -195,7 +197,7 @@ namespace SOAPe
             }
             else
                 ShowStatus("Filter Active", 100, Color.MintCream);
-            ThreadPool.QueueUserWorkItem(new WaitCallback(CheckForErrors), null);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(AnalyzeTrace), null);
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -393,7 +395,7 @@ namespace SOAPe
         }
 
 
-        private void CheckForErrors(object o)
+        private void AnalyzeTrace(object o)
         {
             // Go through the listbox items and check content for errors
             // This method is intended to run on a background thread, as the checking can take a significant length of time
@@ -411,9 +413,9 @@ namespace SOAPe
                     {
                         TraceElement trace = new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text);
                         if (trace.IsErrorResponse)
-                        {
                             listViewLogIndex.Items[i].BackColor = Color.Red;
-                        }    
+                        listViewLogIndex.Items[i].SubItems[5].Text = trace.Mailbox;
+                        listViewLogIndex.Items[i].SubItems[6].Text = trace.Impersonating;
                         i++;
                     }
                 }));
@@ -425,6 +427,8 @@ namespace SOAPe
                     TraceElement trace = new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text);
                     if (trace.IsErrorResponse)
                         listViewLogIndex.Items[i].BackColor = Color.Red;
+                    listViewLogIndex.Items[i].SubItems[5].Text = trace.Mailbox;
+                    listViewLogIndex.Items[i].SubItems[6].Text = trace.Impersonating;
                     i++;
                 }
             }

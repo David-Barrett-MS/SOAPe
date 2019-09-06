@@ -183,6 +183,8 @@ namespace SOAPe
             _logDataTable.Columns.Add(new DataColumn("SOAPMethod", System.Type.GetType("System.String")));
             _logDataTable.Columns.Add(new DataColumn("Data", System.Type.GetType("System.String")));
             _logDataTable.Columns.Add(new DataColumn("Size", System.Type.GetType("System.Int64")));
+            _logDataTable.Columns.Add(new DataColumn("ExchangeImpersonation", System.Type.GetType("System.String")));
+            _logDataTable.Columns.Add(new DataColumn("Mailbox", System.Type.GetType("System.String")));
         }
 
         public void ClearHistory()
@@ -238,7 +240,8 @@ namespace SOAPe
             return SOAPeTag;
         }
 
-        private void LogToDatabase(string Data, string Tag, DateTime LogTime, int ThreadId, string LogApplication, string LogVersion)
+        private void LogToDatabase(string Data, string Tag, DateTime LogTime, int ThreadId, string LogApplication,
+            string LogVersion, string Mailbox = "", string Impersonating = "")
         {
             // Write the trace information to the local database (which is used for the log viewer)
 
@@ -251,6 +254,8 @@ namespace SOAPe
             row["SOAPMethod"] = ReadMethodFromRequest(Data);
             row["Data"] = Data;
             row["Size"] = Data.Length;
+            row["Mailbox"] = Mailbox;
+            row["ExchangeImpersonation"] = Impersonating;
             _logDataTable.Rows.Add(row);
         }
 
@@ -478,7 +483,7 @@ namespace SOAPe
                                             }
                                             else
                                             {
-                                                // We only get here when we have Xml mixed in with Trace
+                                                // We only get here when we have Xml mixed in with Trace (looking at you, EWSEditor...)
                                                 // We should be able to collect everything up to the next Trace or Xml tag and then parse that
 
                                             }
@@ -646,7 +651,14 @@ namespace SOAPe
                 }
                 catch { }
 
-                LogToDatabase(sEWSData,sTag,logTime,threadId, sApplication, sVersion);
+                Dictionary<string, string> interestingXmlElements = TraceElement.InterestingXMLElements(xml);
+                string impersonation = "";
+                string mailbox = "";
+                if (interestingXmlElements.ContainsKey("ExchangeImpersonation"))
+                    impersonation = interestingXmlElements["ExchangeImpersonation"];
+                if (interestingXmlElements.ContainsKey("Mailbox"))
+                    mailbox = interestingXmlElements["Mailbox"];
+                LogToDatabase(sEWSData,sTag,logTime,threadId, sApplication, sVersion, mailbox, impersonation);
             }
             catch { }
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace SOAPe
 {
@@ -14,12 +15,14 @@ namespace SOAPe
         private string _rawTrace = ""; // The whole of the trace element (includes <trace/> tags)
         private string _traceData = ""; // The data of the trace (e.g. the Xml from a request or response)
         private Dictionary<string, string> _traceTagAttributes; // Trace tag attributes (e.g. Tag, Time, Tid), names all lower-cased
+        private Dictionary<string, string> _xmlElements; // We extract certain useful elements from the Xml
 
         public TraceElement(string Trace)
         {
             _rawTrace = Trace;
             _traceTagAttributes = TraceTagAttributes(_rawTrace);
             _traceData = ExtractTraceContent(_rawTrace);
+            _xmlElements = InterestingXMLElements(_traceData);
         }
 
         public TraceElement(string TraceData, string TraceTag)
@@ -28,6 +31,7 @@ namespace SOAPe
             _traceTagAttributes = new Dictionary<string, string>();
             _traceTagAttributes.Add("tag", TraceTag);
             _traceData = TraceData;
+            _xmlElements = InterestingXMLElements(_traceData);
         }
 
         public static Dictionary<string, string> TraceTagAttributes(string TraceTag)
@@ -45,6 +49,113 @@ namespace SOAPe
             }
             catch { }
             return attributes;
+        }
+
+        public static Dictionary<string, string> InterestingXMLElements(XmlDocument xmlDoc)
+        {
+            // We have an Xml document, so we look for interesting information to extract
+
+            Dictionary<string, string> xmlElements = new Dictionary<string, string>();
+
+            // Analyze SOAP header
+            XmlNodeList headerNodeList = xmlDoc.GetElementsByTagName("Header", "http://schemas.xmlsoap.org/soap/envelope/");
+            if (headerNodeList.Count == 0)
+                headerNodeList = xmlDoc.GetElementsByTagName("soap:Header");
+
+            XmlNode headerNode = null;
+            if (headerNodeList.Count == 1)
+            {
+                headerNode = headerNodeList[0];
+            }
+
+            // Look for Impersonation Header
+            if (headerNode != null)
+            {
+                foreach (XmlNode xmlNode in headerNode.ChildNodes)
+                {
+                    if (xmlNode.Name.Equals("ExchangeImpersonation"))
+                    {
+                        foreach (XmlNode xmlImpersonationNode in xmlNode)
+                        {
+                            if (xmlImpersonationNode.Name == "ConnectingSID")
+                            {
+                                // We should have just one child node here, which will be the impersonated user
+                                if (xmlImpersonationNode.ChildNodes.Count == 1)
+                                {
+                                    try
+                                    {
+                                        xmlElements.Add("ExchangeImpersonationType", xmlImpersonationNode.FirstChild.Name);
+                                        xmlElements.Add("ExchangeImpersonation", xmlImpersonationNode.FirstChild.FirstChild.Value);
+                                    }
+                                    catch { }
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            // Analyze SOAP Body
+            XmlNodeList bodyNodeList = xmlDoc.GetElementsByTagName("Body", "http://schemas.xmlsoap.org/soap/envelope/");
+            if (bodyNodeList.Count == 0)
+                bodyNodeList = xmlDoc.GetElementsByTagName("soap:Body");
+            XmlNode bodyNode = null;
+            if (bodyNodeList.Count == 1)
+            {
+                bodyNode = bodyNodeList[0];
+            }
+
+            // Look for Mailbox (implies delegate access)
+            if (bodyNode != null)
+            {
+                foreach (XmlNode xmlNode in bodyNode.FirstChild.ChildNodes)
+                {
+                    if (xmlNode.LocalName.Equals("FolderIds"))
+                    {
+                        foreach (XmlNode xmlFolderIdNode in xmlNode)
+                        {
+                            if (xmlFolderIdNode.LocalName == "DistinguishedFolderId")
+                            {
+                                // DistinguishedFolderId could have a mailbox element, so we check for that
+                                // FolderIds contain mailbox info in the Id, so normal Ids can be ignored (we can't read the mailbox info)
+                                foreach (XmlNode xmlDistinguishedFolderIdNode in xmlFolderIdNode)
+                                {
+                                    if (xmlDistinguishedFolderIdNode.LocalName.Equals("Mailbox"))
+                                    {
+                                        try
+                                        {
+                                            xmlElements.Add("Mailbox", xmlDistinguishedFolderIdNode.FirstChild.FirstChild.Value);
+                                        }
+                                        catch { }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return xmlElements;
+        }
+
+        public static Dictionary<string,string> InterestingXMLElements(string Xml)
+        {
+
+            XmlDocument xmlDoc = new XmlDocument();
+            try
+            {
+                xmlDoc.LoadXml(Xml);
+                return InterestingXMLElements(xmlDoc);
+            }
+            catch
+            {
+                // We'll get an error if the payload is not Xml, in which case we've nothing to do
+                return new Dictionary<string, string>();
+            }
+
         }
 
         public static string ExtractTraceContent(string Trace)
@@ -114,6 +225,29 @@ namespace SOAPe
                 if (sTag.Contains("autodiscover")) { return EWSTraceType.Autodiscover; }
                 return EWSTraceType.Unknown;
             }
+        }
+
+        public string Mailbox
+        {
+            get
+            {
+                return InterestingXmlElement("Mailbox");
+            }
+        }
+
+        public string Impersonating
+        {
+            get
+            {
+                return InterestingXmlElement("ExchangeImpersonation");
+            }
+        }
+
+        public string InterestingXmlElement(string ElementTag)
+        {
+            if (_xmlElements.ContainsKey(ElementTag))
+                return _xmlElements[ElementTag];
+            return null;
         }
 
         public bool IsErrorResponse
