@@ -67,6 +67,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -76,8 +77,9 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.xmlEditor1);
-            this.splitContainer1.Size = new System.Drawing.Size(1144, 428);
+            this.splitContainer1.Size = new System.Drawing.Size(1716, 658);
             this.splitContainer1.SplitterDistance = 529;
+            this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 0;
             // 
             // listViewLogIndex
@@ -96,8 +98,9 @@
             this.listViewLogIndex.GridLines = true;
             this.listViewLogIndex.HideSelection = false;
             this.listViewLogIndex.Location = new System.Drawing.Point(0, 0);
+            this.listViewLogIndex.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.listViewLogIndex.Name = "listViewLogIndex";
-            this.listViewLogIndex.Size = new System.Drawing.Size(529, 428);
+            this.listViewLogIndex.Size = new System.Drawing.Size(529, 658);
             this.listViewLogIndex.TabIndex = 0;
             this.listViewLogIndex.Tag = "Time ASC,Tid ASC";
             this.listViewLogIndex.UseCompatibleStateImageBehavior = false;
@@ -129,17 +132,16 @@
             // 
             this.columnHeader5.Text = "Size";
             this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeader5.Width = 70;
             // 
             // columnHeader6
             // 
             this.columnHeader6.Text = "Mailbox";
-            this.columnHeader6.Width = 200;
+            this.columnHeader6.Width = 150;
             // 
             // columnHeader7
             // 
             this.columnHeader7.Text = "Impersonating";
-            this.columnHeader7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader7.Width = 150;
             // 
             // contextMenuStrip1
             // 
@@ -147,12 +149,12 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.deleteEntryToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(138, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(180, 36);
             // 
             // deleteEntryToolStripMenuItem
             // 
             this.deleteEntryToolStripMenuItem.Name = "deleteEntryToolStripMenuItem";
-            this.deleteEntryToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.deleteEntryToolStripMenuItem.Size = new System.Drawing.Size(179, 32);
             this.deleteEntryToolStripMenuItem.Text = "Delete entry";
             this.deleteEntryToolStripMenuItem.Click += new System.EventHandler(this.deleteEntryToolStripMenuItem_Click);
             // 
@@ -162,7 +164,7 @@
             this.xmlEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.xmlEditor1.IndentXml = true;
             this.xmlEditor1.Location = new System.Drawing.Point(0, 0);
-            this.xmlEditor1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.xmlEditor1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.xmlEditor1.Name = "xmlEditor1";
             this.xmlEditor1.ReadOnly = true;
             this.xmlEditor1.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
@@ -171,7 +173,7 @@
             this.xmlEditor1.SelectionLength = 0;
             this.xmlEditor1.SelectionStart = 0;
             this.xmlEditor1.SendItemIdToTemplateEnabled = false;
-            this.xmlEditor1.Size = new System.Drawing.Size(611, 428);
+            this.xmlEditor1.Size = new System.Drawing.Size(1181, 658);
             this.xmlEditor1.SyntaxHighlight = true;
             this.xmlEditor1.TabIndex = 0;
             // 
@@ -187,17 +189,17 @@
             this.panel1.Controls.Add(this.buttonClearLog);
             this.panel1.Controls.Add(this.buttonClose);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 430);
+            this.panel1.Location = new System.Drawing.Point(0, 662);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1144, 32);
+            this.panel1.Size = new System.Drawing.Size(1716, 49);
             this.panel1.TabIndex = 1;
             // 
             // buttonSaveAs
             // 
-            this.buttonSaveAs.Location = new System.Drawing.Point(461, 3);
-            this.buttonSaveAs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonSaveAs.Location = new System.Drawing.Point(692, 5);
             this.buttonSaveAs.Name = "buttonSaveAs";
-            this.buttonSaveAs.Size = new System.Drawing.Size(64, 23);
+            this.buttonSaveAs.Size = new System.Drawing.Size(96, 35);
             this.buttonSaveAs.TabIndex = 13;
             this.buttonSaveAs.Text = "Save As...";
             this.buttonSaveAs.UseVisualStyleBackColor = true;
@@ -205,10 +207,9 @@
             // 
             // buttonAdvancedImport
             // 
-            this.buttonAdvancedImport.Location = new System.Drawing.Point(353, 3);
-            this.buttonAdvancedImport.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonAdvancedImport.Location = new System.Drawing.Point(530, 5);
             this.buttonAdvancedImport.Name = "buttonAdvancedImport";
-            this.buttonAdvancedImport.Size = new System.Drawing.Size(105, 23);
+            this.buttonAdvancedImport.Size = new System.Drawing.Size(158, 35);
             this.buttonAdvancedImport.TabIndex = 12;
             this.buttonAdvancedImport.Text = "Advanced Import...";
             this.buttonAdvancedImport.UseVisualStyleBackColor = true;
@@ -216,9 +217,10 @@
             // 
             // buttonLoadLogFolder
             // 
-            this.buttonLoadLogFolder.Location = new System.Drawing.Point(246, 3);
+            this.buttonLoadLogFolder.Location = new System.Drawing.Point(369, 5);
+            this.buttonLoadLogFolder.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonLoadLogFolder.Name = "buttonLoadLogFolder";
-            this.buttonLoadLogFolder.Size = new System.Drawing.Size(102, 23);
+            this.buttonLoadLogFolder.Size = new System.Drawing.Size(153, 35);
             this.buttonLoadLogFolder.TabIndex = 11;
             this.buttonLoadLogFolder.Text = "Load log folder...";
             this.buttonLoadLogFolder.UseVisualStyleBackColor = true;
@@ -229,20 +231,21 @@
             this.statusPercentBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.statusPercentBar1.BarColour = System.Drawing.Color.PaleGreen;
-            this.statusPercentBar1.Location = new System.Drawing.Point(611, 4);
-            this.statusPercentBar1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.statusPercentBar1.Location = new System.Drawing.Point(916, 6);
+            this.statusPercentBar1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.statusPercentBar1.Name = "statusPercentBar1";
             this.statusPercentBar1.PercentComplete = 0D;
-            this.statusPercentBar1.Size = new System.Drawing.Size(449, 21);
+            this.statusPercentBar1.Size = new System.Drawing.Size(674, 32);
             this.statusPercentBar1.Status = "";
             this.statusPercentBar1.TabIndex = 10;
             this.statusPercentBar1.Visible = false;
             // 
             // buttonFilter
             // 
-            this.buttonFilter.Location = new System.Drawing.Point(530, 3);
+            this.buttonFilter.Location = new System.Drawing.Point(795, 5);
+            this.buttonFilter.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonFilter.Name = "buttonFilter";
-            this.buttonFilter.Size = new System.Drawing.Size(75, 23);
+            this.buttonFilter.Size = new System.Drawing.Size(112, 35);
             this.buttonFilter.TabIndex = 9;
             this.buttonFilter.Text = "Filter...";
             this.buttonFilter.UseVisualStyleBackColor = true;
@@ -250,9 +253,10 @@
             // 
             // buttonReload
             // 
-            this.buttonReload.Location = new System.Drawing.Point(84, 3);
+            this.buttonReload.Location = new System.Drawing.Point(126, 5);
+            this.buttonReload.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonReload.Name = "buttonReload";
-            this.buttonReload.Size = new System.Drawing.Size(75, 23);
+            this.buttonReload.Size = new System.Drawing.Size(112, 35);
             this.buttonReload.TabIndex = 5;
             this.buttonReload.Text = "Reload log";
             this.buttonReload.UseVisualStyleBackColor = true;
@@ -260,9 +264,10 @@
             // 
             // buttonLoad
             // 
-            this.buttonLoad.Location = new System.Drawing.Point(165, 3);
+            this.buttonLoad.Location = new System.Drawing.Point(248, 5);
+            this.buttonLoad.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(75, 23);
+            this.buttonLoad.Size = new System.Drawing.Size(112, 35);
             this.buttonLoad.TabIndex = 4;
             this.buttonLoad.Text = "Load log...";
             this.buttonLoad.UseVisualStyleBackColor = true;
@@ -270,9 +275,10 @@
             // 
             // buttonClearLog
             // 
-            this.buttonClearLog.Location = new System.Drawing.Point(3, 3);
+            this.buttonClearLog.Location = new System.Drawing.Point(4, 5);
+            this.buttonClearLog.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonClearLog.Name = "buttonClearLog";
-            this.buttonClearLog.Size = new System.Drawing.Size(75, 23);
+            this.buttonClearLog.Size = new System.Drawing.Size(112, 35);
             this.buttonClearLog.TabIndex = 1;
             this.buttonClearLog.Text = "Clear log";
             this.buttonClearLog.UseVisualStyleBackColor = true;
@@ -281,9 +287,10 @@
             // buttonClose
             // 
             this.buttonClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClose.Location = new System.Drawing.Point(1066, 3);
+            this.buttonClose.Location = new System.Drawing.Point(1599, 5);
+            this.buttonClose.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(75, 23);
+            this.buttonClose.Size = new System.Drawing.Size(112, 35);
             this.buttonClose.TabIndex = 0;
             this.buttonClose.Text = "Close";
             this.buttonClose.UseVisualStyleBackColor = true;
@@ -291,13 +298,14 @@
             // 
             // FormLogViewer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1144, 462);
+            this.ClientSize = new System.Drawing.Size(1716, 711);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(818, 294);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.MinimumSize = new System.Drawing.Size(1216, 422);
             this.Name = "FormLogViewer";
             this.Text = "Log Viewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormLogViewer_FormClosing);

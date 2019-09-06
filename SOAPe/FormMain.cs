@@ -557,26 +557,6 @@ namespace SOAPe
             xmlEditorRequest.Text = xmlRequest.OuterXml;
         }
 
-        private string EWSHeader()
-        {
-            // Prepare the EWS header based on version and impersonation settings
-            string sHeader = "";
-
-            if (comboBoxRequestServerVersion.Text != "Not set")
-            {
-                // Set the Exchange version
-                sHeader+= "<RequestServerVersion Version=\"" + comboBoxRequestServerVersion.Text + "\" xmlns=\"http://schemas.microsoft.com/exchange/services/2006/types\" />\r\n";
-            }
-
-            string sImpersonation = GetImpersonationHeader();
-            if (!String.IsNullOrEmpty(sImpersonation))
-                sHeader += sImpersonation;
-
-            if (!String.IsNullOrEmpty(sHeader))
-                sHeader = "<soap:Header>\r\n" + sHeader + "</soap:Header>\r\n";
-
-            return sHeader;
-        }
 
         private void autodiscoverToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -669,7 +649,12 @@ namespace SOAPe
         private void textBoxImpersonationSID_TextChanged(object sender, EventArgs e)
         {
             if (!String.IsNullOrEmpty(textBoxImpersonationSID.Text))
-                checkBoxUpdateEWSHeader.Checked = true;
+            {
+                AddHTTPRequestHeader("X-AnchorMailbox", textBoxImpersonationSID.Text);
+            }
+            else
+                DeleteHTTPRequestHeader("X-AnchorMailbox");
+            UpdateHTTPHeaderControls();
         }
 
         private void LoadCertificate(string Subject)
@@ -779,29 +764,39 @@ namespace SOAPe
             listViewHTTPHeaders.Items[listViewHTTPHeaders.SelectedIndices[0]].Remove();
         }
 
+        private void DeleteHTTPRequestHeader(string HeaderName)
+        {
+            try
+            {
+                ListViewItem[] items = listViewHTTPHeaders.Items.Find(HeaderName, false);
+                if (items.Length > 0)
+                    items[0].Remove();
+            }
+            catch { }
+        }
+
+        private void AddHTTPRequestHeader(string HeaderName, string HeaderValue)
+        {
+            DeleteHTTPRequestHeader(HeaderName);
+
+            try
+            {
+                ListViewItem item = new ListViewItem(HeaderName);
+                item.Name = HeaderName;
+                item.SubItems.Add(HeaderValue);
+                listViewHTTPHeaders.Items.Add(item);
+            }
+            catch { }
+        }
+
         private void buttonHTTPHeaderAdd_Click(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(textBoxHTTPHeaderName.Text))
                 return;
 
-            try
-            {
-                ListViewItem[] items = listViewHTTPHeaders.Items.Find(textBoxHTTPHeaderName.Text, false);
-                if (items.Length > 0)
-                    items[0].Remove();
-            }
-            catch { }
-
-            try
-            {
-                ListViewItem item = new ListViewItem(textBoxHTTPHeaderName.Text);
-                item.Name = textBoxHTTPHeaderName.Text;
-                item.SubItems.Add(textBoxHTTPHeaderValue.Text);
-                listViewHTTPHeaders.Items.Add(item);
-                textBoxHTTPHeaderName.Text = "";
-                textBoxHTTPHeaderValue.Text = "";
-            }
-            catch { }
+            AddHTTPRequestHeader(textBoxHTTPHeaderName.Text, textBoxHTTPHeaderValue.Text);
+            textBoxHTTPHeaderName.Text = "";
+            textBoxHTTPHeaderValue.Text = "";
             UpdateHTTPHeaderControls();
         }
 
