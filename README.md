@@ -5,6 +5,6 @@ SOAPe also incorporates an EWS trace analyser that can import traces from other 
 
 ![SOAPe Interface](https://github.com/David-Barrett-MS/SOAPe/blob/master/SOAPe/Docs/Images/SOAPe1.6.png)
 
-The log viewer allows easy analysis of EWS traces, and includes error analysis and highlighting:
+The log viewer allows easy analysis of EWS traces, and includes error highlighting:
 
 ![SOAPe Log Viewer](https://github.com/David-Barrett-MS/SOAPe/blob/master/SOAPe/Docs/Images/SOAPe%20Log%20Viewer.png)
