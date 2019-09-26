@@ -361,6 +361,7 @@
     <EmbeddedResource Include="EWSTools\EWSConvertIDTemplate.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Docs\Images\SOAPe1.6.png" />
     <Content Include="v1 multisize.ico" />
     <None Include="SOAPe_TemporaryKey.pfx" />
     <Content Include="Templates\EWS\CreateItem %28Task%29.xml">
