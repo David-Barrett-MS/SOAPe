@@ -315,7 +315,6 @@ namespace SOAPe
             ToggleButton(Enabled, buttonLoadLogFolder);
             ToggleButton(Enabled, buttonReload);
             ToggleButton(Enabled, buttonFilter);
-            ToggleButton(false, buttonAdvancedImport);
         }
 
         private void ShowStatus(string Status, double PercentComplete = 0, Color? Colour = null)
