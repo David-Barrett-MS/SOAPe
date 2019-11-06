@@ -354,6 +354,9 @@
   <ItemGroup>
     <Content Include="Docs\Images\SOAPe Log Viewer.png" />
     <Content Include="Docs\Images\SOAPe1.6.png" />
+    <Content Include="Templates\EWS\GetUserPhoto.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="v1 multisize.ico" />
     <None Include="SOAPe_TemporaryKey.pfx" />
     <Content Include="Templates\EWS\CreateItem %28Task%29.xml">
@@ -628,9 +631,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\EWS %28raw%29\GetUserOOFSettings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Templates\EWS %28raw%29\GetUserPhoto.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\EWS %28raw%29\GetUserRetentionPolicyTags .xml">
