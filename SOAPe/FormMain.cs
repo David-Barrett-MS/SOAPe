@@ -198,41 +198,6 @@ namespace SOAPe
             }
         }
 
-        private void LogCredentials()
-        {
-            StringBuilder sCredentialInfo = new StringBuilder();
-            if (radioButtonDefaultCredentials.Checked)
-            {
-                sCredentialInfo.AppendLine("Using default credentials");
-                sCredentialInfo.Append("Username: ");
-                sCredentialInfo.AppendLine(Environment.UserName);
-                sCredentialInfo.Append("Domain: ");
-                sCredentialInfo.AppendLine(Environment.UserDomainName);
-            }
-            else if (radioButtonCertificateAuthentication.Checked)
-            {
-                sCredentialInfo.AppendLine("Using certificate");
-                if (_authCertificate != null)
-                {
-                    sCredentialInfo.Append("Subject: ");
-                    sCredentialInfo.AppendLine(_authCertificate.Subject);
-                }
-                else
-                    sCredentialInfo.AppendLine("NO CERTIFICATE SPECIFIED");
-            }
-            else
-            {
-                sCredentialInfo.AppendLine("Using specific credentials");
-                if (checkBoxForceBasicAuth.Checked)
-                    sCredentialInfo.AppendLine("Forcing BASIC AUTH");
-                sCredentialInfo.Append("Username: ");
-                sCredentialInfo.AppendLine(textBoxUsername.Text);
-                sCredentialInfo.Append("Domain: ");
-                sCredentialInfo.AppendLine(textBoxDomain.Text);
-            }
-            _logger.Log(sCredentialInfo.ToString(), "Request Credentials");
-        }
-
         private void SetSecurityProtocol(ClassSOAP oSOAP)
         {
             // Set security protocol as per form settings
@@ -292,35 +257,9 @@ namespace SOAPe
             HighlightResponseGroupbox(false);
 
             buttonSend.Enabled = false;
-            bool bBasicAuthExistingSetting = (checkBoxForceBasicAuth.Checked && !radioButtonNoAuth.Checked);
-            ClassSOAP oSOAP = null;
-            oSOAP = null;
 
-
-            //LogCredentials();
             CredentialHandler credentialHandler = CredentialHandler();
-            oSOAP = new ClassSOAP(textBoxURL.Text, _logger, credentialHandler);
-            /*if (radioButtonDefaultCredentials.Checked || (radioButtonSpecificCredentials.Checked && !checkBoxForceBasicAuth.Checked))
-            {
-                oSOAP = new ClassSOAP(textBoxURL.Text, CurrentCredentials, _logger);
-            }
-            else if (radioButtonNoAuth.Checked)
-            {
-                oSOAP = new ClassSOAP(textBoxURL.Text, _logger);
-            }
-            else if (radioButtonCertificateAuthentication.Checked)
-            {
-                oSOAP = new ClassSOAP(textBoxURL.Text, _authCertificate, _logger);
-            }
-            else if (radioButtonOAuth.Checked)
-            {
-                oSOAP = new ClassSOAP(textBoxURL.Text, _authCertificate, _logger);
-            }
-            else
-            {
-                oSOAP = new ClassSOAP(textBoxURL.Text, textBoxUsername.Text, textBoxPassword.Text, _logger);
-            }
-            */
+            ClassSOAP oSOAP = new ClassSOAP(textBoxURL.Text, _logger, credentialHandler);
 
             SetSecurityProtocol(oSOAP);
             oSOAP.BypassWebProxy = checkBoxBypassProxySettings.Checked;
@@ -408,8 +347,7 @@ namespace SOAPe
             textBoxUsername.Visible = bUserCredsVisible;
             textBoxPassword.Visible = bUserCredsVisible;
             textBoxDomain.Visible = bUserCredsVisible;
-            textBoxDomain.Enabled = bUserCredsVisible && !checkBoxForceBasicAuth.Checked;
-            checkBoxForceBasicAuth.Visible = bUserCredsVisible;
+            textBoxDomain.Enabled = bUserCredsVisible;
             labelUsername.Visible = bUserCredsVisible;
             labelPassword.Visible = bUserCredsVisible;
             labelDomain.Visible = bUserCredsVisible;
@@ -1149,11 +1087,8 @@ namespace SOAPe
             oForm.Show();
         }
 
-        private void EWSTestGetFolder(string DistinguishedFolderName)
+        private void TryXmlRequest(string requestXml)
         {
-            Dictionary<string, string> fieldValues = new Dictionary<string, string>();
-            fieldValues.Add("FolderId", DistinguishedFolderName);
-            string requestXml = FormReplaceTemplateFields.RetrieveEWSRequest("GetFolder", fieldValues);
             if (!String.IsNullOrEmpty(requestXml))
             {
                 xmlEditorRequest.Text = requestXml;
@@ -1161,22 +1096,47 @@ namespace SOAPe
             }
         }
 
+        private void EWSTestGetFolder(string DistinguishedFolderName)
+        {
+            Dictionary<string, string> fieldValues = new Dictionary<string, string>();
+            fieldValues.Add("FolderId", $"<t:DistinguishedFolderId Id=\"{DistinguishedFolderName}\" />");
+            TryXmlRequest(FormReplaceTemplateFields.RetrieveEWSRequest("GetFolder", fieldValues));
+        }
+
         private void GetFolderInboxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // <t:DistinguishedFolderId Id=\"inbox\" />
-            EWSTestGetFolder("<t:DistinguishedFolderId Id=\"inbox\" />");
+            EWSTestGetFolder("inbox");
         }
 
         private void GetFolderCalendarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // <t:DistinguishedFolderId Id=\"calendar\" />
-            EWSTestGetFolder("<t:DistinguishedFolderId Id=\"calendar\" />");
+            EWSTestGetFolder("calendar");
         }
 
         private void GetFolderContactsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // <t:DistinguishedFolderId Id=\"contacts\" />
-            EWSTestGetFolder("<t:DistinguishedFolderId Id=\"contacts\" />");
+            EWSTestGetFolder("contacts");
+        }
+
+        private void EWSTestFindItem(string DistinguishedFolderName)
+        {
+            Dictionary<string, string> fieldValues = new Dictionary<string, string>();
+            fieldValues.Add("BaseShape", "Default");
+            fieldValues.Add("MaxEntriesReturned", "50");
+            fieldValues.Add("Offset", "0");
+            fieldValues.Add("Basepoint", "Beginning");
+            fieldValues.Add("Folder", $"<t:DistinguishedFolderId Id=\"{DistinguishedFolderName}\" />");
+            TryXmlRequest(FormReplaceTemplateFields.RetrieveEWSRequest("FindItem", fieldValues));
+        }
+
+        private void FindItemInboxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EWSTestFindItem("inbox");
+        }
+
+        private void FindItemContactsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EWSTestFindItem("contacts");
         }
     }
 }
