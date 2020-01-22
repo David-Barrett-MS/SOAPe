@@ -433,17 +433,11 @@ namespace SOAPe
             buttonChooseCertificate.Visible = bCertAuthVisible;
         }
 
-        private void convertIDToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FormEWSConvertID oForm = new FormEWSConvertID(textBoxURL.Text,_logger, CredentialHandler(), this);
-            oForm.Show();
-        }
-
-        private string LoadTemplate(string ItemId = "", string FolderId = "")
+        private string LoadTemplate(string ItemId = "", string FolderId = "", string TemplateName = "")
         {
             // Reads the XML template
             string sTemplateContent = String.Empty;
-            FormReplaceTemplateFields oForm = new FormReplaceTemplateFields(ItemId, FolderId);
+            FormReplaceTemplateFields oForm = new FormReplaceTemplateFields(ItemId, FolderId, TemplateName);
             sTemplateContent = oForm.ReadTemplate(this);
             this.Activate(); // To stop the main window from disappearing behind other applications (Windows 10 z-order issues)
             oForm.Dispose();
@@ -602,25 +596,7 @@ namespace SOAPe
         private void autodiscoverToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Show warning...
-            ClassTemplateReader oReader = new ClassTemplateReader();
-            _autodiscoverForm = new FormEWSAutodiscover(this,textBoxURL, _logger);
-            
-            string sSMTPAddress = _userSMTPAddress;
-            if (!String.IsNullOrEmpty(textBoxImpersonationSID.Text))
-            {
-                // If we are using impersonation, we perform autodiscover on the impersonated address
-                if ((string)textBoxImpersonationSID.Tag == "PrimarySmtpAddress")
-                {
-                    sSMTPAddress = textBoxImpersonationSID.Text;
-                }
-                else
-                    sSMTPAddress = "";
-            }
-            else if (radioButtonSpecificCredentials.Checked)
-                if (textBoxUsername.Text.Contains("@"))
-                    sSMTPAddress = textBoxUsername.Text;
-            _autodiscoverForm.AutodiscoverSMTPAddress = sSMTPAddress;
-            _autodiscoverForm.Show(this);
+
         }
 
         private void radioButtonDefaultCredentials_CheckedChanged(object sender, EventArgs e)
@@ -637,13 +613,6 @@ namespace SOAPe
         {
             UpdateAuthUI();
         }
-
-        private void base64ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Encoding.FormBase64 oForm = new Encoding.FormBase64();
-            oForm.Show();
-        }
-
 
         private void buttonLoadTemplate_Click(object sender, EventArgs e)
         {
@@ -1132,5 +1101,40 @@ namespace SOAPe
             UpdateSOAPHeader();
         }
 
+        private void toolStripMenuItemAutoDiscover_Click(object sender, EventArgs e)
+        {
+            // Open Autodiscover form
+
+            ClassTemplateReader oReader = new ClassTemplateReader();
+            _autodiscoverForm = new FormEWSAutodiscover(this, textBoxURL, _logger);
+
+            string sSMTPAddress = String.Empty;
+            if (!String.IsNullOrEmpty(textBoxImpersonationSID.Text))
+            {
+                // If we are using impersonation, we perform autodiscover on the impersonated address
+                if ((string)textBoxImpersonationSID.Tag == "PrimarySmtpAddress")
+                {
+                    sSMTPAddress = textBoxImpersonationSID.Text;
+                }
+                else
+                    sSMTPAddress = "";
+            }
+            else if (radioButtonSpecificCredentials.Checked)
+                if (textBoxUsername.Text.Contains("@"))
+                    sSMTPAddress = textBoxUsername.Text;
+            _autodiscoverForm.AutodiscoverSMTPAddress = sSMTPAddress;
+            _autodiscoverForm.Show(this);
+        }
+
+        private void toolStripMenuItemConvertId_Click(object sender, EventArgs e)
+        {
+            xmlEditorRequest.Text = LoadTemplate("", "", "ConvertId");
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            Encoding.FormBase64 oForm = new Encoding.FormBase64();
+            oForm.Show();
+        }
     }
 }

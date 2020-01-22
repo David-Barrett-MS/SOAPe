@@ -68,10 +68,25 @@ namespace SOAPe
             catch { }
         }
 
-        public FormReplaceTemplateFields(string ItemId, string FolderId=""): this()
+        public FormReplaceTemplateFields(string ItemId, string FolderId="", string TemplateName=""): this()
         {
             _itemId = ItemId;
             _folderId = FolderId;
+            if (!String.IsNullOrEmpty(TemplateName))
+            {
+                // Specific template has been requested
+                if (comboBoxTemplate.Items.Count>0)
+                {
+                    for (int i=0; i<comboBoxTemplate.Items.Count; i++)
+                    {
+                        if (((String)comboBoxTemplate.Items[i]).Equals(TemplateName))
+                        {
+                            comboBoxTemplate.SelectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -347,6 +362,8 @@ namespace SOAPe
                 {
                     oRegEx = new Regex("<!--FIELD:" + sFieldName + ";.*?-->");
                     _xml = oRegEx.Replace(_xml, sFieldValue);
+                    oRegEx = new Regex("%%FIELD:" + sFieldName + ";.*?%%");
+                    _xml = oRegEx.Replace(_xml, sFieldValue);
                 }
             }
             oRegEx = new Regex("<!--DELETEMARKERSTART.*?-->");
@@ -357,32 +374,59 @@ namespace SOAPe
 
         private bool PopulateFieldList()
         {
+            bool fieldsFound = false;
             Regex oRegEx = new Regex("<!--FIELD:(.*?)-->", RegexOptions.IgnoreCase | RegexOptions.Multiline);
             MatchCollection oMatches = oRegEx.Matches(_templateXML);
             dataGridViewFields.Rows.Clear();
             _fieldType = new Dictionary<string, string>();
-            if (oMatches.Count == 0) return false;
-
-            foreach (Match oMatch in oMatches)
+            if (oMatches.Count > 0)
             {
-                AddField(oMatch.Value);
+                fieldsFound = true;
+                foreach (Match oMatch in oMatches)
+                {
+                    AddField(oMatch.Value);
+                }
             }
-            return true;
+
+            // Now check for Xml attribute fields
+            oRegEx = new Regex("\"%%(.*?)%%\"", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            oMatches = oRegEx.Matches(_templateXML);
+            _fieldType = new Dictionary<string, string>();
+            if (oMatches.Count > 0)
+            {
+                fieldsFound = true;
+                foreach (Match oMatch in oMatches)
+                {
+                    AddField(oMatch.Value);
+                }
+            }
+            return fieldsFound;
         }
 
         private void AddField(string FieldData)
         {
             // Add the field to the data grid
-            
+
             // "<!--FIELD:Subject;field data-->"
-            string sFieldName = FieldData.Substring(10);
-            string sFieldValues = "";
+            // OR "%%FIELD:Subject;field data%%"
+
+            string sFieldName = String.Empty;
+            if (FieldData.StartsWith("\"%%"))
+            {
+                sFieldName = FieldData.Substring(9);
+            }
+            else
+                sFieldName = FieldData.Substring(10);
+
             if (!sFieldName.Contains(";"))
                 return;
+            string sFieldValues = "";
 
             int iSemiColon = sFieldName.IndexOf(";");
             sFieldValues = sFieldName.Substring(iSemiColon + 1);
             if (sFieldValues.EndsWith("-->"))
+                sFieldValues = sFieldValues.Substring(0, sFieldValues.Length - 3);
+            if (sFieldValues.EndsWith("%%\""))
                 sFieldValues = sFieldValues.Substring(0, sFieldValues.Length - 3);
             sFieldName = sFieldName.Substring(0, iSemiColon);
 

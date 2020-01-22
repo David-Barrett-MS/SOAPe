@@ -213,12 +213,6 @@
     <Compile Include="EWSTools\FormEWSAutodiscover.Designer.cs">
       <DependentUpon>FormEWSAutodiscover.cs</DependentUpon>
     </Compile>
-    <Compile Include="EWSTools\FormEWSConvertID.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EWSTools\FormEWSConvertID.Designer.cs">
-      <DependentUpon>FormEWSConvertID.cs</DependentUpon>
-    </Compile>
     <Compile Include="EWSTools\FormEWSQuickTest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -263,9 +257,11 @@
     </Compile>
     <Compile Include="FormReplaceTemplateFields.cs">
       <SubType>Form</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="FormReplaceTemplateFields.Designer.cs">
       <DependentUpon>FormReplaceTemplateFields.cs</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="FormUserControlTest.cs">
       <SubType>Form</SubType>
@@ -306,9 +302,6 @@
     <EmbeddedResource Include="EWSTools\FormEWSAutodiscover.resx">
       <DependentUpon>FormEWSAutodiscover.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EWSTools\FormEWSConvertID.resx">
-      <DependentUpon>FormEWSConvertID.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="EWSTools\FormEWSQuickTest.resx">
       <DependentUpon>FormEWSQuickTest.cs</DependentUpon>
     </EmbeddedResource>
@@ -338,6 +331,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormReplaceTemplateFields.resx">
       <DependentUpon>FormReplaceTemplateFields.cs</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="FormUserControlTest.resx">
       <DependentUpon>FormUserControlTest.cs</DependentUpon>
@@ -376,6 +370,9 @@
   <ItemGroup>
     <Content Include="Docs\Images\SOAPe Log Viewer.png" />
     <Content Include="Docs\Images\SOAPe1.6.png" />
+    <Content Include="Templates\EWS\ConvertId.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\GetUserPhoto.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

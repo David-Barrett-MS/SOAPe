@@ -35,17 +35,12 @@
             this.checkBoxPersistCookies = new System.Windows.Forms.CheckBox();
             this.buttonLoadTemplate = new System.Windows.Forms.Button();
             this.buttonSend = new System.Windows.Forms.Button();
-            this.xmlEditorRequest = new SOAPe.XmlEditor();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.groupBoxResponse = new SOAPe.GroupBoxHighlight();
-            this.xmlEditorResponse = new SOAPe.XmlEditor();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.encodingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.base64ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.eWSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autodiscoverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.convertIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.getFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getItemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hTTPListenerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -123,15 +118,17 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxLogFolder = new System.Windows.Forms.TextBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.getFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.getItemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemAutoDiscover = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemConvertId = new System.Windows.Forms.ToolStripMenuItem();
+            this.xmlEditorRequest = new SOAPe.XmlEditor();
+            this.groupBoxResponse = new SOAPe.GroupBoxHighlight();
+            this.xmlEditorResponse = new SOAPe.XmlEditor();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.groupBoxResponse.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPageUrl.SuspendLayout();
@@ -143,6 +140,7 @@
             this.tabPageHTTPHeaders.SuspendLayout();
             this.tabPageCookies.SuspendLayout();
             this.tabPageLogging.SuspendLayout();
+            this.groupBoxResponse.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox2
@@ -215,28 +213,6 @@
             this.buttonSend.UseVisualStyleBackColor = true;
             this.buttonSend.Click += new System.EventHandler(this.buttonSend_Click);
             // 
-            // xmlEditorRequest
-            // 
-            this.xmlEditorRequest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.xmlEditorRequest.BackColor = System.Drawing.SystemColors.Window;
-            this.xmlEditorRequest.IndentXml = true;
-            this.xmlEditorRequest.Location = new System.Drawing.Point(4, 74);
-            this.xmlEditorRequest.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.xmlEditorRequest.Name = "xmlEditorRequest";
-            this.xmlEditorRequest.ReadOnly = false;
-            this.xmlEditorRequest.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
-    "d\\f0\\fs17\\par\r\n}\r\n";
-            this.xmlEditorRequest.SelectionLength = 0;
-            this.xmlEditorRequest.SelectionStart = 0;
-            this.xmlEditorRequest.SendItemIdToTemplateEnabled = false;
-            this.xmlEditorRequest.Size = new System.Drawing.Size(1170, 286);
-            this.xmlEditorRequest.SyntaxHighlight = true;
-            this.xmlEditorRequest.TabIndex = 7;
-            this.xmlEditorRequest.Tag = "";
-            // 
             // splitContainer1
             // 
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -259,44 +235,6 @@
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 2;
             // 
-            // groupBoxResponse
-            // 
-            this.groupBoxResponse.Controls.Add(this.xmlEditorResponse);
-            this.groupBoxResponse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxResponse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxResponse.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBoxResponse.HighlightColour = System.Drawing.Color.Red;
-            this.groupBoxResponse.Highlighted = false;
-            this.groupBoxResponse.Location = new System.Drawing.Point(0, 0);
-            this.groupBoxResponse.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBoxResponse.Name = "groupBoxResponse";
-            this.groupBoxResponse.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBoxResponse.Size = new System.Drawing.Size(1179, 397);
-            this.groupBoxResponse.TabIndex = 0;
-            this.groupBoxResponse.TabStop = false;
-            this.groupBoxResponse.Text = "Response";
-            // 
-            // xmlEditorResponse
-            // 
-            this.xmlEditorResponse.BackColor = System.Drawing.SystemColors.Window;
-            this.xmlEditorResponse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xmlEditorResponse.IndentXml = false;
-            this.xmlEditorResponse.Location = new System.Drawing.Point(4, 24);
-            this.xmlEditorResponse.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.xmlEditorResponse.Name = "xmlEditorResponse";
-            this.xmlEditorResponse.ReadOnly = true;
-            this.xmlEditorResponse.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
-    "d\\f0\\fs17\\par\r\n}\r\n";
-            this.xmlEditorResponse.SelectionLength = 0;
-            this.xmlEditorResponse.SelectionStart = 0;
-            this.xmlEditorResponse.SendItemIdToTemplateEnabled = true;
-            this.xmlEditorResponse.Size = new System.Drawing.Size(1171, 368);
-            this.xmlEditorResponse.SyntaxHighlight = true;
-            this.xmlEditorResponse.TabIndex = 0;
-            this.xmlEditorResponse.Tag = "NoConfigSave";
-            this.xmlEditorResponse.SendItemIdToTemplate += new SOAPe.XmlEditor.SendItemIdEventHandler(this.xmlEditorResponse_SendItemIdToTemplate);
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -306,9 +244,9 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolsToolStripMenuItem});
             this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.menuStrip1.Location = new System.Drawing.Point(1104, 5);
+            this.menuStrip1.Location = new System.Drawing.Point(1107, 5);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(100, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(97, 28);
             this.menuStrip1.TabIndex = 11;
             this.menuStrip1.Text = "menuStripTools";
             // 
@@ -317,9 +255,10 @@
             this.toolsToolStripMenuItem.AutoSize = false;
             this.toolsToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.encodingToolStripMenuItem,
+            this.toolStripMenuItemAutoDiscover,
+            this.toolStripMenuItemConvertId,
+            this.toolStripMenuItem2,
             this.toolStripMenuItem1,
-            this.eWSToolStripMenuItem,
             this.hTTPListenerToolStripMenuItem,
             this.logViewerToolStripMenuItem,
             this.toolStripSeparator1,
@@ -328,43 +267,26 @@
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(91, 22);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
-            // encodingToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.encodingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.base64ToolStripMenuItem});
-            this.encodingToolStripMenuItem.Name = "encodingToolStripMenuItem";
-            this.encodingToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.encodingToolStripMenuItem.Text = "Encoding";
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.getFolderToolStripMenuItem,
+            this.getItemToolStripMenuItem});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
+            this.toolStripMenuItem1.Text = "EWS Tests";
             // 
-            // base64ToolStripMenuItem
+            // getFolderToolStripMenuItem
             // 
-            this.base64ToolStripMenuItem.Name = "base64ToolStripMenuItem";
-            this.base64ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
-            this.base64ToolStripMenuItem.Text = "Base64...";
-            this.base64ToolStripMenuItem.Click += new System.EventHandler(this.base64ToolStripMenuItem_Click);
+            this.getFolderToolStripMenuItem.Name = "getFolderToolStripMenuItem";
+            this.getFolderToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.getFolderToolStripMenuItem.Text = "GetFolder";
             // 
-            // eWSToolStripMenuItem
+            // getItemToolStripMenuItem
             // 
-            this.eWSToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.autodiscoverToolStripMenuItem,
-            this.convertIDToolStripMenuItem});
-            this.eWSToolStripMenuItem.Name = "eWSToolStripMenuItem";
-            this.eWSToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.eWSToolStripMenuItem.Text = "EWS";
-            // 
-            // autodiscoverToolStripMenuItem
-            // 
-            this.autodiscoverToolStripMenuItem.Name = "autodiscoverToolStripMenuItem";
-            this.autodiscoverToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.autodiscoverToolStripMenuItem.Text = "Autodiscover...";
-            this.autodiscoverToolStripMenuItem.Click += new System.EventHandler(this.autodiscoverToolStripMenuItem_Click);
-            // 
-            // convertIDToolStripMenuItem
-            // 
-            this.convertIDToolStripMenuItem.Name = "convertIDToolStripMenuItem";
-            this.convertIDToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.convertIDToolStripMenuItem.Text = "ConvertID...";
-            this.convertIDToolStripMenuItem.Click += new System.EventHandler(this.convertIDToolStripMenuItem_Click);
+            this.getItemToolStripMenuItem.Name = "getItemToolStripMenuItem";
+            this.getItemToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.getItemToolStripMenuItem.Text = "GetItem";
             // 
             // hTTPListenerToolStripMenuItem
             // 
@@ -397,11 +319,11 @@
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageUrl);
-            this.tabControl1.Controls.Add(this.tabPageTLS);
             this.tabControl1.Controls.Add(this.tabPageAuth);
             this.tabControl1.Controls.Add(this.tabPageEWSHeader);
             this.tabControl1.Controls.Add(this.tabPageHTTPHeaders);
             this.tabControl1.Controls.Add(this.tabPageCookies);
+            this.tabControl1.Controls.Add(this.tabPageTLS);
             this.tabControl1.Controls.Add(this.tabPageLogging);
             this.tabControl1.Location = new System.Drawing.Point(18, 18);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -1182,7 +1104,7 @@
             this.tabPageLogging.Controls.Add(this.textBoxLogFolder);
             this.tabPageLogging.Location = new System.Drawing.Point(4, 29);
             this.tabPageLogging.Name = "tabPageLogging";
-            this.tabPageLogging.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageLogging.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageLogging.Size = new System.Drawing.Size(1176, 82);
             this.tabPageLogging.TabIndex = 6;
             this.tabPageLogging.Text = "Logging";
@@ -1262,26 +1184,86 @@
             this.textBoxLogFolder.Size = new System.Drawing.Size(877, 26);
             this.textBoxLogFolder.TabIndex = 0;
             // 
-            // toolStripMenuItem1
+            // toolStripMenuItemAutoDiscover
             // 
-            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.getFolderToolStripMenuItem,
-            this.getItemToolStripMenuItem});
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
-            this.toolStripMenuItem1.Text = "EWS Quick Tests";
+            this.toolStripMenuItemAutoDiscover.Name = "toolStripMenuItemAutoDiscover";
+            this.toolStripMenuItemAutoDiscover.Size = new System.Drawing.Size(270, 34);
+            this.toolStripMenuItemAutoDiscover.Text = "Autodiscover...";
+            this.toolStripMenuItemAutoDiscover.Click += new System.EventHandler(this.toolStripMenuItemAutoDiscover_Click);
             // 
-            // getFolderToolStripMenuItem
+            // toolStripMenuItemConvertId
             // 
-            this.getFolderToolStripMenuItem.Name = "getFolderToolStripMenuItem";
-            this.getFolderToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.getFolderToolStripMenuItem.Text = "GetFolder";
+            this.toolStripMenuItemConvertId.Name = "toolStripMenuItemConvertId";
+            this.toolStripMenuItemConvertId.Size = new System.Drawing.Size(270, 34);
+            this.toolStripMenuItemConvertId.Text = "ConvertId...";
+            this.toolStripMenuItemConvertId.Click += new System.EventHandler(this.toolStripMenuItemConvertId_Click);
             // 
-            // getItemToolStripMenuItem
+            // xmlEditorRequest
             // 
-            this.getItemToolStripMenuItem.Name = "getItemToolStripMenuItem";
-            this.getItemToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.getItemToolStripMenuItem.Text = "GetItem";
+            this.xmlEditorRequest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.xmlEditorRequest.BackColor = System.Drawing.SystemColors.Window;
+            this.xmlEditorRequest.IndentXml = true;
+            this.xmlEditorRequest.Location = new System.Drawing.Point(4, 74);
+            this.xmlEditorRequest.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.xmlEditorRequest.Name = "xmlEditorRequest";
+            this.xmlEditorRequest.ReadOnly = false;
+            this.xmlEditorRequest.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
+            this.xmlEditorRequest.SelectionLength = 0;
+            this.xmlEditorRequest.SelectionStart = 0;
+            this.xmlEditorRequest.SendItemIdToTemplateEnabled = false;
+            this.xmlEditorRequest.Size = new System.Drawing.Size(1170, 286);
+            this.xmlEditorRequest.SyntaxHighlight = true;
+            this.xmlEditorRequest.TabIndex = 7;
+            this.xmlEditorRequest.Tag = "";
+            // 
+            // groupBoxResponse
+            // 
+            this.groupBoxResponse.Controls.Add(this.xmlEditorResponse);
+            this.groupBoxResponse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxResponse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxResponse.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.groupBoxResponse.HighlightColour = System.Drawing.Color.Red;
+            this.groupBoxResponse.Highlighted = false;
+            this.groupBoxResponse.Location = new System.Drawing.Point(0, 0);
+            this.groupBoxResponse.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBoxResponse.Name = "groupBoxResponse";
+            this.groupBoxResponse.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBoxResponse.Size = new System.Drawing.Size(1179, 397);
+            this.groupBoxResponse.TabIndex = 0;
+            this.groupBoxResponse.TabStop = false;
+            this.groupBoxResponse.Text = "Response";
+            // 
+            // xmlEditorResponse
+            // 
+            this.xmlEditorResponse.BackColor = System.Drawing.SystemColors.Window;
+            this.xmlEditorResponse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.xmlEditorResponse.IndentXml = false;
+            this.xmlEditorResponse.Location = new System.Drawing.Point(4, 24);
+            this.xmlEditorResponse.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.xmlEditorResponse.Name = "xmlEditorResponse";
+            this.xmlEditorResponse.ReadOnly = true;
+            this.xmlEditorResponse.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
+            this.xmlEditorResponse.SelectionLength = 0;
+            this.xmlEditorResponse.SelectionStart = 0;
+            this.xmlEditorResponse.SendItemIdToTemplateEnabled = true;
+            this.xmlEditorResponse.Size = new System.Drawing.Size(1171, 368);
+            this.xmlEditorResponse.SyntaxHighlight = true;
+            this.xmlEditorResponse.TabIndex = 0;
+            this.xmlEditorResponse.Tag = "NoConfigSave";
+            this.xmlEditorResponse.SendItemIdToTemplate += new SOAPe.XmlEditor.SendItemIdEventHandler(this.xmlEditorResponse_SendItemIdToTemplate);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(270, 34);
+            this.toolStripMenuItem2.Text = "Base64 Encoder...";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // FormMain
             // 
@@ -1303,7 +1285,6 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.groupBoxResponse.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -1325,6 +1306,7 @@
             this.tabPageCookies.PerformLayout();
             this.tabPageLogging.ResumeLayout(false);
             this.tabPageLogging.PerformLayout();
+            this.groupBoxResponse.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1338,11 +1320,6 @@
         private System.Windows.Forms.Button buttonLoadTemplate;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem encodingToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem base64ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem eWSToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem autodiscoverToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem convertIDToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hTTPListenerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem logViewerToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBoxPersistCookies;
@@ -1428,6 +1405,9 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem getFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem getItemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAutoDiscover;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemConvertId;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
     }
 }
 

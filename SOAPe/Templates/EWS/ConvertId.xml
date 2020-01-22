@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">
+  <soap:Body>
+    <ConvertId xmlns="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               DestinationFormat="%%FIELD:DestinationFormat;list;EntryId,EwsId,EwsLegacyId,HexEntryId,OwaId,StoreId%%">
+      <SourceIds>
+        <t:AlternateId Format="%%FIELD:SourceFormat;list;EntryId,EwsId,EwsLegacyId,HexEntryId,OwaId,StoreId%%" Id="%%FIELD:Source Id;string%%"
+                       Mailbox="%%FIELD:Mailbox;string%%"/>
+      </SourceIds>
+    </ConvertId>
+  </soap:Body>
+</soap:Envelope>

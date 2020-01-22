@@ -263,8 +263,8 @@ namespace SOAPe.EWSTools
 
             if (_logger != null)
             {
-                LogHeaders(oReq.Headers, "Autodiscover Request Headers", Url);
-                _logger.Log(Request, "Autodiscover Request");
+                LogHeaders(oReq.Headers, "AutodiscoverRequestHeaders", Url);
+                _logger.Log(Request, "AutodiscoverRequest");
             }
 
             return oReq;
@@ -288,9 +288,9 @@ namespace SOAPe.EWSTools
                 try
                 {
                     oResponse = (HttpWebResponse)oReq.GetResponse();
-                    LogHeaders(oResponse.Headers, "Autodiscover Response Headers", "", (oResponse as HttpWebResponse));
+                    LogHeaders(oResponse.Headers, "AutodiscoverResponseHeaders", "", (oResponse as HttpWebResponse));
                     if (oResponse.Cookies.Count>0)
-                        LogCookies(oResponse.Cookies, "Autodiscover Response Cookies");
+                        LogCookies(oResponse.Cookies, "AutodiscoverResponseCookies");
                 }
                 catch (Exception ex)
                 {
@@ -298,7 +298,7 @@ namespace SOAPe.EWSTools
                     {
                         WebException wEX = ex as WebException;
                         oResponse = (HttpWebResponse)wEX.Response;
-                        LogHeaders(oResponse.Headers, "Autodiscover Response Headers", "", oResponse);
+                        LogHeaders(oResponse.Headers, "AutodiscoverResponseHeaders", "", oResponse);
                         if (oResponse.StatusCode == HttpStatusCode.Unauthorized)
                         {
                             if (_lastUrlHadValidCertificate)
@@ -308,9 +308,9 @@ namespace SOAPe.EWSTools
                                 oReq = CreateWebRequest(Url, autodiscoverXml, _credentialHandler);
                                 oReq.PreAuthenticate = true;
                                 oResponse = (HttpWebResponse)oReq.GetResponse();
-                                LogHeaders(oResponse.Headers, "Autodiscover Response Headers", "", (oResponse as HttpWebResponse));
+                                LogHeaders(oResponse.Headers, "AutodiscoverResponseHeaders", "", (oResponse as HttpWebResponse));
                                 if (oResponse.Cookies.Count > 0)
-                                    LogCookies(oResponse.Cookies, "Autodiscover Response Cookies");
+                                    LogCookies(oResponse.Cookies, "AutodiscoverResponseCookies");
                             }
                         }
                     }
@@ -378,6 +378,9 @@ namespace SOAPe.EWSTools
                 try
                 {
                     oResponse = (HttpWebResponse)oReq.GetResponse();
+                    LogHeaders(oResponse.Headers, "AutodiscoverResponseHeaders", "", (oResponse as HttpWebResponse));
+                    if (oResponse.Cookies.Count > 0)
+                        LogCookies(oResponse.Cookies, "AutodiscoverResponseCookies");
                 }
                 catch (Exception ex)
                 {
@@ -385,6 +388,7 @@ namespace SOAPe.EWSTools
                     {
                         WebException wEX = ex as WebException;
                         oResponse = (HttpWebResponse)wEX.Response;
+                        LogHeaders(oResponse.Headers, "AutodiscoverResponseHeaders", "", oResponse);
                         if (oResponse.StatusCode == HttpStatusCode.Unauthorized)
                         {
                             if (_lastUrlHadValidCertificate)
@@ -393,6 +397,9 @@ namespace SOAPe.EWSTools
                                 Log("Authentication required, adding credentials and resending request");
                                 oReq = CreateWebRequest(Url, AutodiscoverRequest(), _credentialHandler);
                                 oResponse = (HttpWebResponse)oReq.GetResponse();
+                                LogHeaders(oResponse.Headers, "AutodiscoverResponseHeaders", "", (oResponse as HttpWebResponse));
+                                if (oResponse.Cookies.Count > 0)
+                                    LogCookies(oResponse.Cookies, "AutodiscoverResponseCookies");
                             }
                         }
                     }
@@ -426,7 +433,7 @@ namespace SOAPe.EWSTools
             if (_AutodiscoverXMLDoc == null) return false;
 
             // We have some XML, so log this (assuming Logger specified)
-            if (!(_logger == null))
+            if (null != _logger)
             {
                 _logger.Log(_AutodiscoverXML, "Autodiscover response from " + FromUrl);
             }
