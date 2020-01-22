@@ -120,10 +120,13 @@
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripMenuItemAutoDiscover = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemConvertId = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.xmlEditorRequest = new SOAPe.XmlEditor();
             this.groupBoxResponse = new SOAPe.GroupBoxHighlight();
             this.xmlEditorResponse = new SOAPe.XmlEditor();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.GetFolderInboxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.GetFolderCalendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.GetFolderContactsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -244,9 +247,9 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolsToolStripMenuItem});
             this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.menuStrip1.Location = new System.Drawing.Point(1107, 5);
+            this.menuStrip1.Location = new System.Drawing.Point(1015, 5);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(97, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(189, 58);
             this.menuStrip1.TabIndex = 11;
             this.menuStrip1.Text = "menuStripTools";
             // 
@@ -278,6 +281,10 @@
             // 
             // getFolderToolStripMenuItem
             // 
+            this.getFolderToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.GetFolderInboxToolStripMenuItem,
+            this.GetFolderCalendarToolStripMenuItem,
+            this.GetFolderContactsToolStripMenuItem});
             this.getFolderToolStripMenuItem.Name = "getFolderToolStripMenuItem";
             this.getFolderToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.getFolderToolStripMenuItem.Text = "GetFolder";
@@ -1198,6 +1205,13 @@
             this.toolStripMenuItemConvertId.Text = "ConvertId...";
             this.toolStripMenuItemConvertId.Click += new System.EventHandler(this.toolStripMenuItemConvertId_Click);
             // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(270, 34);
+            this.toolStripMenuItem2.Text = "Base64 Encoder...";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            // 
             // xmlEditorRequest
             // 
             this.xmlEditorRequest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1258,12 +1272,26 @@
             this.xmlEditorResponse.Tag = "NoConfigSave";
             this.xmlEditorResponse.SendItemIdToTemplate += new SOAPe.XmlEditor.SendItemIdEventHandler(this.xmlEditorResponse_SendItemIdToTemplate);
             // 
-            // toolStripMenuItem2
+            // GetFolderInboxToolStripMenuItem
             // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(270, 34);
-            this.toolStripMenuItem2.Text = "Base64 Encoder...";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            this.GetFolderInboxToolStripMenuItem.Name = "GetFolderInboxToolStripMenuItem";
+            this.GetFolderInboxToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.GetFolderInboxToolStripMenuItem.Text = "Inbox";
+            this.GetFolderInboxToolStripMenuItem.Click += new System.EventHandler(this.GetFolderInboxToolStripMenuItem_Click);
+            // 
+            // GetFolderCalendarToolStripMenuItem
+            // 
+            this.GetFolderCalendarToolStripMenuItem.Name = "GetFolderCalendarToolStripMenuItem";
+            this.GetFolderCalendarToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.GetFolderCalendarToolStripMenuItem.Text = "Calendar";
+            this.GetFolderCalendarToolStripMenuItem.Click += new System.EventHandler(this.GetFolderCalendarToolStripMenuItem_Click);
+            // 
+            // GetFolderContactsToolStripMenuItem
+            // 
+            this.GetFolderContactsToolStripMenuItem.Name = "GetFolderContactsToolStripMenuItem";
+            this.GetFolderContactsToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.GetFolderContactsToolStripMenuItem.Text = "Contacts";
+            this.GetFolderContactsToolStripMenuItem.Click += new System.EventHandler(this.GetFolderContactsToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -1408,6 +1436,9 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAutoDiscover;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemConvertId;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem GetFolderInboxToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem GetFolderCalendarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem GetFolderContactsToolStripMenuItem;
     }
 }
 

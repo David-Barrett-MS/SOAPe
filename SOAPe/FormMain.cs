@@ -448,7 +448,6 @@ namespace SOAPe
             return sTemplateContent;
         }
 
-
         private void UpdateSOAPHeader()
         {
             // Update the SOAP header as required
@@ -1135,6 +1134,36 @@ namespace SOAPe
         {
             Encoding.FormBase64 oForm = new Encoding.FormBase64();
             oForm.Show();
+        }
+
+        private void EWSTestGetFolder(string DistinguishedFolderName)
+        {
+            Dictionary<string, string> fieldValues = new Dictionary<string, string>();
+            fieldValues.Add("FolderId", DistinguishedFolderName);
+            string requestXml = FormReplaceTemplateFields.RetrieveEWSRequest("GetFolder", fieldValues);
+            if (!String.IsNullOrEmpty(requestXml))
+            {
+                xmlEditorRequest.Text = requestXml;
+                buttonSend_Click(this, null);
+            }
+        }
+
+        private void GetFolderInboxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // <t:DistinguishedFolderId Id=\"inbox\" />
+            EWSTestGetFolder("<t:DistinguishedFolderId Id=\"inbox\" />");
+        }
+
+        private void GetFolderCalendarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // <t:DistinguishedFolderId Id=\"calendar\" />
+            EWSTestGetFolder("<t:DistinguishedFolderId Id=\"calendar\" />");
+        }
+
+        private void GetFolderContactsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // <t:DistinguishedFolderId Id=\"contacts\" />
+            EWSTestGetFolder("<t:DistinguishedFolderId Id=\"contacts\" />");
         }
     }
 }

@@ -89,7 +89,6 @@ namespace SOAPe
             }
         }
 
-
         private void InitFolderCombo()
         {
             if (String.IsNullOrEmpty(_templatePath))
@@ -106,7 +105,7 @@ namespace SOAPe
             
         }
 
-        private void ReadTemplatePath()
+        private static void ReadTemplatePath()
         {
             try
             {
@@ -161,13 +160,15 @@ namespace SOAPe
             }
         }
 
-        private string ReadTemplate()
+        private static string ReadTemplateByName(string TemplateName, string TemplateFolder="EWS")
         {
-            string sPath = String.Format("{0}\\{1}", _templatePath, comboBoxTemplateFolder.Text);
+            if (String.IsNullOrEmpty(_templatePath))
+                ReadTemplatePath();
+            string sPath = String.Format("{0}\\{1}", _templatePath, TemplateFolder);
             if (!Directory.Exists(sPath))
                 return "";
 
-            string sFile = String.Format("{0}\\{1}", sPath, comboBoxTemplate.Text);
+            string sFile = String.Format("{0}\\{1}", sPath, TemplateName);
             if (!File.Exists(sFile))
             {
                 if (!sFile.EndsWith(".xml"))
@@ -181,7 +182,6 @@ namespace SOAPe
             {
                 oReader = new StreamReader(sFile);
                 string sTemplateContent = oReader.ReadToEnd();
-                _currentTemplateName = comboBoxTemplate.Text;
                 return sTemplateContent;
             }
             catch
@@ -192,6 +192,12 @@ namespace SOAPe
             {
                 oReader.Close();
             }
+        }
+
+        private string ReadTemplate()
+        {
+            _currentTemplateName = comboBoxTemplate.Text;
+            return ReadTemplateByName(comboBoxTemplate.Text, comboBoxTemplateFolder.Text);
         }
 
         public string ReadTemplate(Form Owner)
@@ -223,6 +229,29 @@ namespace SOAPe
         {
             if (_fieldType.ContainsKey(FieldName))
                 return _fieldType[FieldName];
+            return String.Empty;
+        }
+
+        private static string ReplaceTemplateFields(string TemplateXml, Dictionary<String,String> FieldValues)
+        {
+            Regex oRegEx = new Regex("<!--FIELD:(.*?)-->", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            MatchCollection oMatches = oRegEx.Matches(TemplateXml);
+
+            foreach (string sFieldName in FieldValues.Keys)
+            {
+                oRegEx = new Regex("<!--FIELD:" + sFieldName + ";.*?-->");
+                TemplateXml = oRegEx.Replace(TemplateXml, FieldValues[sFieldName]);
+                oRegEx = new Regex("%%FIELD:" + sFieldName + ";.*?%%");
+                TemplateXml = oRegEx.Replace(TemplateXml, FieldValues[sFieldName]);
+            }
+            return TemplateXml;
+        }
+
+        public static string RetrieveEWSRequest(string TemplateName, Dictionary<String, String> FieldValues)
+        {
+            string templateXml = ReadTemplateByName(TemplateName);
+            if (!String.IsNullOrEmpty(templateXml))
+                return ReplaceTemplateFields(templateXml, FieldValues);
             return String.Empty;
         }
 
@@ -391,7 +420,6 @@ namespace SOAPe
             // Now check for Xml attribute fields
             oRegEx = new Regex("\"%%(.*?)%%\"", RegexOptions.IgnoreCase | RegexOptions.Multiline);
             oMatches = oRegEx.Matches(_templateXML);
-            _fieldType = new Dictionary<string, string>();
             if (oMatches.Count > 0)
             {
                 fieldsFound = true;
