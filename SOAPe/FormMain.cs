@@ -569,21 +569,34 @@ namespace SOAPe
             if (headerNodeList.Count == 1)
             {
                 // Replace the header
-                xmlRequest.FirstChild.NextSibling.ReplaceChild(headerNode, headerNodeList[0]);
+                if (headerNode.HasChildNodes)
+                {
+                    xmlRequest.FirstChild.NextSibling.ReplaceChild(headerNode, headerNodeList[0]);
+                }
+                else if (!headerNodeList[0].HasChildNodes)
+                    xmlRequest.FirstChild.NextSibling.RemoveChild(headerNodeList[0]);
             }
             else
             {
                 // Add a header (one doesn't currently exist)
-                XmlNode envelopeNode = xmlRequest.FirstChild.NextSibling;
-                if (envelopeNode.Name.ToLower().EndsWith("envelope"))
+                if (headerNode.HasChildNodes)
                 {
-                    envelopeNode.InsertBefore(headerNode, envelopeNode.FirstChild);
+                    XmlNode envelopeNode = xmlRequest.FirstChild.NextSibling;
+                    if (envelopeNode.Name.ToLower().EndsWith("envelope"))
+                    {
+                        envelopeNode.InsertBefore(headerNode, envelopeNode.FirstChild);
+                    }
+                    else
+                    {
+                        // We don't appear to have a soap envelope, which is fatal
+                        System.Windows.Forms.MessageBox.Show(this, "Couldn't find <envelope> in SOAP request.", "Error updating header", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
                 else
                 {
-                    // We don't appear to have a soap envelope, which is fatal
-                    System.Windows.Forms.MessageBox.Show(this, "Couldn't find <envelope> in SOAP request.", "Error updating header", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    // Check if there is anything left in the header, and if not, remove it
+                    
                 }
             }
 
