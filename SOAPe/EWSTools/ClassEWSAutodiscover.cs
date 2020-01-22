@@ -24,6 +24,7 @@ using System.Xml;
 using System.DirectoryServices;
 using System.Globalization;
 using SOAPe.DNSTools;
+using SOAPe.Auth;
 
 namespace SOAPe.EWSTools
 {
@@ -40,7 +41,7 @@ namespace SOAPe.EWSTools
         private string _SMTPAddress = "";
         private string _AutodiscoverXML = "";
         private XmlDocument _AutodiscoverXMLDoc = null;
-        private ICredentials _credentials = null;
+        private CredentialHandler _credentialHandler = null;
         private string _AutodiscoveXMLRequest = "";
         private string _AutodiscoverSOAPRequest = "";
         private List<string> _testedUrls = new List<string>();
@@ -59,10 +60,10 @@ namespace SOAPe.EWSTools
             _SMTPAddress = SMTPAddress;
         }
 
-        public ClassEWSAutodiscover(string SMTPAddress, ICredentials Credentials)
+        public ClassEWSAutodiscover(string SMTPAddress, CredentialHandler CredentialHandler)
             : this(SMTPAddress)
         {
-            _credentials = Credentials;
+            _credentialHandler = CredentialHandler;
         }
 
         public ClassEWSAutodiscover(string SMTPAddress, ListBox LogListBox)
@@ -71,14 +72,14 @@ namespace SOAPe.EWSTools
             _logListBox = LogListBox;
         }
 
-        public ClassEWSAutodiscover(string SMTPAddress, ICredentials Credentials, ListBox LogListBox)
-            : this(SMTPAddress, Credentials)
+        public ClassEWSAutodiscover(string SMTPAddress, CredentialHandler CredentialHandler, ListBox LogListBox)
+            : this(SMTPAddress, CredentialHandler)
         {
             _logListBox = LogListBox;
         }
 
-        public ClassEWSAutodiscover(string SMTPAddress, ICredentials Credentials, ListBox LogListBox, ClassLogger Logger)
-            : this(SMTPAddress, Credentials, LogListBox)
+        public ClassEWSAutodiscover(string SMTPAddress, CredentialHandler CredentialHandler, ListBox LogListBox, ClassLogger Logger)
+            : this(SMTPAddress, CredentialHandler, LogListBox)
         {
             _logger = Logger;
         }
@@ -229,14 +230,25 @@ namespace SOAPe.EWSTools
             return sRequest;
         }
 
-        private HttpWebRequest CreateWebRequest(string Url, string Request, ICredentials Credentials=null)
+        private void LogHeaders(WebHeaderCollection Headers, string Description, string Url = "", HttpWebResponse Response = null)
+        {
+            if (_logger == null) return;
+            _logger.LogWebHeaders(Headers, Description, Url, Response);
+        }
+
+        private void LogCookies(CookieCollection Cookies, string Description)
+        {
+            if (_logger == null) return;
+            _logger.LogCookies(Cookies, Description);
+        }
+
+        private HttpWebRequest CreateWebRequest(string Url, string Request, CredentialHandler CredentialHandler=null)
         {
             // Return a web request for the given URL
             HttpWebRequest oReq = (HttpWebRequest)WebRequest.Create(Url);
-            if (!(Credentials == null))
+            if (!(CredentialHandler == null))
             {
-                oReq.UseDefaultCredentials = false;
-                oReq.Credentials = Credentials;
+                CredentialHandler.ApplyCredentialsToHttpWebRequest(oReq);
             }
             oReq.AllowAutoRedirect = false;
             oReq.Method = "POST";
@@ -248,6 +260,13 @@ namespace SOAPe.EWSTools
             oReqStream.Write(bRequest, 0, bRequest.Length);
             oReqStream.Close();
             oReq.Headers.Add("charset", "utf-8");
+
+            if (_logger != null)
+            {
+                LogHeaders(oReq.Headers, "Autodiscover Request Headers", Url);
+                _logger.Log(Request, "Autodiscover Request");
+            }
+
             return oReq;
         }
 
@@ -262,12 +281,16 @@ namespace SOAPe.EWSTools
             Log("Testing url: " + Url);
             try
             {
-                HttpWebRequest oReq = CreateWebRequest(Url, AutodiscoverRequest());
+                string autodiscoverXml = AutodiscoverRequest();
+                HttpWebRequest oReq = CreateWebRequest(Url, autodiscoverXml);
 
                 HttpWebResponse oResponse = null;
                 try
                 {
                     oResponse = (HttpWebResponse)oReq.GetResponse();
+                    LogHeaders(oResponse.Headers, "Autodiscover Response Headers", "", (oResponse as HttpWebResponse));
+                    if (oResponse.Cookies.Count>0)
+                        LogCookies(oResponse.Cookies, "Autodiscover Response Cookies");
                 }
                 catch (Exception ex)
                 {
@@ -275,15 +298,19 @@ namespace SOAPe.EWSTools
                     {
                         WebException wEX = ex as WebException;
                         oResponse = (HttpWebResponse)wEX.Response;
+                        LogHeaders(oResponse.Headers, "Autodiscover Response Headers", "", oResponse);
                         if (oResponse.StatusCode == HttpStatusCode.Unauthorized)
                         {
                             if (_lastUrlHadValidCertificate)
                             {
                                 // Recreate web request but with authentication
                                 Log("Authentication required, adding credentials and resending request");
-                                oReq = CreateWebRequest(Url, AutodiscoverRequest(), _credentials);
+                                oReq = CreateWebRequest(Url, autodiscoverXml, _credentialHandler);
                                 oReq.PreAuthenticate = true;
                                 oResponse = (HttpWebResponse)oReq.GetResponse();
+                                LogHeaders(oResponse.Headers, "Autodiscover Response Headers", "", (oResponse as HttpWebResponse));
+                                if (oResponse.Cookies.Count > 0)
+                                    LogCookies(oResponse.Cookies, "Autodiscover Response Cookies");
                             }
                         }
                     }
@@ -364,7 +391,7 @@ namespace SOAPe.EWSTools
                             {
                                 // Recreate web request but with authentication
                                 Log("Authentication required, adding credentials and resending request");
-                                oReq = CreateWebRequest(Url, AutodiscoverRequest(), _credentials);
+                                oReq = CreateWebRequest(Url, AutodiscoverRequest(), _credentialHandler);
                                 oResponse = (HttpWebResponse)oReq.GetResponse();
                             }
                         }

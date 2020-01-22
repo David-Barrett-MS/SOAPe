@@ -21,15 +21,14 @@ using System.Xml;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
+using SOAPe.Auth;
 
 namespace SOAPe
 {
     class ClassSOAP
     {
         private string _targetURL="";
-        private ICredentials _credentials = null;
-        private X509Certificate2 _authCertificate = null;
-        private bool _noAuth = false;
+        private CredentialHandler _credentialHandler = null;
         private ClassLogger _logger = null;
         private string _authHeader = "";
         private bool _bypassWebProxy = false;
@@ -39,36 +38,11 @@ namespace SOAPe
         private List<string[]> _httpHeaders = new List<string[]>();
         private SecurityProtocolType _securityProtocol = ServicePointManager.SecurityProtocol;
 
-        public ClassSOAP(string TargetURL, ClassLogger Logger)
+        public ClassSOAP(string TargetURL, ClassLogger Logger, CredentialHandler credentialHandler)
         {
-            // Initialise the class
             _targetURL = TargetURL;
             _logger = Logger;
-            _noAuth = true;
-        }
-
-        public ClassSOAP(string TargetURL, ICredentials Credential, ClassLogger Logger)
-            : this(TargetURL, Logger)
-        {
-            // Initialise the class
-            _credentials = Credential;
-            _noAuth = false;
-        }
-
-        public ClassSOAP(string TargetURL, string Username, string Password, ClassLogger Logger)
-            : this(TargetURL, Logger)
-        {
-            // Initialise the class for basic authentication
-            string sAuthInfo = Username + ":" + Password;
-            _authHeader = "Basic " + Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(sAuthInfo));
-            _noAuth = false;
-        }
-
-        public ClassSOAP(string TargetURL, X509Certificate2 AuthenticationCertificate, ClassLogger Logger)
-            : this(TargetURL, Logger)
-        {
-            _authCertificate = AuthenticationCertificate;
-            _noAuth = false;
+            _credentialHandler = credentialHandler;
         }
 
         public SecurityProtocolType SecurityProtocol
@@ -81,12 +55,6 @@ namespace SOAPe
         {
             get { return _targetURL; }
             set { _targetURL = value; }
-        }
-
-        public ICredentials Credentials
-        {
-            get { return _credentials; }
-            set { _credentials = value; }
         }
 
         public bool BypassWebProxy
@@ -121,43 +89,29 @@ namespace SOAPe
             set { _authHeader = value; }
         }
 
-        private void LogHeaders(WebHeaderCollection Headers, string Description, string Url = "", HttpWebResponse Response = null)
+        private void Log(string Details, string Description = "")
         {
-            // Log request headers
-            string sHeaders = "";
-            if (Response!=null)
-            {
-                sHeaders += String.Format("{0} {1}{2}", (int)Response.StatusCode, Response.StatusDescription, Environment.NewLine);
-            }
-            if (!String.IsNullOrEmpty(Url))
-            {
-                sHeaders += String.Format("POST URL: {0}{1}{1}", Url, Environment.NewLine);
-            }
             try
             {
-                foreach (string sHeader in Headers.AllKeys)
-                {
-                    sHeaders += sHeader + ": " + Headers[sHeader] + Environment.NewLine;
-                }
-                Log(sHeaders, Description);
+                if (_logger == null) return;
+                _logger.Log(Details, Description);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message, "Failed to log information", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void LogHeaders(WebHeaderCollection Headers, string Description, string Url = "", HttpWebResponse Response = null)
+        {
+            if (_logger == null) return;
+            _logger.LogWebHeaders(Headers, Description, Url, Response);
         }
 
         private void LogCookies(CookieCollection Cookies, string Description)
         {
-            // Log cookies
-            try
-            {
-                if (Cookies.Count == 0) return;
-                string sCookies = "";
-                foreach (Cookie cookie in Cookies)
-                {
-                    sCookies += cookie.ToString() + Environment.NewLine;
-                }
-                Log(sCookies, Description);
-            }
-            catch { }
+            if (_logger == null) return;
+            _logger.LogCookies(Cookies, Description);
         }
 
         private void LogSSLSettings()
@@ -211,22 +165,7 @@ namespace SOAPe
                 oWebRequest.Proxy = null;
 
             // Set authentication
-            oWebRequest.UseDefaultCredentials = false;
-            if (!String.IsNullOrEmpty(_authHeader))
-            {
-                // Add authorization header
-                oWebRequest.Headers["Authorization"] = _authHeader;
-            }
-            else if (!_noAuth)
-            {
-                if (_authCertificate != null)
-                {
-                    oWebRequest.ClientCertificates = new X509CertificateCollection();
-                    oWebRequest.ClientCertificates.Add(_authCertificate);
-                }
-                else
-                    oWebRequest.Credentials = _credentials;
-            }
+            _credentialHandler.ApplyCredentialsToHttpWebRequest(oWebRequest);
 
             oWebRequest.ContentType = "text/xml;charset=\"utf-8\"";
             oWebRequest.Accept = "text/xml";
@@ -262,7 +201,7 @@ namespace SOAPe
                 catch (Exception ex)
                 {
                     sError = ex.Message;
-                    sResponse = "Request was invalid XML: " + ex.Message + "\n\r\n\r" + sRequest;
+                    sResponse = "Request was invalid XML (not sent): " + ex.Message + "\n\r\n\r" + sRequest;
                     Log(sResponse, "Response");
                     return "";
                 }
@@ -353,18 +292,7 @@ namespace SOAPe
             return sResponse;
         }
 
-        private void Log(string Details, string Description = "")
-        {
-            try
-            {
-                if (_logger == null) return;
-                _logger.Log(Details, Description);
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message, "Failed to log information", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
+
     
     }
 }

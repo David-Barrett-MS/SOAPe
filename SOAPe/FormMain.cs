@@ -31,6 +31,7 @@ using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using SOAPe.EWSTools;
 using System.Threading;
+using SOAPe.Auth;
 
 namespace SOAPe
 {
@@ -250,6 +251,35 @@ namespace SOAPe
             oSOAP.SecurityProtocol = securityProtocolType;
         }
 
+        public CredentialHandler CredentialHandler()
+        {
+            // Create a CredentialHandler object with the selected credentials
+            CredentialHandler credentialHandler;
+            if (radioButtonNoAuth.Checked)
+            {
+                credentialHandler = new CredentialHandler(AuthType.None);
+            }
+            else if (radioButtonCertificateAuthentication.Checked)
+            {
+                credentialHandler = new CredentialHandler(AuthType.Certificate);
+                credentialHandler.Certificate = _authCertificate;
+            }
+            else if (radioButtonOAuth.Checked)
+            {
+                credentialHandler = new CredentialHandler(AuthType.OAuth);
+                credentialHandler.OAuthToken = textBoxOAuthToken.Text;
+            }
+            else
+            {
+                credentialHandler = new CredentialHandler(AuthType.Basic);
+                credentialHandler.Username = textBoxUsername.Text;
+                credentialHandler.Password = textBoxPassword.Text;
+                if (!String.IsNullOrEmpty(textBoxDomain.Text))
+                    credentialHandler.Domain = textBoxDomain.Text;
+            }
+            return credentialHandler;
+        }
+
         private void buttonSend_Click(object sender, EventArgs e)
         {
             if (checkBoxUpdateEWSHeader.Checked)
@@ -265,8 +295,12 @@ namespace SOAPe
             bool bBasicAuthExistingSetting = (checkBoxForceBasicAuth.Checked && !radioButtonNoAuth.Checked);
             ClassSOAP oSOAP = null;
             oSOAP = null;
-            LogCredentials();
-            if (radioButtonDefaultCredentials.Checked || (radioButtonSpecificCredentials.Checked && !checkBoxForceBasicAuth.Checked))
+
+
+            //LogCredentials();
+            CredentialHandler credentialHandler = CredentialHandler();
+            oSOAP = new ClassSOAP(textBoxURL.Text, _logger, credentialHandler);
+            /*if (radioButtonDefaultCredentials.Checked || (radioButtonSpecificCredentials.Checked && !checkBoxForceBasicAuth.Checked))
             {
                 oSOAP = new ClassSOAP(textBoxURL.Text, CurrentCredentials, _logger);
             }
@@ -278,8 +312,15 @@ namespace SOAPe
             {
                 oSOAP = new ClassSOAP(textBoxURL.Text, _authCertificate, _logger);
             }
+            else if (radioButtonOAuth.Checked)
+            {
+                oSOAP = new ClassSOAP(textBoxURL.Text, _authCertificate, _logger);
+            }
             else
+            {
                 oSOAP = new ClassSOAP(textBoxURL.Text, textBoxUsername.Text, textBoxPassword.Text, _logger);
+            }
+            */
 
             SetSecurityProtocol(oSOAP);
             oSOAP.BypassWebProxy = checkBoxBypassProxySettings.Checked;
@@ -394,7 +435,7 @@ namespace SOAPe
 
         private void convertIDToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormEWSConvertID oForm = new FormEWSConvertID(textBoxURL.Text, CurrentCredentials, _logger, this);
+            FormEWSConvertID oForm = new FormEWSConvertID(textBoxURL.Text,_logger, CredentialHandler(), this);
             oForm.Show();
         }
 
@@ -562,15 +603,8 @@ namespace SOAPe
         {
             // Show warning...
             ClassTemplateReader oReader = new ClassTemplateReader();
-
-            try
-            {
-                _autodiscoverForm.Credentials = CurrentCredentials;
-            }
-            catch
-            {
-                _autodiscoverForm = new FormEWSAutodiscover(CurrentCredentials, textBoxURL, _logger);
-            }
+            _autodiscoverForm = new FormEWSAutodiscover(this,textBoxURL, _logger);
+            
             string sSMTPAddress = _userSMTPAddress;
             if (!String.IsNullOrEmpty(textBoxImpersonationSID.Text))
             {
@@ -825,7 +859,7 @@ namespace SOAPe
                 checkBoxUpdateEWSHeader.Checked = true;
         }
 
-        private string GetImpersonationHeader()
+        public string GetImpersonationHeader()
         {
             string sHeader = ReadImpersonationTemplate();
             string sIDType = "";

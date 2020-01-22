@@ -26,7 +26,8 @@ namespace SOAPe.EWSTools
     public partial class FormEWSAutodiscover : Form
     {
         string _EWSUrl = "";
-        private ICredentials _credentials = null;
+        //private ICredentials _credentials = null;
+        private FormMain _authForm; // Reference to the main form so that we can apply authentication
         private ClassLogger _logger = null;
         private Control _targetControl = null; // The control into which any autodiscovered URL will be put
 
@@ -35,21 +36,20 @@ namespace SOAPe.EWSTools
             InitializeComponent();
         }
 
-        public FormEWSAutodiscover(ICredentials Credentials)
+        public FormEWSAutodiscover(FormMain AuthForm)
         {
             InitializeComponent();
-            _credentials = Credentials;
-            PopulateCredentials();
+            _authForm = AuthForm;
         }
 
-        public FormEWSAutodiscover(ICredentials Credentials, Control TargetControl)
-            : this(Credentials)
+        public FormEWSAutodiscover(FormMain AuthForm, Control TargetControl)
+            : this(AuthForm)
         {
             _targetControl = TargetControl;
         }
 
-        public FormEWSAutodiscover(ICredentials Credentials, Control TargetControl, ClassLogger Logger)
-            : this(Credentials, TargetControl)
+        public FormEWSAutodiscover(FormMain AuthForm, Control TargetControl, ClassLogger Logger)
+            : this(AuthForm, TargetControl)
         {
             _logger = Logger;
         }
@@ -64,54 +64,6 @@ namespace SOAPe.EWSTools
             {
                 textBoxSMTP.Text = value;
             }
-        }
-
-        public ICredentials Credentials
-        {
-            get
-            {
-                if (_credentials == null)
-                {
-                    // Need to rebuild credentials
-                    if (String.IsNullOrEmpty(textBoxDomain.Text))
-                    {
-                        _credentials = new NetworkCredential(textBoxUsername.Text, textBoxPassword.Text);
-                    }
-                    else
-                        _credentials = new NetworkCredential(textBoxUsername.Text, textBoxPassword.Text, textBoxDomain.Text);
-                }
-                return _credentials;
-            }
-            set
-            {
-                _credentials = value;
-                PopulateCredentials();
-            }
-        }
-
-        private void PopulateCredentials()
-        {
-            try
-            {
-                ICredentials cred = _credentials;
-                if (cred == CredentialCache.DefaultCredentials)
-                {
-                    // Using default credentials, we won't be able to pull details back
-                    textBoxUsername.Text = "";
-                    textBoxPassword.Text = "";
-                    textBoxDomain.Text = "";
-                    SetUserBackColour(this.BackColor);
-                }
-                else
-                {
-                    textBoxUsername.Text = (cred as NetworkCredential).UserName;
-                    textBoxPassword.Text = (cred as NetworkCredential).Password;
-                    textBoxDomain.Text = (cred as NetworkCredential).Domain;
-                }
-
-                _credentials = cred;
-            }
-            catch { }
         }
 
         public string GetEWSUrl(string SMTPAddress = "", IWin32Window Parent = null)
@@ -145,8 +97,7 @@ namespace SOAPe.EWSTools
             SetFormControls(false);
             Application.UseWaitCursor = true;
             Application.DoEvents();
-
-            ClassEWSAutodiscover oAutoDiscover = new ClassEWSAutodiscover(textBoxSMTP.Text, Credentials, listBoxLog,_logger);
+            ClassEWSAutodiscover oAutoDiscover = new ClassEWSAutodiscover(textBoxSMTP.Text, _authForm.CredentialHandler(), listBoxLog,_logger);
             oAutoDiscover.IgnoreCertificateErrors = checkBoxIgnoreCertificateErrors.Checked;
             if (oAutoDiscover.Autodiscover(checkBoxSkipSCPAutodiscover.Checked))
             {
@@ -187,34 +138,6 @@ namespace SOAPe.EWSTools
         private void buttonClearLog_Click(object sender, EventArgs e)
         {
             listBoxLog.Items.Clear();
-        }
-
-        private void textBoxUsername_TextChanged(object sender, EventArgs e)
-        {
-            _credentials = null;
-            if (textBoxUsername.BackColor == this.BackColor)
-                SetUserBackColour(textBoxSMTP.BackColor);
-        }
-
-        private void textBoxPassword_TextChanged(object sender, EventArgs e)
-        {
-            _credentials = null;
-            if (textBoxPassword.BackColor == this.BackColor)
-                SetUserBackColour(textBoxSMTP.BackColor);
-        }
-
-        private void textBoxDomain_TextChanged(object sender, EventArgs e)
-        {
-            _credentials = null;
-            if (textBoxDomain.BackColor == this.BackColor)
-                SetUserBackColour(textBoxSMTP.BackColor);
-        }
-
-        private void SetUserBackColour(Color backColour)
-        {
-            textBoxUsername.BackColor = backColour;
-            textBoxPassword.BackColor = backColour;
-            textBoxDomain.BackColor = backColour;
         }
 
         private void FormEWSAutodiscover_FormClosing(object sender, FormClosingEventArgs e)

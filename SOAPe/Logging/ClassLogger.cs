@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Data;
 using System.Data.Common;
+using System.Net;
 
 namespace SOAPe
 {
@@ -708,24 +709,29 @@ namespace SOAPe
             // The method should be the first element in the SOAP body
             // If we fail to parse the Xml, or it is unexpected, we return null
 
-            XmlNode nodeEnvelope = Request.DocumentElement;
-            if (!nodeEnvelope.LocalName.ToLower().Equals("envelope"))
-                return null;
-
-            XmlNode nodeBody = null;
-            foreach (XmlNode childNode in nodeEnvelope.ChildNodes)
+            try
             {
-                if (childNode.LocalName.ToLower().Equals("body"))
-                {
-                    nodeBody = childNode;
-                    break;
-                }
-            }
-            if (nodeBody == null)
-                return null;
+                XmlNode nodeEnvelope = Request.DocumentElement;
+                if (!nodeEnvelope.LocalName.ToLower().Equals("envelope"))
+                    return null;
 
-            XmlNode nodeRequestType = nodeBody.FirstChild;
-            return nodeRequestType.LocalName;
+                XmlNode nodeBody = null;
+                foreach (XmlNode childNode in nodeEnvelope.ChildNodes)
+                {
+                    if (childNode.LocalName.ToLower().Equals("body"))
+                    {
+                        nodeBody = childNode;
+                        break;
+                    }
+                }
+                if (nodeBody == null)
+                    return null;
+
+                XmlNode nodeRequestType = nodeBody.FirstChild;
+                return nodeRequestType.LocalName;
+            }
+            catch { }
+            return null;
         }
 
         public static string ReadMethodFromRequest(string Request)
@@ -745,6 +751,45 @@ namespace SOAPe
             {
                 return null;
             }
+        }
+
+        public void LogWebHeaders(WebHeaderCollection Headers, string Description, string Url = "", HttpWebResponse Response = null)
+        {
+            // Log request headers
+            string sHeaders = "";
+            if (Response != null)
+            {
+                sHeaders += String.Format("{0} {1}{2}", (int)Response.StatusCode, Response.StatusDescription, Environment.NewLine);
+            }
+            if (!String.IsNullOrEmpty(Url))
+            {
+                sHeaders += String.Format("POST URL: {0}{1}{1}", Url, Environment.NewLine);
+            }
+            try
+            {
+                foreach (string sHeader in Headers.AllKeys)
+                {
+                    sHeaders += sHeader + ": " + Headers[sHeader] + Environment.NewLine;
+                }
+                Log(sHeaders, Description);
+            }
+            catch { }
+        }
+
+        public void LogCookies(CookieCollection Cookies, string Description)
+        {
+            // Log cookies
+            try
+            {
+                if (Cookies.Count == 0) return;
+                string sCookies = "";
+                foreach (Cookie cookie in Cookies)
+                {
+                    sCookies += cookie.ToString() + Environment.NewLine;
+                }
+                Log(sCookies, Description);
+            }
+            catch { }
         }
     }
 }

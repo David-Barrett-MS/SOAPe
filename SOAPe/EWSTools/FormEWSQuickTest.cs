@@ -72,7 +72,7 @@ namespace SOAPe.EWSTools
             if (radioButtonAutodiscover.Checked)
             {
                 // Perform autodiscover
-                ClassEWSAutodiscover autodiscover = new ClassEWSAutodiscover(textBoxAutodiscoverEmail.Text, CurrentCredentials, listBoxLog, _logger);
+                ClassEWSAutodiscover autodiscover = new ClassEWSAutodiscover(textBoxAutodiscoverEmail.Text, _mainform.CredentialHandler(), listBoxLog, _logger);
                 if (autodiscover.Autodiscover())
                 {
                     textBoxEWSUrl.Text = autodiscover.EWSUrl;

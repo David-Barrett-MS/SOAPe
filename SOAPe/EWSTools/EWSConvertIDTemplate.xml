@@ -2,7 +2,7 @@
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
                xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">
   <soap:Header>
-    <t:RequestServerVersion Version="Exchange2007_SP1"/>
+    <t:RequestServerVersion Version="Exchange2010_SP2"/>
   </soap:Header>
   <soap:Body>
     <ConvertId xmlns="http://schemas.microsoft.com/exchange/services/2006/messages"
