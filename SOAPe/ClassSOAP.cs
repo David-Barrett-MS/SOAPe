@@ -129,7 +129,7 @@ namespace SOAPe
             if ((ServicePointManager.SecurityProtocol & SecurityProtocolType.Tls12) == SecurityProtocolType.Tls12)
                 protocols.Add("TLS 1.2");
 
-            sSSL.Append(String.Join("; ", protocols));
+            sSSL.AppendLine(String.Join("; ", protocols));
 
             _logger.Log(sSSL.ToString(), "Connection Security");
         }
@@ -149,7 +149,6 @@ namespace SOAPe
             string sResponse = "";
             SecurityProtocolType currentSecurityProtocol = ServicePointManager.SecurityProtocol;
             ServicePointManager.SecurityProtocol = _securityProtocol;
-            LogSSLSettings();
             HttpWebRequest oWebRequest = null;
             try
             {
@@ -221,6 +220,8 @@ namespace SOAPe
                 }
                 LogCookies(oCookies, "Request Cookies");
             }
+
+            LogSSLSettings();
 
             Stream stream = null;
             try
