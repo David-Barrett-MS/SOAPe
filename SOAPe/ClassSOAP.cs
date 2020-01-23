@@ -189,6 +189,15 @@ namespace SOAPe
                 }
             }
 
+            // We add a client-request-id header so that we can easily match request/response
+            string clientRequestId = Guid.NewGuid().ToString();
+            StringBuilder sTimings = new StringBuilder();
+            sTimings.AppendLine("Latency (latency shown in milliseconds, times are in ticks)").AppendLine();
+            sTimings.AppendLine($"client-request-id: {clientRequestId}").AppendLine();
+
+            oWebRequest.Headers["client-request-id"] = clientRequestId;
+            oWebRequest.Headers["return-client-request-id"] = "true";
+
             oWebRequest.Method = "POST";
             XmlDocument oSOAPRequest = new XmlDocument();
             if (!String.IsNullOrEmpty(sRequest))
@@ -236,14 +245,18 @@ namespace SOAPe
                 Log(sResponse, "Response");
                 return "";
             }
+            DateTime requestSendStartTime = DateTime.Now;
             if (!string.IsNullOrEmpty(sRequest))
                 oSOAPRequest.Save(stream);
             stream.Close();
+            DateTime requestSendEndTime = DateTime.Now;
             LogHeaders(oWebRequest.Headers, "Request Headers", _targetURL);
             Log(oSOAPRequest.OuterXml, "Request");
 
             oWebRequest.Expect = "";
 
+            DateTime responseReceiveEndTime = DateTime.MinValue;
+            DateTime responseReceiveStartTime = DateTime.Now;
             IAsyncResult asyncResult = oWebRequest.BeginGetResponse(null, null);
             asyncResult.AsyncWaitHandle.WaitOne();
 
@@ -251,6 +264,7 @@ namespace SOAPe
             try
             {
                 oWebResponse = oWebRequest.EndGetResponse(asyncResult);
+                responseReceiveEndTime = DateTime.Now;
                 _lastResponseHeaders = oWebResponse.Headers;
                 LogHeaders(oWebResponse.Headers, "Response Headers","",(oWebResponse as HttpWebResponse));
                 _responseCookies = (oWebResponse as HttpWebResponse).Cookies;
@@ -258,6 +272,7 @@ namespace SOAPe
             }
             catch (Exception ex)
             {
+                responseReceiveEndTime = DateTime.Now;
                 if (ex is WebException)
                 {
                     WebException wex = ex as WebException;
@@ -290,6 +305,16 @@ namespace SOAPe
             }
             catch { }
             Log(sResponse, "Response");
+
+            sTimings.AppendLine($"Request start: {(long)(requestSendStartTime.Ticks/10000)}");
+            sTimings.AppendLine($"Request complete: {(long)(requestSendEndTime.Ticks/10000)}");
+            sTimings.AppendLine($"Request latency: {(long)((requestSendEndTime.Ticks- requestSendStartTime.Ticks) / 10000)}").AppendLine();
+            sTimings.AppendLine($"Response start: {(long)(responseReceiveStartTime.Ticks / 10000)}");
+            sTimings.AppendLine($"Response complete: {(long)(responseReceiveEndTime.Ticks / 10000)}");
+            sTimings.AppendLine($"Response latency: {(long)((responseReceiveEndTime.Ticks - responseReceiveStartTime.Ticks) / 10000)}").AppendLine();
+            sTimings.AppendLine($"Total time taken (includes processing time): {(long)((responseReceiveEndTime.Ticks - requestSendStartTime.Ticks) / 10000)}");
+            Log(sTimings.ToString(), "Latency Report");
+
             return sResponse;
         }
 
