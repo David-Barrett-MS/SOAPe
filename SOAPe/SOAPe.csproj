@@ -406,7 +406,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Docs\Images\SOAPe Log Viewer.png" />
-    <Content Include="Docs\Images\SOAPe1.6.png" />
+    <Content Include="Docs\Images\SOAPe1.1.6.png" />
     <Content Include="Templates\EWS\ConvertId.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
