@@ -377,12 +377,12 @@ namespace SOAPe
             string sTemplateContent = String.Empty;
             FormReplaceTemplateFields oForm = new FormReplaceTemplateFields(ItemId, FolderId, TemplateName);
             sTemplateContent = oForm.ReadTemplate(this);
-            this.Activate(); // To stop the main window from disappearing behind other applications (Windows 10 z-order issues)
             oForm.Dispose();
 
             if (String.IsNullOrEmpty(sTemplateContent))
                 return xmlEditorRequest.Text;
 
+            this.Activate(); // To stop the main window from disappearing behind other applications (Windows 10 z-order issues)
             return sTemplateContent;
         }
 
@@ -1142,6 +1142,11 @@ namespace SOAPe
         private void GetFolderByIdToolStripMenuItem_Click(object sender, EventArgs e)
         {
             xmlEditorRequest.Text = LoadTemplate("", "", "GetFolder");
+        }
+
+        private void GetItemByIdToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            xmlEditorRequest.Text = LoadTemplate("", "", "GetItem");
         }
     }
 }
