@@ -398,7 +398,7 @@ namespace SOAPe
             DateTime readStartTime = DateTime.Now;
             try
             {
-                // Read and analyse log.  Regular expressions work, but are expensive (and slow) for large files
+                // Read and analyse log.  Regular expressions work, but are expensive (therefore slow) for large files
                 // We read each character at a time until we have a full trace (based on <trace> tags), then parse it
                 long streamLength = readLogFileStream.Length;
                 long readBytes = 0;
@@ -670,14 +670,29 @@ namespace SOAPe
             try
             {
                 XmlDocument xml = new XmlDocument();
+                bool xmlLoaded = false;
                 try
                 {
                     xml.LoadXml(Request.Trim());
+                    xmlLoaded = true;
                 }
-                catch
+                catch {}
+                if (!xmlLoaded)
                 {
-                    return;
+                    // This isn't valid XML.  We'll do a final check to see if we can find the closing <Envelope> tag and parse again
+                    int i = Request.LastIndexOf("envelope>", StringComparison.OrdinalIgnoreCase);
+                    if (i < 0) return;
+                    Request = Request.Substring(0, i + 9);
+                    try
+                    {
+                        xml.LoadXml(Request.Trim());
+                        xmlLoaded = true;
+                    }
+                    catch { }
                 }
+
+                if (!xmlLoaded)
+                    return;
 
                 string sEWSMethod = ReadMethodFromRequest(xml);
                 string sTag = "Unknown";

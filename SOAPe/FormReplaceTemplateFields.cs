@@ -317,6 +317,7 @@ namespace SOAPe
                         default:
                             // If we have a tag set, then this field is a multi-row field so we need to process all the rows
                             sFieldName = (string)oRow.Tag;
+                            bool propSelected = false;
                             if (FieldType(sFieldName) == "getadditionalproperties")
                                 sFieldValue += "<t:AdditionalProperties>";
                             string sFieldValuePart = "";
@@ -337,11 +338,17 @@ namespace SOAPe
                                 // Check in case we have run out of rows!
                                 if (i >= dataGridViewFields.Rows.Count)
                                     break;
-                                sFieldValue += sFieldValuePart;
+                                if (!String.IsNullOrEmpty(sFieldValuePart))
+                                {
+                                    sFieldValue += sFieldValuePart;
+                                    propSelected = true;
+                                }
                                 oRow = dataGridViewFields.Rows[i];
                             }
                             if (FieldType(sFieldName) == "getadditionalproperties")
                                 sFieldValue += "</t:AdditionalProperties>";
+                            if (!propSelected)
+                                sFieldValue = "";
                             i--;
                             break;
                     }
@@ -603,6 +610,8 @@ namespace SOAPe
                         oTextbox.Value = sProperty[0];
                         oRow.Cells.Add(oTextbox);
                         DataGridViewCheckBoxCell oCheckCell = new DataGridViewCheckBoxCell();
+                        oCheckCell.FalseValue = String.Empty;
+                        oCheckCell.Value = String.Empty;
                         if (sProperty.GetUpperBound(0) == 3)
                         {
                             string[] sDistinguishedPropertySetId = { "address", "appointment", "calendarAssistant", "common", "internetheaders", "meeting", "publicstrings", "task", "unifiedmessaging" };
@@ -693,10 +702,6 @@ namespace SOAPe
             }
         }
 
-        private void dataGridViewFields_DataError(object sender, DataGridViewDataErrorEventArgs e)
-        {
-            System.Windows.Forms.MessageBox.Show(String.Format("Unexpected datagrid error: {0}{1}", Environment.NewLine, e.Exception.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
 
         private void dataGridViewFields_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
@@ -781,7 +786,18 @@ namespace SOAPe
 
             string sUri = (_owner as FormMain).HTTPListener.URi; // This will open the listener if not already open
         }
+
+        private void dataGridViewFields_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dataGridViewFields.CurrentCell is DataGridViewCheckBoxCell)
+            {
+                dataGridViewFields.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void dataGridViewFields_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show(String.Format("Unexpected datagrid error: {0}{1}", Environment.NewLine, e.Exception.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
-
-
 }

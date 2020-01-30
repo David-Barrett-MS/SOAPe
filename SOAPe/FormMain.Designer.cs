@@ -128,6 +128,7 @@
             this.xmlEditorRequest = new SOAPe.XmlEditor();
             this.groupBoxResponse = new SOAPe.GroupBoxHighlight();
             this.xmlEditorResponse = new SOAPe.XmlEditor();
+            this.GetFolderByIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -248,9 +249,9 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolsToolStripMenuItem});
             this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.menuStrip1.Location = new System.Drawing.Point(1107, 5);
+            this.menuStrip1.Location = new System.Drawing.Point(1018, 5);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(97, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(186, 56);
             this.menuStrip1.TabIndex = 11;
             this.menuStrip1.Text = "menuStripTools";
             // 
@@ -285,7 +286,8 @@
             this.getFolderToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.GetFolderInboxToolStripMenuItem,
             this.GetFolderCalendarToolStripMenuItem,
-            this.GetFolderContactsToolStripMenuItem});
+            this.GetFolderContactsToolStripMenuItem,
+            this.GetFolderByIdToolStripMenuItem});
             this.getFolderToolStripMenuItem.Name = "getFolderToolStripMenuItem";
             this.getFolderToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.getFolderToolStripMenuItem.Text = "GetFolder";
@@ -1205,35 +1207,35 @@
             // GetFolderInboxToolStripMenuItem
             // 
             this.GetFolderInboxToolStripMenuItem.Name = "GetFolderInboxToolStripMenuItem";
-            this.GetFolderInboxToolStripMenuItem.Size = new System.Drawing.Size(183, 34);
+            this.GetFolderInboxToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.GetFolderInboxToolStripMenuItem.Text = "Inbox";
             this.GetFolderInboxToolStripMenuItem.Click += new System.EventHandler(this.GetFolderInboxToolStripMenuItem_Click);
             // 
             // GetFolderCalendarToolStripMenuItem
             // 
             this.GetFolderCalendarToolStripMenuItem.Name = "GetFolderCalendarToolStripMenuItem";
-            this.GetFolderCalendarToolStripMenuItem.Size = new System.Drawing.Size(183, 34);
+            this.GetFolderCalendarToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.GetFolderCalendarToolStripMenuItem.Text = "Calendar";
             this.GetFolderCalendarToolStripMenuItem.Click += new System.EventHandler(this.GetFolderCalendarToolStripMenuItem_Click);
             // 
             // GetFolderContactsToolStripMenuItem
             // 
             this.GetFolderContactsToolStripMenuItem.Name = "GetFolderContactsToolStripMenuItem";
-            this.GetFolderContactsToolStripMenuItem.Size = new System.Drawing.Size(183, 34);
+            this.GetFolderContactsToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.GetFolderContactsToolStripMenuItem.Text = "Contacts";
             this.GetFolderContactsToolStripMenuItem.Click += new System.EventHandler(this.GetFolderContactsToolStripMenuItem_Click);
             // 
             // FindItemInboxToolStripMenuItem
             // 
             this.FindItemInboxToolStripMenuItem.Name = "FindItemInboxToolStripMenuItem";
-            this.FindItemInboxToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.FindItemInboxToolStripMenuItem.Size = new System.Drawing.Size(183, 34);
             this.FindItemInboxToolStripMenuItem.Text = "Inbox";
             this.FindItemInboxToolStripMenuItem.Click += new System.EventHandler(this.FindItemInboxToolStripMenuItem_Click);
             // 
             // FindItemContactsToolStripMenuItem
             // 
             this.FindItemContactsToolStripMenuItem.Name = "FindItemContactsToolStripMenuItem";
-            this.FindItemContactsToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.FindItemContactsToolStripMenuItem.Size = new System.Drawing.Size(183, 34);
             this.FindItemContactsToolStripMenuItem.Text = "Contacts";
             this.FindItemContactsToolStripMenuItem.Click += new System.EventHandler(this.FindItemContactsToolStripMenuItem_Click);
             // 
@@ -1296,6 +1298,13 @@
             this.xmlEditorResponse.TabIndex = 0;
             this.xmlEditorResponse.Tag = "NoConfigSave";
             this.xmlEditorResponse.SendItemIdToTemplate += new SOAPe.XmlEditor.SendItemIdEventHandler(this.xmlEditorResponse_SendItemIdToTemplate);
+            // 
+            // GetFolderByIdToolStripMenuItem
+            // 
+            this.GetFolderByIdToolStripMenuItem.Name = "GetFolderByIdToolStripMenuItem";
+            this.GetFolderByIdToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.GetFolderByIdToolStripMenuItem.Text = "By Id";
+            this.GetFolderByIdToolStripMenuItem.Click += new System.EventHandler(this.GetFolderByIdToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -1444,6 +1453,7 @@
         private System.Windows.Forms.ToolStripMenuItem GetFolderContactsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem FindItemInboxToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem FindItemContactsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem GetFolderByIdToolStripMenuItem;
     }
 }
 

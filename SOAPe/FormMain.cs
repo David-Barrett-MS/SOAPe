@@ -1138,5 +1138,10 @@ namespace SOAPe
         {
             EWSTestFindItem("contacts");
         }
+
+        private void GetFolderByIdToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            xmlEditorRequest.Text = LoadTemplate("", "", "GetFolder");
+        }
     }
 }
