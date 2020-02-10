@@ -30,7 +30,10 @@ namespace SOAPe
         private bool _encryptData = true;
         private bool _storeButtonInfo = false;
         private bool _storeLabelInfo = false;
-        static Dictionary<string, string> _formsConfig = null;
+        private bool _doNotStoreConfig = false;  // Used to control whether we want to store anything at all
+        private static Dictionary<string, string> _formsConfig = null;
+        private static Dictionary<string, Dictionary<string,string>> _configurationSets = null;
+        private static string _selectedConfiguration = String.Empty;
         private List<string> _controlTypesExcludedFromRecursion = new List<string>();
 
         public ClassFormConfig(System.Windows.Forms.Form form)
@@ -58,9 +61,28 @@ namespace SOAPe
             _controlTypesExcludedFromRecursion.Add(ExcludedType);
         }
 
+        public bool SaveEnabled
+        {
+            get { return !_doNotStoreConfig; }
+            set { _doNotStoreConfig = !value; }
+        }
+
+        public bool SaveConfiguration()
+        {
+            if (_doNotStoreConfig)
+                return false;
+            if (!String.IsNullOrEmpty(_configFile))
+            {
+                SaveFormValues(_configFile);
+                return true;
+            }
+            return false;
+        }
+
         private void _form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            SaveFormValues(_configFile);
+            if (!_doNotStoreConfig)
+                SaveFormValues(_configFile);
         }
 
         private void Initialise(Form form)
@@ -84,7 +106,7 @@ namespace SOAPe
             _form.FormClosing += _form_FormClosing;
         }
 
-        private string Decode(string FormData)
+        private static string Decode(string FormData)
         {
             // Decode the data back to our form config
 
@@ -98,7 +120,7 @@ namespace SOAPe
             return String.Empty;
         }
 
-        private string Encode(string FormData)
+        private static string Encode(string FormData)
         {
             // Encode the data so that it is a single (long) line
             // Simplest way is to Base64 encode it...
@@ -107,7 +129,7 @@ namespace SOAPe
             return System.Convert.ToBase64String(formDataBytes);
         }
 
-        private void ReadFormDataFromFile(string ConfigFile)
+        private static void ReadFormDataFromFile(string ConfigFile)
         {
             // Read configuration data from the file to our dictionary object
             _formsConfig = new Dictionary<string, string>();
@@ -135,8 +157,26 @@ namespace SOAPe
             if (!appSettings.StartsWith("FormConfigv"))
                 return;
 
+            if (appSettings.StartsWith("FormConfigv3"))
+            {
+                // v3 adds multiple configuration support
+                ReadAllConfigurations(appSettings);
+                return;
+            }
 
-            using (StringReader reader = new StringReader(appSettings))
+            // Assuming version 2 (multiple forms but single configuration support)
+            _formsConfig = ReadFormsConfiguration(appSettings);
+        }
+
+        private static void ReadAllConfigurations(string MultipleConfigurationData)
+        {
+
+        }
+
+        private static Dictionary<string, string> ReadFormsConfiguration(string ConfigurationData)
+        {
+            Dictionary<string, string> formsConfigurationData = new Dictionary<string, string>();
+            using (StringReader reader = new StringReader(ConfigurationData))
             {
                 string sLine = "";
                 while (sLine != null)
@@ -154,13 +194,14 @@ namespace SOAPe
                                 string formData = sLine.Substring(splitLocation + 1);
                                 if (!String.IsNullOrEmpty(formName))
                                 {
-                                    _formsConfig.Add(formName, Decode(formData));
+                                    formsConfigurationData.Add(formName, Decode(formData));
                                 }
                             }
                         }
                     }
                 }
             }
+            return formsConfigurationData;
         }
 
         public bool StoreButtonInfo

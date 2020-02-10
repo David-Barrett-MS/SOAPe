@@ -669,11 +669,12 @@ namespace SOAPe
             // Attempt to read an EWS request/response that has no <trace> tags
             try
             {
+                Request = Request.Trim();
                 XmlDocument xml = new XmlDocument();
                 bool xmlLoaded = false;
                 try
                 {
-                    xml.LoadXml(Request.Trim());
+                    xml.LoadXml(Request);
                     xmlLoaded = true;
                 }
                 catch {}
@@ -685,7 +686,7 @@ namespace SOAPe
                     Request = Request.Substring(0, i + 9);
                     try
                     {
-                        xml.LoadXml(Request.Trim());
+                        xml.LoadXml(Request);
                         xmlLoaded = true;
                     }
                     catch { }

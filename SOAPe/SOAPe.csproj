@@ -209,6 +209,12 @@
       <DependentUpon>FormAcquireToken.cs</DependentUpon>
     </Compile>
     <Compile Include="CSUACSelfElevation.cs" />
+    <Compile Include="FormConfigurationManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormConfigurationManager.Designer.cs">
+      <DependentUpon>FormConfigurationManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logging\FormCreateLogFile.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -351,6 +357,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Auth\FormChooseAuthCertificate.resx">
       <DependentUpon>FormChooseAuthCertificate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormConfigurationManager.resx">
+      <DependentUpon>FormConfigurationManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Logging\FormCreateLogFile.resx">
       <DependentUpon>FormCreateLogFile.cs</DependentUpon>

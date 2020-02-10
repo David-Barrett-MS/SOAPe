@@ -28,7 +28,7 @@ namespace SOAPe
     public partial class FormListener : Form
     {
         private HttpListener _Listener = null;
-        private string _ListenURi = "";
+        //private string _ListenURi = "";
         private int _ListenPort = 36728;
         private List<string> _Requests;
         private string _NotificationResponse = "";
@@ -64,10 +64,9 @@ namespace SOAPe
                     sMachineName = sMachineName + "." + oDomain.Name;
             }
             catch { }
-            _ListenURi = "http://" + sMachineName + ":" + _ListenPort + "/" + Application.ProductName.ToString() + "/";
+            textBoxListenerURi.Text = "http://" + sMachineName + ":" + _ListenPort + "/" + Application.ProductName.ToString() + "/";
             _Listener.Prefixes.Clear();
-            _Listener.Prefixes.Add(_ListenURi);
-            textBoxListenerURi.Text = _ListenURi;
+            _Listener.Prefixes.Add(textBoxListenerURi.Text);
             try
             {
                 _Listener.Start();
@@ -78,7 +77,7 @@ namespace SOAPe
                 System.Windows.Forms.MessageBox.Show("Unable to start HTTP listener" + Environment.NewLine + "(are you running as administrator?)",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBoxListenerURi.Text = "FAILED TO START LISTENER: " + ex.Message;
-                _ListenURi = "";
+                textBoxListenerURi.Text = "";
                 textBoxListenerURi.BackColor = Color.Red;
                 textBoxListenerURi.ForeColor = Color.Black;
             }
@@ -103,7 +102,7 @@ namespace SOAPe
         {
             get
             {
-                return _ListenURi;
+                return textBoxListenerURi.Text;
             }
         }
 
@@ -258,5 +257,36 @@ namespace SOAPe
 
         }
 
+        private void buttonEditListenUrl_Click(object sender, EventArgs e)
+        {
+            if (buttonEditListenUrl.Text=="Edit...")
+            {
+                textBoxListenerURi.Enabled = true;
+                textBoxListenerURi.ReadOnly = false;
+                buttonEditListenUrl.Text = "Apply";
+                return;
+            }
+
+            textBoxListenerURi.ReadOnly = true;
+            buttonEditListenUrl.Text = "Edit...";
+
+            _Listener.Stop();
+            _Listener.Prefixes.Clear();
+            _Listener.Prefixes.Add(textBoxListenerURi.Text);
+            try
+            {
+                _Listener.Start();
+                _Listener.BeginGetContext(new AsyncCallback(ListenerCallback), _Listener);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("Unable to start HTTP listener" + Environment.NewLine + "(are you running as administrator?)",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxListenerURi.Text = "FAILED TO START LISTENER: " + ex.Message;
+                textBoxListenerURi.Text = "";
+                textBoxListenerURi.BackColor = Color.Red;
+                textBoxListenerURi.ForeColor = Color.Black;
+            }
+        }
     }
 }

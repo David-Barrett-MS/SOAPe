@@ -257,6 +257,8 @@ namespace SOAPe
             HighlightResponseGroupbox(false);
 
             buttonSend.Enabled = false;
+            xmlEditorRequest.Enabled = false;
+            this.Update();
 
             CredentialHandler credentialHandler = CredentialHandler();
             ClassSOAP oSOAP = new ClassSOAP(textBoxURL.Text, _logger, credentialHandler);
@@ -294,6 +296,7 @@ namespace SOAPe
             UpdateHTTPCookieControls();
             UpdateHTTPHeaderControls();
             buttonSend.Enabled = true;
+            xmlEditorRequest.Enabled = true;
         }
 
         private void PersistCookies(CookieCollection Cookies)
@@ -1141,12 +1144,17 @@ namespace SOAPe
 
         private void GetFolderByIdToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            xmlEditorRequest.Text = LoadTemplate("", "", "GetFolder");
+            TryXmlRequest(LoadTemplate("", "", "GetFolder"));
         }
 
         private void GetItemByIdToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            xmlEditorRequest.Text = LoadTemplate("", "", "GetItem");
+            TryXmlRequest(LoadTemplate("", "", "GetItem"));
+        }
+
+        private void ConfigurationManagerToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
