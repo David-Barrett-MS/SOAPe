@@ -56,15 +56,7 @@ namespace SOAPe
 
         private void StartListening()
         {
-            string sMachineName = Environment.MachineName;
-            try
-            {
-                System.DirectoryServices.ActiveDirectory.Domain oDomain = System.DirectoryServices.ActiveDirectory.Domain.GetComputerDomain();
-                if (!String.IsNullOrEmpty(oDomain.Name))
-                    sMachineName = sMachineName + "." + oDomain.Name;
-            }
-            catch { }
-            textBoxListenerURi.Text = "http://" + sMachineName + ":" + _ListenPort + "/" + Application.ProductName.ToString() + "/";
+            textBoxListenerURi.Text = "http://*:" + _ListenPort + "/" + Application.ProductName.ToString() + "/";
             _Listener.Prefixes.Clear();
             _Listener.Prefixes.Add(textBoxListenerURi.Text);
             try
