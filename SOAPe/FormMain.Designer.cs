@@ -277,7 +277,7 @@
             // 
             this.xmlEditorResponse.BackColor = System.Drawing.SystemColors.Window;
             this.xmlEditorResponse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xmlEditorResponse.IndentXml = false;
+            this.xmlEditorResponse.IndentXml = true;
             this.xmlEditorResponse.Location = new System.Drawing.Point(3, 16);
             this.xmlEditorResponse.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.xmlEditorResponse.Name = "xmlEditorResponse";
