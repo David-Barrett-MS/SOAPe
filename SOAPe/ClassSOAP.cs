@@ -174,16 +174,24 @@ namespace SOAPe
                 {
                     try
                     {
-                        if (header[0].ToLower() == "content-type")
+                        switch (header[0].ToLower())
                         {
-                            oWebRequest.ContentType = header[1];
+                            case "user-agent":
+                                oWebRequest.UserAgent = header[1];
+                                break;
+
+                            case "content-type":
+                                oWebRequest.ContentType = header[1];
+                                break;
+
+                            case "accept":
+                                oWebRequest.Accept = header[1];
+                                break;
+
+                            default:
+                                oWebRequest.Headers[header[0]] = header[1];
+                                break;
                         }
-                        else if (header[0].ToLower() == "accept")
-                        {
-                            oWebRequest.Accept = header[1];
-                        }
-                        else
-                            oWebRequest.Headers[header[0]] = header[1];
                     }
                     catch { }
                 }
