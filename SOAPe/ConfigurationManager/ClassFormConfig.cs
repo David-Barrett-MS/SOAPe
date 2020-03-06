@@ -20,37 +20,110 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
 using System.Security.Cryptography;
+using System.Security.Policy;
 
-namespace SOAPe
+namespace SOAPe.ConfigurationManager
 {
     class ClassFormConfig
     {
         private Form _form = null;
         private string _configFile = String.Empty;
         private bool _encryptData = true;
-        private bool _storeButtonInfo = false;
-        private bool _storeLabelInfo = false;
         private bool _doNotStoreConfig = false;  // Used to control whether we want to store anything at all
         private static Dictionary<string, string> _formsConfig = null;
         private static Dictionary<string, Dictionary<string,string>> _configurationSets = null;
-        private static string _selectedConfiguration = String.Empty;
+        private static string _selectedConfiguration = "Default";
         private List<string> _controlTypesExcludedFromRecursion = new List<string>();
+        private static ConfigurationManager.FormConfigurationManager _formConfigurationManager = null;
+        public static event EventHandler ConfigChanged = delegate { };
+        public static event EventHandler UpdateConfig = delegate { };
+        public static event EventHandler UpdateAndSaveConfig = delegate { };
 
-        public ClassFormConfig(System.Windows.Forms.Form form)
+        public ClassFormConfig(System.Windows.Forms.Form form, bool DoNotApply = false)
         {
-            Initialise(form);
+            Initialise(form, DoNotApply);
         }
 
-        public ClassFormConfig(Form form, bool Encrypt)
+        public ClassFormConfig(Form form, bool Encrypt, bool DoNotApply = false)
         {
             _encryptData = Encrypt;
-            Initialise(form);
+            Initialise(form, DoNotApply);
         }
 
         public ClassFormConfig(System.Windows.Forms.Form form, string configFile)
         {
             _configFile = configFile;
-            Initialise(form);
+            Initialise(form, false);
+        }
+
+        public static string ActiveConfiguration
+        {
+            get { return _selectedConfiguration; }
+        }
+
+        public static bool ApplyConfiguration(string ConfigName="Default")
+        {
+            if (_configurationSets.ContainsKey(ConfigName))
+            {
+                _selectedConfiguration = ConfigName;
+                _formsConfig = _configurationSets[ConfigName];
+                ConfigChanged(null, null);
+                return true;
+            }
+            return false;
+        }
+
+        public static bool SaveNewConfiguration(string ConfigName)
+        {
+            // Save our current configuration as a new configuration set with the given name
+            if (String.IsNullOrEmpty(ConfigName))
+                return false;
+
+            if (_configurationSets.ContainsKey(ConfigName))
+                return false;
+
+            _selectedConfiguration = ConfigName;
+            _formsConfig = new Dictionary<string, string>();
+            UpdateConfig(null, null);
+            return true;
+        }
+
+        public static bool DeleteConfiguration(string ConfigName)
+        {
+            if (_configurationSets.Count < 2)
+                return false; // Can't delete last configuration set
+
+            if (!_configurationSets.ContainsKey(ConfigName))
+                return false;
+
+            _configurationSets.Remove(ConfigName);
+            if (_selectedConfiguration.Equals(ConfigName))
+            {
+                _selectedConfiguration = _configurationSets.Keys.ToList<string>()[0];
+                _formsConfig = _configurationSets[_selectedConfiguration];
+                ConfigChanged(null, null);
+            }
+            return true;
+        }
+
+        public static bool RenameConfiguration(string currentName, string newName)
+        {
+            if (!_configurationSets.ContainsKey(currentName))
+                return false;
+
+            if (_configurationSets.ContainsKey(newName))
+                return false;
+
+            _configurationSets.Add(newName, _configurationSets[currentName]);
+            _configurationSets.Remove(currentName);
+            if (_selectedConfiguration.Equals(currentName))
+                _selectedConfiguration = newName;
+            return true;
+        }
+
+        public static List<string> ConfigurationSetNames()
+        {
+            return _configurationSets.Keys.ToList<string>();
         }
 
         public void AddControlTypeRecurseExclusion(string ExcludedType)
@@ -61,11 +134,17 @@ namespace SOAPe
             _controlTypesExcludedFromRecursion.Add(ExcludedType);
         }
 
+        public List<Control> ExcludedControls { get; } = new List<Control>();
+
         public bool SaveEnabled
         {
             get { return !_doNotStoreConfig; }
             set { _doNotStoreConfig = !value; }
         }
+
+        public bool StoreButtonInfo { get; set; } = false;
+
+        public bool StoreLabelInfo { get; set; } = false;
 
         public bool SaveConfiguration()
         {
@@ -73,19 +152,27 @@ namespace SOAPe
                 return false;
             if (!String.IsNullOrEmpty(_configFile))
             {
-                SaveFormValues(_configFile);
+                SaveConfiguration(_configFile);
                 return true;
             }
             return false;
         }
 
+        public static void SaveActiveConfiguration()
+        {
+            UpdateAndSaveConfig(null, null);
+        }
+
         private void _form_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!_doNotStoreConfig)
-                SaveFormValues(_configFile);
+                SaveConfiguration(_configFile);
+            ClassFormConfig.ConfigChanged -= ClassFormConfig_ConfigChanged;
+            ClassFormConfig.UpdateConfig -= ClassFormConfig_UpdateConfig;
+            ClassFormConfig.UpdateAndSaveConfig -= ClassFormConfig_UpdateAndSaveConfig;
         }
 
-        private void Initialise(Form form)
+        private void Initialise(Form form, bool DoNotApply)
         {
             _form = form;
             // If no config file is specified, then we use one based on current user's SID
@@ -102,13 +189,36 @@ namespace SOAPe
                 _configFile = @".\config.dat";
             if (_formsConfig == null)
                 ReadFormDataFromFile(_configFile);
-            RestoreFormValues();
+            if (!DoNotApply)
+                RestoreFormValues();
             _form.FormClosing += _form_FormClosing;
+            ClassFormConfig.ConfigChanged += ClassFormConfig_ConfigChanged;
+            ClassFormConfig.UpdateConfig += ClassFormConfig_UpdateConfig;
+            ClassFormConfig.UpdateAndSaveConfig += ClassFormConfig_UpdateAndSaveConfig;
+        }
+
+        private void ClassFormConfig_UpdateAndSaveConfig(object sender, EventArgs e)
+        {
+            UpdateFormValues();
+            if (!_doNotStoreConfig)
+                SaveConfiguration(_configFile);
+        }
+
+        private void ClassFormConfig_UpdateConfig(object sender, EventArgs e)
+        {
+            // This event occurs when we need to save the config
+            UpdateFormValues();
+        }
+
+        private void ClassFormConfig_ConfigChanged(object sender, EventArgs e)
+        {
+            // We get this event when the configuration has changed and we need to reapply it to the form
+            RestoreFormValues();
         }
 
         private static string Decode(string FormData)
         {
-            // Decode the data back to our form config
+            // Decode the data so that we understand it...
 
             byte[] encodedFormData = null;
             try
@@ -127,6 +237,18 @@ namespace SOAPe
 
             byte[] formDataBytes = System.Text.Encoding.UTF8.GetBytes(FormData);
             return System.Convert.ToBase64String(formDataBytes);
+        }
+
+        private static string Encode(Dictionary<String, String> configSetData)
+        {
+            StringBuilder encodedData = new StringBuilder();
+            foreach (string formName in configSetData.Keys)
+            {
+                encodedData.Append(formName);
+                encodedData.Append(":");
+                encodedData.AppendLine(Encode(configSetData[formName]));
+            }
+            return Encode(encodedData.ToString());
         }
 
         private static void ReadFormDataFromFile(string ConfigFile)
@@ -165,12 +287,57 @@ namespace SOAPe
             }
 
             // Assuming version 2 (multiple forms but single configuration support)
+            // We'll be saving in v3 so we just make this configuraiton the default set
+            _configurationSets = new Dictionary<string, Dictionary<string, string>>();
             _formsConfig = ReadFormsConfiguration(appSettings);
+            _configurationSets.Add("Default", _formsConfig);
         }
 
         private static void ReadAllConfigurations(string MultipleConfigurationData)
         {
+            // v3 format:
+            // Configuration name:ConfigurationData(Base64 encoded)
+            _configurationSets = new Dictionary<string, Dictionary<string, string>>();
+            using (StringReader reader = new StringReader(MultipleConfigurationData))
+            {
+                string sLine = "";
+                while (sLine != null)
+                {
+                    // Each "line" should be a complete configuration blob for a single form
+                    sLine = reader.ReadLine();
+                    if (!String.IsNullOrEmpty(sLine))
+                    {
+                        if (!sLine.StartsWith("FormConfig"))
+                        {
+                            int splitLocation = sLine.IndexOf(':');
+                            if (splitLocation > 0)
+                            {
+                                string configName = sLine.Substring(0, splitLocation);
+                                string configData = sLine.Substring(splitLocation + 1);
+                                if (!String.IsNullOrEmpty(configName))
+                                {
+                                    _configurationSets.Add(configName, ReadFormsConfiguration(Decode(configData)));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (_configurationSets.ContainsKey(_selectedConfiguration))
+            {
+                _formsConfig = _configurationSets[_selectedConfiguration];
+                return;
+            }
 
+            if (_configurationSets.Count==0)
+            {
+                _selectedConfiguration = "Default";
+                _formsConfig = new Dictionary<string, string>(); 
+                _configurationSets.Add(_selectedConfiguration, _formsConfig);
+                return;
+            }
+            _selectedConfiguration = _configurationSets.Keys.ToList<string>()[0];
+            _formsConfig = _configurationSets[_selectedConfiguration];
         }
 
         private static Dictionary<string, string> ReadFormsConfiguration(string ConfigurationData)
@@ -204,24 +371,24 @@ namespace SOAPe
             return formsConfigurationData;
         }
 
-        public bool StoreButtonInfo
+        public static void ShowConfigurationManager(Form Owner = null)
         {
-            get { return _storeButtonInfo; }
-            set { _storeButtonInfo = value; }
+            if (_formConfigurationManager == null)
+                _formConfigurationManager = new ConfigurationManager.FormConfigurationManager();
+            if (_formConfigurationManager.Visible)
+                return;
+            _formConfigurationManager.SideLoadToForm(Owner);
+            _formConfigurationManager.Show(Owner);
         }
 
-        public bool StoreLabelInfo
-        {
-            get { return _storeLabelInfo; }
-            set { _storeLabelInfo = value; }
-        }
 
         private void SaveControlProperties(Control control, ref StringBuilder appSettings)
         {
             // Write the control's properties to our config file
 
-            if ((control is Label) && !_storeLabelInfo) return;
-            if ((control is Button) && !_storeButtonInfo) return;
+            if ((control is Label) && !StoreLabelInfo) return;
+            if ((control is Button) && !StoreButtonInfo) return;
+            if (ExcludedControls.Contains(control)) return;
             if (control.Tag != null)
             {
                 if (control.Tag.Equals("NoConfigSave"))
@@ -262,7 +429,28 @@ namespace SOAPe
             }
         }
 
-        private void SaveFormValues(string Filename)
+        private void SaveConfiguration(string Filename)
+        {
+            UpdateFormValues();
+            StringBuilder allAppConfig = new StringBuilder("FormConfigv3");
+            allAppConfig.AppendLine();
+
+            foreach (String configSetName in _configurationSets.Keys)
+            {
+                allAppConfig.Append(configSetName);
+                allAppConfig.Append(":");
+                allAppConfig.AppendLine(Encode(_configurationSets[configSetName]));
+            }
+
+            if (_encryptData)
+            {
+                File.WriteAllBytes(Filename, ProtectedData.Protect(System.Text.Encoding.Unicode.GetBytes(allAppConfig.ToString()), null, DataProtectionScope.CurrentUser));
+            }
+            else
+                File.WriteAllBytes(Filename, System.Text.Encoding.Unicode.GetBytes(allAppConfig.ToString()));
+        }
+
+        private void UpdateFormValues()
         {
             // Read and save all our control's values
 
@@ -276,23 +464,8 @@ namespace SOAPe
                 _formsConfig.Remove(_form.Name);
 
             _formsConfig.Add(_form.Name, Encode(appSettings.ToString()));
+            _configurationSets[_selectedConfiguration] = _formsConfig;
 
-            StringBuilder allAppSettings = new StringBuilder("FormConfigv2");
-            allAppSettings.AppendLine();
-
-            foreach (string formName in _formsConfig.Keys)
-            {
-                allAppSettings.Append(formName);
-                allAppSettings.Append(":");
-                allAppSettings.AppendLine(Encode(_formsConfig[formName]));
-            }
-
-            if (_encryptData)
-            {
-                File.WriteAllBytes(Filename, ProtectedData.Protect(System.Text.Encoding.Unicode.GetBytes(allAppSettings.ToString()), null, DataProtectionScope.CurrentUser));
-            }
-            else
-                File.WriteAllBytes(Filename, System.Text.Encoding.Unicode.GetBytes(allAppSettings.ToString()));
         }
 
         private void RestoreFormValues()
@@ -348,9 +521,16 @@ namespace SOAPe
                         if (control != null)
                         {
                             bool bRestore = true;
-                            if (control.Tag != null)
+                            if (ExcludedControls.Contains(control))
                             {
-                                bRestore = !control.Tag.Equals("NoConfigSave");
+                                bRestore = false;
+                            }
+                            else
+                            {
+                                if (control.Tag != null)
+                                {
+                                    bRestore = !control.Tag.Equals("NoConfigSave");
+                                }
                             }
                             if (bRestore)
                             {

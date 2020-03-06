@@ -1,4 +1,4 @@
-﻿namespace SOAPe
+﻿namespace SOAPe.ConfigurationManager
 {
     partial class FormConfigurationManager
     {
@@ -35,15 +35,19 @@
             this.buttonDelete = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
             this.buttonAdd = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buttonSave = new System.Windows.Forms.Button();
+            this.textBoxActiveConfiguration = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.listBoxConfigs);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 57);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(325, 409);
+            this.groupBox1.Size = new System.Drawing.Size(325, 364);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Saved configurations";
@@ -56,35 +60,40 @@
             "Default"});
             this.listBoxConfigs.Location = new System.Drawing.Point(3, 16);
             this.listBoxConfigs.Name = "listBoxConfigs";
-            this.listBoxConfigs.Size = new System.Drawing.Size(319, 390);
+            this.listBoxConfigs.Size = new System.Drawing.Size(319, 345);
+            this.listBoxConfigs.Sorted = true;
             this.listBoxConfigs.TabIndex = 0;
+            this.listBoxConfigs.SelectedIndexChanged += new System.EventHandler(this.listBoxConfigs_SelectedIndexChanged);
             // 
             // buttonApply
             // 
-            this.buttonApply.Location = new System.Drawing.Point(343, 12);
+            this.buttonApply.Location = new System.Drawing.Point(343, 63);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(75, 23);
             this.buttonApply.TabIndex = 1;
             this.buttonApply.Text = "Apply";
             this.buttonApply.UseVisualStyleBackColor = true;
+            this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
             // 
             // buttonRename
             // 
-            this.buttonRename.Location = new System.Drawing.Point(343, 41);
+            this.buttonRename.Location = new System.Drawing.Point(343, 92);
             this.buttonRename.Name = "buttonRename";
             this.buttonRename.Size = new System.Drawing.Size(75, 23);
             this.buttonRename.TabIndex = 2;
             this.buttonRename.Text = "Rename";
             this.buttonRename.UseVisualStyleBackColor = true;
+            this.buttonRename.Click += new System.EventHandler(this.buttonRename_Click);
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(343, 70);
+            this.buttonDelete.Location = new System.Drawing.Point(343, 121);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);
             this.buttonDelete.TabIndex = 3;
             this.buttonDelete.Text = "Delete";
             this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
             // buttonClose
             // 
@@ -94,22 +103,58 @@
             this.buttonClose.TabIndex = 4;
             this.buttonClose.Text = "Close";
             this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Location = new System.Drawing.Point(343, 99);
+            this.buttonAdd.Location = new System.Drawing.Point(343, 150);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(75, 23);
             this.buttonAdd.TabIndex = 5;
             this.buttonAdd.Text = "Add";
             this.buttonAdd.UseVisualStyleBackColor = true;
+            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.buttonSave);
+            this.groupBox2.Controls.Add(this.textBoxActiveConfiguration);
+            this.groupBox2.Location = new System.Drawing.Point(15, 12);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Size = new System.Drawing.Size(403, 40);
+            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Active configuration";
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(323, 14);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(75, 23);
+            this.buttonSave.TabIndex = 1;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
+            // textBoxActiveConfiguration
+            // 
+            this.textBoxActiveConfiguration.Location = new System.Drawing.Point(4, 16);
+            this.textBoxActiveConfiguration.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxActiveConfiguration.Name = "textBoxActiveConfiguration";
+            this.textBoxActiveConfiguration.ReadOnly = true;
+            this.textBoxActiveConfiguration.Size = new System.Drawing.Size(314, 20);
+            this.textBoxActiveConfiguration.TabIndex = 0;
+            this.textBoxActiveConfiguration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // FormConfigurationManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(427, 434);
+            this.ClientSize = new System.Drawing.Size(437, 468);
             this.ControlBox = false;
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.buttonAdd);
             this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.buttonDelete);
@@ -118,8 +163,11 @@
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "FormConfigurationManager";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Configuration Manager";
             this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -133,5 +181,8 @@
         private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.Button buttonClose;
         private System.Windows.Forms.Button buttonAdd;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TextBox textBoxActiveConfiguration;
+        private System.Windows.Forms.Button buttonSave;
     }
 }

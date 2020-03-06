@@ -201,18 +201,24 @@
     </Compile>
     <Compile Include="Auth\OAuthHelper.cs" />
     <Compile Include="Auth\EncryptedTokenCache.cs" />
-    <Compile Include="ClassFormConfig.cs" />
+    <Compile Include="ConfigurationManager\ClassFormConfig.cs" />
     <Compile Include="Auth\FormAcquireToken.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Auth\FormAcquireToken.Designer.cs">
       <DependentUpon>FormAcquireToken.cs</DependentUpon>
     </Compile>
-    <Compile Include="CSUACSelfElevation.cs" />
-    <Compile Include="FormConfigurationManager.cs">
+    <Compile Include="ConfigurationManager\FormConfigurationName.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormConfigurationManager.Designer.cs">
+    <Compile Include="ConfigurationManager\FormConfigurationName.Designer.cs">
+      <DependentUpon>FormConfigurationName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CSUACSelfElevation.cs" />
+    <Compile Include="ConfigurationManager\FormConfigurationManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigurationManager\FormConfigurationManager.Designer.cs">
       <DependentUpon>FormConfigurationManager.cs</DependentUpon>
     </Compile>
     <Compile Include="Logging\FormCreateLogFile.cs">
@@ -334,6 +340,9 @@
     <EmbeddedResource Include="Auth\FormTokenViewer.resx">
       <DependentUpon>FormTokenViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationManager\FormConfigurationName.resx">
+      <DependentUpon>FormConfigurationName.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataGridViewDateTimeEdit.resx">
       <DependentUpon>DataGridViewDateTimeEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -358,7 +367,7 @@
     <EmbeddedResource Include="Auth\FormChooseAuthCertificate.resx">
       <DependentUpon>FormChooseAuthCertificate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormConfigurationManager.resx">
+    <EmbeddedResource Include="ConfigurationManager\FormConfigurationManager.resx">
       <DependentUpon>FormConfigurationManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Logging\FormCreateLogFile.resx">

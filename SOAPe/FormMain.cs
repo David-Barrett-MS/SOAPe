@@ -32,6 +32,7 @@ using System.DirectoryServices.AccountManagement;
 using SOAPe.EWSTools;
 using System.Threading;
 using SOAPe.Auth;
+using SOAPe.ConfigurationManager;
 
 namespace SOAPe
 {
@@ -44,14 +45,19 @@ namespace SOAPe
         private string _userSMTPAddress = "";
         private static bool _ignoreSSLErrors = false;
         private X509Certificate2 _authCertificate = null;
-        private ClassFormConfig _formConfig = null;
+        private ConfigurationManager.ClassFormConfig _formConfig = null;
         private Auth.FormAzureApplicationRegistration _oAuthAppRegForm=null;
 
         public FormMain(bool DebugLogging)
         {
             InitializeComponent();
-            _formConfig = new ClassFormConfig(this);
+
+            // Add our form configuration helper
+            _formConfig = new ConfigurationManager.ClassFormConfig(this, true);
             _formConfig.AddControlTypeRecurseExclusion("SOAPe.XmlEditor");
+            _formConfig.ExcludedControls.Add(groupBoxResponse);
+            _formConfig.ExcludedControls.Add(xmlEditorResponse);
+            ClassFormConfig.ApplyConfiguration();
 
             // Configure log file
             if (String.IsNullOrEmpty(textBoxLogFolder.Text)) textBoxLogFolder.Text = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
@@ -71,7 +77,6 @@ namespace SOAPe
             UpdateHTTPHeaderControls();
             UpdateHTTPCookieControls();
             xmlEditorResponse.XmlValidationComplete += xmlEditorResponse_XmlValidationComplete;
-            _logger.DebugLog("Initialisation complete");
 
             try
             {
@@ -89,6 +94,7 @@ namespace SOAPe
                 oForm.Show(this);
             }
              */
+            _logger.DebugLog("Initialisation complete");
         }
 
         private string LogFileName()
@@ -1154,7 +1160,7 @@ namespace SOAPe
 
         private void ConfigurationManagerToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-
+            ConfigurationManager.ClassFormConfig.ShowConfigurationManager(this);
         }
     }
 }

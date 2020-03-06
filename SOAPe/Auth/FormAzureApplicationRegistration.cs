@@ -26,7 +26,7 @@ namespace SOAPe.Auth
 {
     public partial class FormAzureApplicationRegistration : Form
     {
-        private ClassFormConfig _formConfig = null;
+        private ConfigurationManager.ClassFormConfig _formConfig = null;
         private AuthenticationResult _lastAuthResult = null;
         private ClassOAuthHelper _oAuthHelper = new ClassOAuthHelper();
         private TextBox _tokenTextBox = null;
@@ -34,7 +34,7 @@ namespace SOAPe.Auth
         public FormAzureApplicationRegistration()
         {
             InitializeComponent();
-            _formConfig = new ClassFormConfig(this);
+            _formConfig = new ConfigurationManager.ClassFormConfig(this);
             textBoxTenantId_TextChanged(null, null);
             UpdateAuthUI();
         }
