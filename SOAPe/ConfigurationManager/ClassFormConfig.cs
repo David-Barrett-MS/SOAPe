@@ -377,8 +377,16 @@ namespace SOAPe.ConfigurationManager
                 _formConfigurationManager = new ConfigurationManager.FormConfigurationManager();
             if (_formConfigurationManager.Visible)
                 return;
+            try
+            {
+                _formConfigurationManager.Show(Owner);
+            }
+            catch (ObjectDisposedException)
+            {
+                _formConfigurationManager = new ConfigurationManager.FormConfigurationManager();
+                _formConfigurationManager.Show(Owner);
+            }
             _formConfigurationManager.SideLoadToForm(Owner);
-            _formConfigurationManager.Show(Owner);
         }
 
 
