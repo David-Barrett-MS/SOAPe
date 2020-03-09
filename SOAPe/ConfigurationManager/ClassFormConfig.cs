@@ -61,16 +61,20 @@ namespace SOAPe.ConfigurationManager
             get { return _selectedConfiguration; }
         }
 
-        public static bool ApplyConfiguration(string ConfigName="Default")
+        public static bool ApplyConfiguration(string ConfigName="")
         {
-            if (_configurationSets.ContainsKey(ConfigName))
+            if (!String.IsNullOrEmpty(ConfigName))
             {
-                _selectedConfiguration = ConfigName;
-                _formsConfig = _configurationSets[ConfigName];
-                ConfigChanged(null, null);
-                return true;
+                if (_configurationSets.ContainsKey(ConfigName))
+                {
+                    _selectedConfiguration = ConfigName;
+                }
+                else
+                    return false;
             }
-            return false;
+            _formsConfig = _configurationSets[_selectedConfiguration];
+            ConfigChanged(null, null);
+            return true;
         }
 
         public static bool SaveNewConfiguration(string ConfigName)
@@ -253,9 +257,15 @@ namespace SOAPe.ConfigurationManager
 
         private static void ReadFormDataFromFile(string ConfigFile)
         {
-            // Read configuration data from the file to our dictionary object
+            // Read configuration data from the file
+            _configurationSets = new Dictionary<string, Dictionary<string, string>>();
             _formsConfig = new Dictionary<string, string>();
-            if (!File.Exists(ConfigFile)) return;
+            if (!File.Exists(ConfigFile))
+            {
+                _configurationSets.Add("Default", _formsConfig);
+                _selectedConfiguration = "Default";
+                return;
+            }
 
             String appSettings = String.Empty;
             try
@@ -277,7 +287,11 @@ namespace SOAPe.ConfigurationManager
                 catch { }
             }
             if (!appSettings.StartsWith("FormConfigv"))
+            {
+                _configurationSets.Add("Default", _formsConfig);
+                _selectedConfiguration = "Default";
                 return;
+            }
 
             if (appSettings.StartsWith("FormConfigv3"))
             {
@@ -288,7 +302,6 @@ namespace SOAPe.ConfigurationManager
 
             // Assuming version 2 (multiple forms but single configuration support)
             // We'll be saving in v3 so we just make this configuraiton the default set
-            _configurationSets = new Dictionary<string, Dictionary<string, string>>();
             _formsConfig = ReadFormsConfiguration(appSettings);
             _configurationSets.Add("Default", _formsConfig);
         }
