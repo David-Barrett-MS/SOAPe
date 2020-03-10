@@ -413,7 +413,7 @@ namespace SOAPe
                     StringBuilder sTag=null;
                     bool bCollectTag = false;
                     bool bInTraceTag = false;
-                    int i = 1;
+                    int i = 0;
                     byte lastShowProgressPercent = 0;
 
                     while (!logFileReader.EndOfStream)
@@ -427,7 +427,10 @@ namespace SOAPe
                             if ((byte)percentComplete > lastShowProgressPercent)
                             {
                                 lastShowProgressPercent = (byte)percentComplete;
-                                OnProgressChanged(new ProgressEventArgs($"Processing {i}", percentComplete));
+                                if (i>0)
+                                    OnProgressChanged(new ProgressEventArgs($"Processing {i}", percentComplete));
+                                else
+                                    OnProgressChanged(new ProgressEventArgs($"Processing...", percentComplete));
                             }
                         }
 
