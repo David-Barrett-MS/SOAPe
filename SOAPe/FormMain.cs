@@ -981,7 +981,16 @@ namespace SOAPe
 
             if (textBoxURL.Text.Equals((string)radioButtonUrlOffice365.Tag) || String.IsNullOrEmpty(textBoxURL.Text))
             {
-                textBoxURL.Text = (string)radioButtonUrlCustom.Tag;
+                // https://<server>/EWS/Exchange.asmx
+                if (String.IsNullOrEmpty((string)radioButtonUrlCustom.Tag))
+                {
+                    textBoxURL.Text = "https://<server>/EWS/Exchange.asmx";
+                    textBoxURL.SelectionStart = 8;
+                    textBoxURL.SelectionLength = 8;
+                    textBoxURL.Focus();
+                }
+                else
+                    textBoxURL.Text = (string)radioButtonUrlCustom.Tag;
             }
             textBoxURL.ReadOnly = false;
         }
