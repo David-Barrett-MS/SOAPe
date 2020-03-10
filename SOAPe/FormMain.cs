@@ -981,7 +981,6 @@ namespace SOAPe
 
             if (textBoxURL.Text.Equals((string)radioButtonUrlOffice365.Tag) || String.IsNullOrEmpty(textBoxURL.Text))
             {
-                // https://<server>/EWS/Exchange.asmx
                 if (String.IsNullOrEmpty((string)radioButtonUrlCustom.Tag))
                 {
                     textBoxURL.Text = "https://<server>/EWS/Exchange.asmx";
@@ -990,7 +989,19 @@ namespace SOAPe
                     textBoxURL.Focus();
                 }
                 else
+                {
                     textBoxURL.Text = (string)radioButtonUrlCustom.Tag;
+                    if (textBoxURL.Text.StartsWith("https://",StringComparison.OrdinalIgnoreCase))
+                    {
+                        textBoxURL.SelectionStart = 8;
+                        int serverEnd = textBoxURL.Text.IndexOf('/', 8);
+                        if (serverEnd > 8)
+                        {
+                            textBoxURL.SelectionLength = serverEnd - 8;
+                            textBoxURL.Focus();
+                        }
+                    }
+                }
             }
             textBoxURL.ReadOnly = false;
         }
