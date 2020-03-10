@@ -73,11 +73,11 @@ namespace SOAPe
             {
                 foreach (XmlNode xmlNode in headerNode.ChildNodes)
                 {
-                    if (xmlNode.Name.Equals("ExchangeImpersonation"))
+                    if (xmlNode.LocalName.Equals("ExchangeImpersonation"))
                     {
                         foreach (XmlNode xmlImpersonationNode in xmlNode)
                         {
-                            if (xmlImpersonationNode.Name == "ConnectingSID")
+                            if (xmlImpersonationNode.LocalName == "ConnectingSID")
                             {
                                 // We should have just one child node here, which will be the impersonated user
                                 if (xmlImpersonationNode.ChildNodes.Count == 1)
@@ -264,7 +264,7 @@ namespace SOAPe
                     try
                     {
                         string sHTTPResponse = _traceData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)[0];
-                        if (!(sHTTPResponse.Contains("200 OK")))
+                        if (!(sHTTPResponse.StartsWith("200")))
                             return true;
                     }
                     catch { }

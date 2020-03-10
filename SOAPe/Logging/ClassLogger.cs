@@ -636,7 +636,6 @@ namespace SOAPe
                             }
                         }
                     }
-                    
                 }
                 catch { }
                 string sApplication = "Unknown";
@@ -652,14 +651,7 @@ namespace SOAPe
                 }
                 catch { }
 
-                Dictionary<string, string> interestingXmlElements = TraceElement.InterestingXMLElements(xml);
-                string impersonation = "";
-                string mailbox = "";
-                if (interestingXmlElements.ContainsKey("ExchangeImpersonation"))
-                    impersonation = interestingXmlElements["ExchangeImpersonation"];
-                if (interestingXmlElements.ContainsKey("Mailbox"))
-                    mailbox = interestingXmlElements["Mailbox"];
-                LogToDatabase(sEWSData,sTag,logTime,threadId, sApplication, sVersion, mailbox, impersonation);
+                LogToDatabase(sEWSData,sTag,logTime,threadId, sApplication, sVersion, "", "");
             }
             catch { }
         }
