@@ -250,6 +250,25 @@ namespace SOAPe
             return null;
         }
 
+        public bool IsThrottledResponse
+        {
+            get
+            {
+                if (this.TraceType != EWSTraceType.Response)
+                    return false;
+
+                // Now check the response
+                if (this.TraceTag.Contains("EwsResponse"))
+                {
+                    if (_traceData.Contains("ResponseCode>ErrorServerBusy"))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         public bool IsErrorResponse
         {
             get

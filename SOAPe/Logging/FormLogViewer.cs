@@ -221,10 +221,10 @@ namespace SOAPe
             oItem.SubItems.Add(e.Trace.TraceThreadId.ToString());
             oItem.SubItems.Add(sTag);
 
-            if (e.Trace.IsErrorResponse)
-            {
+            if (e.Trace.IsThrottledResponse)
+                oItem.BackColor = Color.Orange;
+            else if (e.Trace.IsErrorResponse)
                 oItem.BackColor = Color.Red;
-            }
 
             if (listViewLogIndex.InvokeRequired)
             {
@@ -411,7 +411,9 @@ namespace SOAPe
                     while (i < listViewLogIndex.Items.Count)
                     {
                         TraceElement trace = new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text);
-                        if (trace.IsErrorResponse)
+                        if (trace.IsThrottledResponse)
+                            listViewLogIndex.Items[i].BackColor = Color.Orange;
+                        else if (trace.IsErrorResponse)
                             listViewLogIndex.Items[i].BackColor = Color.Red;
                         listViewLogIndex.Items[i].SubItems[5].Text = trace.Mailbox;
                         listViewLogIndex.Items[i].SubItems[6].Text = trace.Impersonating;
@@ -424,7 +426,9 @@ namespace SOAPe
                 while (i < listViewLogIndex.Items.Count)
                 {
                     TraceElement trace = new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text);
-                    if (trace.IsErrorResponse)
+                    if (trace.IsThrottledResponse)
+                        listViewLogIndex.Items[i].BackColor = Color.Orange;
+                    else if (trace.IsErrorResponse)
                         listViewLogIndex.Items[i].BackColor = Color.Red;
                     listViewLogIndex.Items[i].SubItems[5].Text = trace.Mailbox;
                     listViewLogIndex.Items[i].SubItems[6].Text = trace.Impersonating;
