@@ -161,7 +161,7 @@ namespace SOAPe
 
             while (i < iTraceCount-1)
             {
-                ShowStatus(String.Format("Processing {0} of {1}", i++, iTraceCount), ((double)i / (double)iTraceCount)*100);
+                ShowStatus($"Analysing {i++} of {iTraceCount}", ((double)i / (double)iTraceCount)*100);
                 ListViewItem item = new ListViewItem(logRows[i]["Time"].ToString());
                 item.Tag = logRows[i]["Data"].ToString();
                 StringBuilder sDescription = new StringBuilder(logRows[i]["Tag"].ToString());

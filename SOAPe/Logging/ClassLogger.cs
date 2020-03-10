@@ -414,12 +414,22 @@ namespace SOAPe
                     bool bCollectTag = false;
                     bool bInTraceTag = false;
                     int i = 1;
+                    byte lastShowProgressPercent = 0;
 
                     while (!logFileReader.EndOfStream)
                     {
                         char c=(char)logFileReader.Read();
                         sTrace.Append(c);
                         percentComplete = ((float)readBytes++ / (float)streamLength) * (float)100;
+                        if (ShowProgress)
+                        {
+                            // Ensure we update progress at least once per percentage of the way through the file we are
+                            if ((byte)percentComplete > lastShowProgressPercent)
+                            {
+                                lastShowProgressPercent = (byte)percentComplete;
+                                OnProgressChanged(new ProgressEventArgs($"Processing {i}", percentComplete));
+                            }
+                        }
 
                         if (bCollectTag)
                         {
