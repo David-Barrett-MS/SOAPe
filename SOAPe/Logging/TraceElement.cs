@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace SOAPe
 {
@@ -50,6 +52,9 @@ namespace SOAPe
             catch { }
             return attributes;
         }
+
+        public Color ThrottledColour { get; set; } = Color.Orange;
+        public Color ErrorColour { get; set; } = Color.Red;
 
         public static Dictionary<string, string> InterestingXMLElements(XmlDocument xmlDoc)
         {
@@ -248,6 +253,18 @@ namespace SOAPe
             if (_xmlElements.ContainsKey(ElementTag))
                 return _xmlElements[ElementTag];
             return null;
+        }
+
+        public Color? HighlightColour
+        {
+            get
+            {
+                if (this.IsThrottledResponse)
+                    return this.ThrottledColour;
+                if (this.IsErrorResponse)
+                    return this.ErrorColour;
+                return null;
+            }
         }
 
         public bool IsThrottledResponse

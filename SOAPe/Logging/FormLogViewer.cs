@@ -221,10 +221,8 @@ namespace SOAPe
             oItem.SubItems.Add(e.Trace.TraceThreadId.ToString());
             oItem.SubItems.Add(sTag);
 
-            if (e.Trace.IsThrottledResponse)
-                oItem.BackColor = Color.Orange;
-            else if (e.Trace.IsErrorResponse)
-                oItem.BackColor = Color.Red;
+            if (e.Trace.HighlightColour != null)
+                oItem.BackColor = (Color)e.Trace.HighlightColour;
 
             if (listViewLogIndex.InvokeRequired)
             {
@@ -411,10 +409,8 @@ namespace SOAPe
                     while (i < listViewLogIndex.Items.Count)
                     {
                         TraceElement trace = new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text);
-                        if (trace.IsThrottledResponse)
-                            listViewLogIndex.Items[i].BackColor = Color.Orange;
-                        else if (trace.IsErrorResponse)
-                            listViewLogIndex.Items[i].BackColor = Color.Red;
+                        if (trace.HighlightColour != null)
+                            listViewLogIndex.Items[i].BackColor = (Color)trace.HighlightColour;
                         listViewLogIndex.Items[i].SubItems[5].Text = trace.Mailbox;
                         listViewLogIndex.Items[i].SubItems[6].Text = trace.Impersonating;
                         i++;
@@ -426,10 +422,8 @@ namespace SOAPe
                 while (i < listViewLogIndex.Items.Count)
                 {
                     TraceElement trace = new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text);
-                    if (trace.IsThrottledResponse)
-                        listViewLogIndex.Items[i].BackColor = Color.Orange;
-                    else if (trace.IsErrorResponse)
-                        listViewLogIndex.Items[i].BackColor = Color.Red;
+                    if (trace.HighlightColour != null)
+                        listViewLogIndex.Items[i].BackColor = (Color)trace.HighlightColour;
                     listViewLogIndex.Items[i].SubItems[5].Text = trace.Mailbox;
                     listViewLogIndex.Items[i].SubItems[6].Text = trace.Impersonating;
                     i++;

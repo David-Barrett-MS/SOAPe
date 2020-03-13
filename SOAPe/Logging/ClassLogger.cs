@@ -439,7 +439,7 @@ namespace SOAPe
                             sTag.Append(c);
                             if (c.Equals('>'))
                             {
-                                if (sTag.ToString().ToLower().Equals("</trace>"))
+                                if (sTag.ToString().Equals("</trace>", StringComparison.OrdinalIgnoreCase))
                                 {
                                     // We have a complete trace, so process it
                                     if (ShowProgress)
@@ -448,11 +448,11 @@ namespace SOAPe
                                     sTrace = new StringBuilder();
                                     bInTraceTag = false;
                                 }
-                                else if (sTag.ToString().ToLower().StartsWith("<trace"))
+                                else if (sTag.ToString().StartsWith("<trace", StringComparison.OrdinalIgnoreCase))
                                 {
                                     if (bInXml)
                                     {
-                                        // We have been collecting Xml that has occured outside trace tags
+                                        // We have been collecting Xml that has occurred outside trace tags
                                         // As we've now found another trace tag, we try to parse everything we have collected in between as Xml
 
                                         if (ShowProgress)
@@ -474,7 +474,7 @@ namespace SOAPe
                                     bFoundXmlTag = false; // We need to ensure this is false if we find a trace tag so that trace tags take priority
                                     bInTraceTag = true;
                                 }
-                                else if (sTag.ToString().ToLower().StartsWith("<?xml"))
+                                else if (sTag.ToString().StartsWith("<?xml", StringComparison.OrdinalIgnoreCase))
                                 {
                                     if (!bInTraceTag)
                                     {
@@ -609,7 +609,7 @@ namespace SOAPe
                     // We have invalid Xml (this happens when we have the actual requests/responses, as the tracer doesn't make nice Xml! :) )
                     // We strip out the contents (everything in the <Trace></Trace>), and try again
                     int iContentStart = Trace.IndexOf(">") + 1;
-                    int iContentEnd = Trace.LastIndexOf("</Trace>");
+                    int iContentEnd = Trace.LastIndexOf("</Trace>", StringComparison.OrdinalIgnoreCase);
                     sEWSData = Trace.Substring(iContentStart, iContentEnd - iContentStart).TrimStart();
                     StringBuilder sTraceInfo = new StringBuilder(Trace.Substring(0, iContentStart)).Append(Trace.Substring(iContentEnd));
                     xml.LoadXml(sTraceInfo.ToString());
@@ -705,7 +705,7 @@ namespace SOAPe
                 if (!String.IsNullOrEmpty(sEWSMethod))
                 {
                     sTag = "EwsRequest";
-                    if (sEWSMethod.ToLower().Contains("response") || sEWSMethod.ToLower().StartsWith("fault"))
+                    if ( (sEWSMethod.IndexOf("response", StringComparison.OrdinalIgnoreCase) > 0) || sEWSMethod.StartsWith("fault", StringComparison.OrdinalIgnoreCase))
                         sTag = "EwsResponse";
                 }
 
@@ -733,13 +733,13 @@ namespace SOAPe
             try
             {
                 XmlNode nodeEnvelope = Request.DocumentElement;
-                if (!nodeEnvelope.LocalName.ToLower().Equals("envelope"))
+                if (!nodeEnvelope.LocalName.Equals("envelope", StringComparison.OrdinalIgnoreCase))
                     return null;
 
                 XmlNode nodeBody = null;
                 foreach (XmlNode childNode in nodeEnvelope.ChildNodes)
                 {
-                    if (childNode.LocalName.ToLower().Equals("body"))
+                    if (childNode.LocalName.Equals("body", StringComparison.OrdinalIgnoreCase))
                     {
                         nodeBody = childNode;
                         break;
