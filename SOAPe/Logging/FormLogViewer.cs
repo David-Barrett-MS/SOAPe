@@ -220,9 +220,11 @@ namespace SOAPe
             oItem.SubItems.Add(e.Trace.TraceTag);
             oItem.SubItems.Add(e.Trace.TraceThreadId.ToString());
             oItem.SubItems.Add(sTag);
+            oItem.SubItems.Add(String.Empty);
+            oItem.SubItems.Add(String.Empty);
+            oItem.SubItems.Add(String.Empty);
 
-            if (e.Trace.HighlightColour != null)
-                oItem.BackColor = (Color)e.Trace.HighlightColour;
+            UpdateListViewItem(oItem, e.Trace);
 
             if (listViewLogIndex.InvokeRequired)
             {
@@ -408,11 +410,7 @@ namespace SOAPe
                 listViewLogIndex.Invoke(new MethodInvoker(delegate() {
                     while (i < listViewLogIndex.Items.Count)
                     {
-                        TraceElement trace = new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text);
-                        if (trace.HighlightColour != null)
-                            listViewLogIndex.Items[i].BackColor = (Color)trace.HighlightColour;
-                        listViewLogIndex.Items[i].SubItems[5].Text = trace.Mailbox;
-                        listViewLogIndex.Items[i].SubItems[6].Text = trace.Impersonating;
+                        UpdateListViewItem(listViewLogIndex.Items[i], new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text));
                         i++;
                     }
                 }));
@@ -421,15 +419,20 @@ namespace SOAPe
             {
                 while (i < listViewLogIndex.Items.Count)
                 {
-                    TraceElement trace = new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text);
-                    if (trace.HighlightColour != null)
-                        listViewLogIndex.Items[i].BackColor = (Color)trace.HighlightColour;
-                    listViewLogIndex.Items[i].SubItems[5].Text = trace.Mailbox;
-                    listViewLogIndex.Items[i].SubItems[6].Text = trace.Impersonating;
+                    UpdateListViewItem(listViewLogIndex.Items[i], new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text));
                     i++;
                 }
             }
             this._checkingForErrors = false;
+        }
+
+        public static void UpdateListViewItem(ListViewItem listViewItem, TraceElement traceElement)
+        {
+            if (traceElement.HighlightColour != null)
+                listViewItem.BackColor = (Color)traceElement.HighlightColour;
+            listViewItem.SubItems[4].Text = traceElement.Data.Length.ToString();
+            listViewItem.SubItems[5].Text = traceElement.Mailbox;
+            listViewItem.SubItems[6].Text = traceElement.Impersonating;
         }
 
         private void UpdateView()

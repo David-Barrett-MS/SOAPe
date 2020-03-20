@@ -50,7 +50,7 @@ namespace SOAPe
         private string AddColourTable(string RTF)
         {
             // We need to add the colour table for the syntax highlighting.  Replace any existing colour table.
-            int iCTableStart = RTF.IndexOf("{\\colortbl;");
+            int iCTableStart = RTF.IndexOf(@"{\colortbl;");
 
             if (iCTableStart != -1)
             {
@@ -62,10 +62,10 @@ namespace SOAPe
             else
             {
                 // Adding new colour table
-                int iRTFLoc = RTF.IndexOf("\\rtf");
+                int iRTFLoc = RTF.IndexOf(@"\rtf");
                 if (iRTFLoc < 0)
                 {
-                    RTF = RTF.Insert(0, "{\\rtf\\ansi\\deff0" + _syntaxColours.ColourTable);
+                    RTF = RTF.Insert(0, @"{\rtf\ansi\deff0" + _syntaxColours.ColourTable);
                     RTF += "}";
                 }
                 else

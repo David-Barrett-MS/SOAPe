@@ -89,12 +89,12 @@ namespace SOAPe
             set { _authHeader = value; }
         }
 
-        private void Log(string Details, string Description = "")
+        private void Log(string Details, string Description = "", string ClientRequestId="")
         {
             try
             {
                 if (_logger == null) return;
-                _logger.Log(Details, Description);
+                _logger.Log(Details, Description, ClientRequestId);
             }
             catch (Exception ex)
             {
@@ -198,12 +198,16 @@ namespace SOAPe
             }
 
             // We add a client-request-id header so that we can easily match request/response
-            string clientRequestId = Guid.NewGuid().ToString();
+            string clientRequestId = oWebRequest.Headers.Get("client-request-id");
+            if (String.IsNullOrEmpty(clientRequestId))
+            {
+                clientRequestId = Guid.NewGuid().ToString();
+                oWebRequest.Headers["client-request-id"] = clientRequestId;
+            }
             StringBuilder sTimings = new StringBuilder();
             sTimings.AppendLine("Latency (latency shown in milliseconds, times are in ticks)").AppendLine();
             sTimings.AppendLine($"client-request-id: {clientRequestId}").AppendLine();
-
-            oWebRequest.Headers["client-request-id"] = clientRequestId;
+            
             oWebRequest.Headers["return-client-request-id"] = "true";
 
             oWebRequest.Method = "POST";
@@ -259,7 +263,7 @@ namespace SOAPe
             stream.Close();
             DateTime requestSendEndTime = DateTime.Now;
             LogHeaders(oWebRequest.Headers, "Request Headers", _targetURL);
-            Log(oSOAPRequest.OuterXml, "Request");
+            Log(oSOAPRequest.OuterXml, "Request", clientRequestId);
 
             oWebRequest.Expect = "";
 
@@ -312,7 +316,7 @@ namespace SOAPe
                 oWebResponse.Close();
             }
             catch { }
-            Log(sResponse, "Response");
+            Log(sResponse, "Response", clientRequestId);
 
             sTimings.AppendLine($"Request start: {(long)(requestSendStartTime.Ticks/10000)}");
             sTimings.AppendLine($"Request complete: {(long)(requestSendEndTime.Ticks/10000)}");

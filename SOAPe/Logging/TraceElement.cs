@@ -53,8 +53,10 @@ namespace SOAPe
             return attributes;
         }
 
-        public Color ThrottledColour { get; set; } = Color.Orange;
-        public Color ErrorColour { get; set; } = Color.Red;
+        public static Color ThrottledColour { get; set; } = Color.Orange;
+        public static Color ThrottledRequestColour { get; set; } = Color.DarkOrange;
+        public static Color ErrorColour { get; set; } = Color.Red;
+        public static Color ErrorRequestColour { get; set; } = Color.DarkRed;
 
         public static Dictionary<string, string> InterestingXMLElements(XmlDocument xmlDoc)
         {
@@ -260,9 +262,17 @@ namespace SOAPe
             get
             {
                 if (this.IsThrottledResponse)
-                    return this.ThrottledColour;
+                {
+                    if (this.TraceType == EWSTraceType.Request)
+                        return TraceElement.ThrottledRequestColour;
+                    return TraceElement.ThrottledColour;
+                }
                 if (this.IsErrorResponse)
-                    return this.ErrorColour;
+                {
+                    if (this.TraceType == EWSTraceType.Request)
+                        return TraceElement.ErrorRequestColour;
+                    return TraceElement.ErrorColour;
+                }
                 return null;
             }
         }

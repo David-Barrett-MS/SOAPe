@@ -260,12 +260,12 @@ namespace SOAPe
             _logDataTable.Rows.Add(row);
         }
 
-        public void Log(string Details, string Description)
+        public void Log(string Details, string Description, string clientRequestId = "")
         {
-            Log(Details, Description, false, DateTime.Now, -1, "SOAPe", "", false);
+            Log(Details, Description, false, DateTime.Now, -1, "SOAPe", "", false, clientRequestId);
         }
 
-        public void Log(string Details, string Description, bool SuppressLogToFile, DateTime LogTime, int ThreadId, string LogApplication, string LogVersion, bool SuppressEvent)
+        public void Log(string Details, string Description, bool SuppressLogToFile, DateTime LogTime, int ThreadId, string LogApplication, string LogVersion, bool SuppressEvent,string clientRequestId="")
         {
             DateTime logTime = DateTime.Now;
             if (LogTime != null)
@@ -275,12 +275,10 @@ namespace SOAPe
             if (String.IsNullOrEmpty(LogVersion) && LogApplication.Equals("SOAPe"))
                 LogVersion = Application.ProductVersion;
             StringBuilder sTrace = new StringBuilder();
-            sTrace.Append(String.Format("<Trace Tag=\"{0}\" Tid=\"{3}\" Time=\"{1}\" Application=\"{4}\" Version=\"{2}\" >",
-                 TraceTag(Description),
-                 logTime,
-                 LogVersion,
-                 ThreadId,
-                 LogApplication));
+            sTrace.Append($"<Trace Tag=\"{TraceTag(Description)}\" Tid=\"{ThreadId}\" Time=\"{logTime}\" Application=\"{LogApplication}\" Version=\"{LogVersion}\"");
+            if (!String.IsNullOrEmpty(clientRequestId))
+                sTrace.Append($" ClientRequestId=\"{clientRequestId}\"");
+            sTrace.Append(" >");
             sTrace.Append(Environment.NewLine);
             sTrace.Append(Details);
             sTrace.Append(Environment.NewLine);
@@ -786,13 +784,16 @@ namespace SOAPe
             {
                 sHeaders += String.Format("POST URL: {0}{1}{1}", Url, Environment.NewLine);
             }
+            string clientRequestId = "";
             try
             {
                 foreach (string sHeader in Headers.AllKeys)
                 {
+                    if (sHeader.Equals("Client-Request-Id", StringComparison.OrdinalIgnoreCase))
+                        clientRequestId = Headers[sHeader];
                     sHeaders += sHeader + ": " + Headers[sHeader] + Environment.NewLine;
                 }
-                Log(sHeaders, Description);
+                Log(sHeaders, Description, clientRequestId);
             }
             catch { }
         }

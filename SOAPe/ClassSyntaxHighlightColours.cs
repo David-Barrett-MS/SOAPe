@@ -20,19 +20,19 @@ namespace SOAPe
 {
     class ClassSyntaxHighlightColours
     {
-        private string _tagColour = "\\red0\\green0\\blue255";              // Blue
-        private string _tagNameColour = "\\red163\\green21\\blue21";        // Crimson
-        private string _attributeNameColour = "\\red253\\green52\\blue0";    // Red
-        private string _attributeValueColour = "\\red0\\green0\\blue255";   // Blue
-        private string _commentTextColour = "\\red0\\green128\\blue0";      // Green
-        private string _errorTextColour = "\\red255\\green255\\blue255";    // White
-        private string _errorTextHighlight = "\\red255\\green0\\blue0";     // Red
+        private string _tagColour = @"\red0\green0\blue255";              // Blue
+        private string _tagNameColour = @"\red163\green21\blue21";        // Crimson
+        private string _attributeNameColour = @"\red253\green52\blue0";    // Red
+        private string _attributeValueColour = @"\red0\green0\blue255";   // Blue
+        private string _commentTextColour = @"\red\green128\blue0";      // Green
+        private string _errorTextColour = @"\red255\green255\blue255";    // White
+        private string _errorTextHighlight = @"\red255\green0\blue0";     // Red
 
         public string ColourTable
         {
             get
             {
-                StringBuilder sColourTable = new StringBuilder("{\\colortbl");
+                StringBuilder sColourTable = new StringBuilder(@"{\colortbl");
                 //sColourTable.Append(";" + _defaultColour);
                 sColourTable.Append(";" + _tagColour);
                 sColourTable.Append(";" + _tagNameColour);
@@ -50,7 +50,7 @@ namespace SOAPe
         {
             get
             {
-                return "\\cf0 ";
+                return @"\cf0 ";
             }
         }
 
@@ -58,7 +58,7 @@ namespace SOAPe
         {
             get
             {
-                return "\\cf1 ";
+                return @"\cf1 ";
             }
         }
 
@@ -66,7 +66,7 @@ namespace SOAPe
         {
             get
             {
-                return "\\cf2 ";
+                return @"\cf2 ";
             }
         }
 
@@ -74,7 +74,7 @@ namespace SOAPe
         {
             get
             {
-                return "\\cf3 ";
+                return @"\cf3 ";
             }
         }
 
@@ -82,7 +82,7 @@ namespace SOAPe
         {
             get
             {
-                return "\\cf4 ";
+                return @"\cf4 ";
             }
         }
 
@@ -90,7 +90,7 @@ namespace SOAPe
         {
             get
             {
-                return "\\cf5 ";
+                return @"\cf5 ";
             }
         }
 
@@ -98,7 +98,7 @@ namespace SOAPe
         {
             get
             {
-                return "\\cf6 ";
+                return @"\cf6 ";
             }
         }
 
@@ -106,7 +106,7 @@ namespace SOAPe
         {
             get
             {
-                return "\\cf7 ";
+                return @"\cf7 ";
             }
         }
     }
