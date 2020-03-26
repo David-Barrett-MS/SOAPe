@@ -85,7 +85,6 @@ namespace SOAPe
         private string _logPath = "";
         private static StreamWriter _debugLogStream = null;
         private string _debugLogPath = "";
-        private string _currentProgress = "";
         private DataTable _logDataTable = null;
         private static Dictionary<string, int> _threadNameToNumber;
         private readonly object _lockObject = new object();
@@ -186,6 +185,7 @@ namespace SOAPe
             _logDataTable.Columns.Add(new DataColumn("Size", System.Type.GetType("System.Int64")));
             _logDataTable.Columns.Add(new DataColumn("ExchangeImpersonation", System.Type.GetType("System.String")));
             _logDataTable.Columns.Add(new DataColumn("Mailbox", System.Type.GetType("System.String")));
+            _logDataTable.Columns.Add(new DataColumn("ClientRequestId", System.Type.GetType("System.String")));
         }
 
         public void ClearHistory()
@@ -208,16 +208,13 @@ namespace SOAPe
 
         protected virtual void OnProgressChanged(ProgressEventArgs e)
         {
-            _currentProgress = e.Progress;
+            Progress = e.Progress;
             ProgressEventHandler handler = ProgressChanged;
             if (handler != null)
                 handler(this, e);
         }
 
-        public string Progress
-        {
-            get { return _currentProgress; }
-        }
+        public string Progress { get; private set; } = "";
 
         private string TraceTag(string SOAPeTag)
         {
@@ -242,7 +239,7 @@ namespace SOAPe
         }
 
         private void LogToDatabase(string Data, string Tag, DateTime LogTime, int ThreadId, string LogApplication,
-            string LogVersion, string Mailbox = "", string Impersonating = "")
+            string LogVersion, string Mailbox = "", string Impersonating = "", string ClientRequestId = "")
         {
             // Write the trace information to the local database (which is used for the log viewer)
 
@@ -257,6 +254,7 @@ namespace SOAPe
             row["Size"] = Data.Length;
             row["Mailbox"] = Mailbox;
             row["ExchangeImpersonation"] = Impersonating;
+            row["ClientRequestId"] = ClientRequestId;
             _logDataTable.Rows.Add(row);
         }
 
@@ -316,9 +314,10 @@ namespace SOAPe
                 }
             }
 
-            LogToDatabase(Details, TraceTag(Description), logTime, ThreadId, LogApplication, LogVersion);
+            TraceElement traceElement = new TraceElement(sTrace.ToString());
+            LogToDatabase(Details, TraceTag(Description), logTime, ThreadId, LogApplication, LogVersion,traceElement.Mailbox, traceElement.Impersonating, traceElement.ClientRequestId);
             if (!SuppressEvent)
-                OnLogAdded(new LogAddedEventArgs(new TraceElement(sTrace.ToString())));
+                OnLogAdded(new LogAddedEventArgs(traceElement));
         }
 
         public void DebugLog(string Details)
@@ -661,8 +660,15 @@ namespace SOAPe
                     sVersion = xml.FirstChild.Attributes["Version"].Value;
                 }
                 catch { }
+                
+                string sClientRequestId = "";
+                try
+                {
+                    sClientRequestId = xml.FirstChild.Attributes["ClientRequestId"].Value;
+                }
+                catch { }
 
-                LogToDatabase(sEWSData,sTag,logTime,threadId, sApplication, sVersion, "", "");
+                LogToDatabase(sEWSData,sTag,logTime,threadId, sApplication, sVersion, "", "", sClientRequestId);
             }
             catch { }
         }

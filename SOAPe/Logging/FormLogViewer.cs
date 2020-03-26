@@ -163,7 +163,7 @@ namespace SOAPe
             {
                 ShowStatus($"Analysing {i++} of {iTraceCount}", ((double)i / (double)iTraceCount)*100);
                 ListViewItem item = new ListViewItem(logRows[i]["Time"].ToString());
-                item.Tag = logRows[i]["Data"].ToString();
+                item.Tag = TraceElement.CreateFromDataTableRow(logRows[i]);
                 StringBuilder sDescription = new StringBuilder(logRows[i]["Tag"].ToString());
                 item.SubItems.Add(sDescription.ToString());
                 item.SubItems.Add(logRows[i]["Tid"].ToString());
@@ -216,7 +216,7 @@ namespace SOAPe
                 sTag = ClassLogger.ReadMethodFromRequest(e.Trace.Data);
             }
             catch { }
-            oItem.Tag = e.Trace.Data;
+            oItem.Tag = e.Trace;
             oItem.SubItems.Add(e.Trace.TraceTag);
             oItem.SubItems.Add(e.Trace.TraceThreadId.ToString());
             oItem.SubItems.Add(sTag);
@@ -248,7 +248,7 @@ namespace SOAPe
                 sDetails = "";
                 try
                 {
-                    sDetails = (string)listViewLogIndex.FocusedItem.Tag;
+                    sDetails = ((TraceElement)listViewLogIndex.FocusedItem.Tag).Data;
                 }
                 catch { }
                 _lastSelectedItem = listViewLogIndex.FocusedItem;
@@ -405,13 +405,19 @@ namespace SOAPe
             this._checkingForErrors = true;
 
             int i = 0;
+            bool firstPass = true;
             if (listViewLogIndex.InvokeRequired)
             {
                 listViewLogIndex.Invoke(new MethodInvoker(delegate() {
                     while (i < listViewLogIndex.Items.Count)
                     {
-                        UpdateListViewItem(listViewLogIndex.Items[i], new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text));
+                        UpdateListViewItem(listViewLogIndex.Items[i], (TraceElement)listViewLogIndex.Items[i].Tag);
                         i++;
+                        if ((i == listViewLogIndex.Items.Count) && firstPass)
+                        {
+                            i = 0;
+                            firstPass = false;
+                        }
                     }
                 }));
             }
@@ -419,8 +425,13 @@ namespace SOAPe
             {
                 while (i < listViewLogIndex.Items.Count)
                 {
-                    UpdateListViewItem(listViewLogIndex.Items[i], new TraceElement((string)listViewLogIndex.Items[i].Tag, listViewLogIndex.Items[i].SubItems[1].Text));
+                    UpdateListViewItem(listViewLogIndex.Items[i], (TraceElement)listViewLogIndex.Items[i].Tag);
                     i++;
+                    if ((i == listViewLogIndex.Items.Count) && firstPass)
+                    {
+                        i = 0;
+                        firstPass = false;
+                    }
                 }
             }
             this._checkingForErrors = false;
@@ -428,8 +439,10 @@ namespace SOAPe
 
         public static void UpdateListViewItem(ListViewItem listViewItem, TraceElement traceElement)
         {
+            traceElement.Analyze();
             if (traceElement.HighlightColour != null)
                 listViewItem.BackColor = (Color)traceElement.HighlightColour;
+
             listViewItem.SubItems[4].Text = traceElement.Data.Length.ToString();
             listViewItem.SubItems[5].Text = traceElement.Mailbox;
             listViewItem.SubItems[6].Text = traceElement.Impersonating;
@@ -627,9 +640,16 @@ namespace SOAPe
             trace.Append(Application.ProductVersion);
             trace.Append("\" ");
 
+            if (!String.IsNullOrEmpty(((TraceElement)listViewItem.Tag).ClientRequestId))
+            {
+                trace.Append("ClientRequestId=\"");
+                trace.Append(((TraceElement)listViewItem.Tag).ClientRequestId);
+                trace.Append("\" ");
+            }
+
             trace.AppendLine(">");
 
-            trace.Append(listViewItem.Tag.ToString());
+            trace.Append(((TraceElement)listViewItem.Tag).Data);
             trace.AppendLine("</Trace>");
 
             return trace.ToString();
