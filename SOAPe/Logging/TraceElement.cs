@@ -373,7 +373,10 @@ namespace SOAPe
                     {
                         string sHTTPResponse = traceElement.Data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)[0];
                         if (!(sHTTPResponse.StartsWith("200")))
-                            traceElement._isError = true;
+                        {
+                            if (!(sHTTPResponse.Contains(" 200 ")))
+                                traceElement._isError = true;
+                        }
                     }
                     catch { }
                 }
