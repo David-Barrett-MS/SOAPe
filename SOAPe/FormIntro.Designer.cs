@@ -30,17 +30,17 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormIntro));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.panelLogo = new System.Windows.Forms.Panel();
+            this.labelApplicationName = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBoxVersion = new System.Windows.Forms.TextBox();
             this.groupBoxNotes = new System.Windows.Forms.GroupBox();
-            this.buttonClose = new System.Windows.Forms.Button();
-            this.panelLogo = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.labelApplicationName = new System.Windows.Forms.Label();
             this.textBoxNotes = new System.Windows.Forms.TextBox();
+            this.buttonClose = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
-            this.groupBoxNotes.SuspendLayout();
             this.panelLogo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBoxNotes.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -54,6 +54,42 @@
             this.groupBox1.Size = new System.Drawing.Size(832, 170);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
+            // 
+            // panelLogo
+            // 
+            this.panelLogo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelLogo.Controls.Add(this.labelApplicationName);
+            this.panelLogo.Controls.Add(this.pictureBox1);
+            this.panelLogo.Location = new System.Drawing.Point(257, 27);
+            this.panelLogo.Name = "panelLogo";
+            this.panelLogo.Size = new System.Drawing.Size(240, 100);
+            this.panelLogo.TabIndex = 4;
+            // 
+            // labelApplicationName
+            // 
+            this.labelApplicationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelApplicationName.AutoSize = true;
+            this.labelApplicationName.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.labelApplicationName.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelApplicationName.Location = new System.Drawing.Point(110, 32);
+            this.labelApplicationName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelApplicationName.Name = "labelApplicationName";
+            this.labelApplicationName.Size = new System.Drawing.Size(128, 37);
+            this.labelApplicationName.TabIndex = 5;
+            this.labelApplicationName.Text = "SOAPe";
+            this.labelApplicationName.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(3, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 100);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
             // 
             // textBoxVersion
             // 
@@ -78,6 +114,18 @@
             this.groupBoxNotes.TabIndex = 1;
             this.groupBoxNotes.TabStop = false;
             // 
+            // textBoxNotes
+            // 
+            this.textBoxNotes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxNotes.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxNotes.Location = new System.Drawing.Point(4, 24);
+            this.textBoxNotes.Multiline = true;
+            this.textBoxNotes.Name = "textBoxNotes";
+            this.textBoxNotes.ReadOnly = true;
+            this.textBoxNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxNotes.Size = new System.Drawing.Size(824, 492);
+            this.textBoxNotes.TabIndex = 0;
+            // 
             // buttonClose
             // 
             this.buttonClose.Location = new System.Drawing.Point(372, 725);
@@ -88,51 +136,6 @@
             this.buttonClose.Text = "Close";
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
-            // 
-            // panelLogo
-            // 
-            this.panelLogo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelLogo.Controls.Add(this.labelApplicationName);
-            this.panelLogo.Controls.Add(this.pictureBox1);
-            this.panelLogo.Location = new System.Drawing.Point(257, 27);
-            this.panelLogo.Name = "panelLogo";
-            this.panelLogo.Size = new System.Drawing.Size(240, 100);
-            this.panelLogo.TabIndex = 4;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(3, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 100);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
-            // 
-            // labelApplicationName
-            // 
-            this.labelApplicationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelApplicationName.AutoSize = true;
-            this.labelApplicationName.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.labelApplicationName.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelApplicationName.Location = new System.Drawing.Point(110, 32);
-            this.labelApplicationName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelApplicationName.Name = "labelApplicationName";
-            this.labelApplicationName.Size = new System.Drawing.Size(128, 37);
-            this.labelApplicationName.TabIndex = 5;
-            this.labelApplicationName.Text = "SOAPe";
-            this.labelApplicationName.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // textBoxNotes
-            // 
-            this.textBoxNotes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxNotes.Location = new System.Drawing.Point(4, 24);
-            this.textBoxNotes.Multiline = true;
-            this.textBoxNotes.Name = "textBoxNotes";
-            this.textBoxNotes.Size = new System.Drawing.Size(824, 492);
-            this.textBoxNotes.TabIndex = 0;
             // 
             // FormIntro
             // 
@@ -152,11 +155,11 @@
             this.Text = "SOAPe Release Notes";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBoxNotes.ResumeLayout(false);
-            this.groupBoxNotes.PerformLayout();
             this.panelLogo.ResumeLayout(false);
             this.panelLogo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBoxNotes.ResumeLayout(false);
+            this.groupBoxNotes.PerformLayout();
             this.ResumeLayout(false);
 
         }

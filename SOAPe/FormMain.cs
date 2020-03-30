@@ -101,13 +101,15 @@ namespace SOAPe
 
         private void FormMain_Shown(object sender, EventArgs e)
         {
+            // Main form has just been shown, so check if we need to display release notes
+
             if (!_formConfig.ConfigSavedToDisk)
             {
-                // We don't have an existing configuration file, so ask if we want to create one
+                // We don't have an existing configuration file, so this is the first run of SOAPe
                 FormIntro formIntro = new FormIntro();
                 formIntro.ShowDialog(this);
             }
-            this.Shown -= FormMain_Shown;
+            this.Shown -= FormMain_Shown; // We don't want to display the form more than once, so no need to keep the event
         }
 
         private string LogFileName()
@@ -1194,6 +1196,12 @@ namespace SOAPe
         private void ConfigurationManagerToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             ConfigurationManager.ClassFormConfig.ShowConfigurationManager(this);
+        }
+
+        private void releaseNotesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormIntro formIntro = new FormIntro();
+            formIntro.ShowDialog(this);
         }
     }
 }
