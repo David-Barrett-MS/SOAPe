@@ -443,6 +443,8 @@ namespace SOAPe
             if (traceElement.HighlightColour != null)
                 listViewItem.BackColor = (Color)traceElement.HighlightColour;
 
+            listViewItem.SubItems[1].Text = traceElement.TraceTag;
+            listViewItem.SubItems[3].Text = traceElement.SOAPMethod;
             listViewItem.SubItems[4].Text = traceElement.Data.Length.ToString();
             listViewItem.SubItems[5].Text = traceElement.Mailbox;
             listViewItem.SubItems[6].Text = traceElement.Impersonating;

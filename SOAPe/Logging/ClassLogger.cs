@@ -249,7 +249,7 @@ namespace SOAPe
             row["Time"] = LogTime;
             row["Version"] = LogVersion;
             row["Application"] = LogApplication;
-            row["SOAPMethod"] = ReadMethodFromRequest(Data);
+            row["SOAPMethod"] = "Unknown";// ReadMethodFromRequest(Data); // Saving for later analysis to speed up log import
             row["Data"] = Data;
             row["Size"] = Data.Length;
             row["Mailbox"] = Mailbox;

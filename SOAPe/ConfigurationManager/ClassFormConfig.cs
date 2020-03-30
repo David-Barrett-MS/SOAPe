@@ -176,6 +176,11 @@ namespace SOAPe.ConfigurationManager
             ClassFormConfig.UpdateAndSaveConfig -= ClassFormConfig_UpdateAndSaveConfig;
         }
 
+        public bool ConfigSavedToDisk
+        {
+            get { return File.Exists(_configFile); }
+        }
+
         private void Initialise(Form form, bool DoNotApply)
         {
             _form = form;

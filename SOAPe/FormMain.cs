@@ -95,6 +95,19 @@ namespace SOAPe
             }
              */
             _logger.DebugLog("Initialisation complete");
+
+            this.Shown += FormMain_Shown;
+        }
+
+        private void FormMain_Shown(object sender, EventArgs e)
+        {
+            if (!_formConfig.ConfigSavedToDisk)
+            {
+                // We don't have an existing configuration file, so ask if we want to create one
+                FormIntro formIntro = new FormIntro();
+                formIntro.ShowDialog(this);
+            }
+            this.Shown -= FormMain_Shown;
         }
 
         private string LogFileName()

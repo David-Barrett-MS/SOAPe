@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace SOAPe
 {
@@ -102,7 +103,7 @@ namespace SOAPe
             if (_traceAnalysed)
             {
                 if (TraceType == EWSTraceType.Request)
-                    AnalyseErrors(this);
+                    AnalyseErrors(this);  // We always recheck for errors as requests can only be identified retrospectively
                 return;
             }
             AnalyseErrors(this);
@@ -195,6 +196,7 @@ namespace SOAPe
             // Look for Mailbox (implies delegate access)
             if (bodyNode != null)
             {
+                xmlElements.Add("SOAPMethod", bodyNode.FirstChild.LocalName);
                 foreach (XmlNode xmlNode in bodyNode.FirstChild.ChildNodes)
                 {
                     if (xmlNode.LocalName.Equals("FolderIds"))
@@ -294,6 +296,15 @@ namespace SOAPe
             }
         }
 
+        public string SOAPMethod
+        {
+            get
+            {
+                return InterestingXmlElement("SOAPMethod");
+            }
+        }
+
+
         public string ClientRequestId
         {
             get
@@ -343,6 +354,7 @@ namespace SOAPe
         {
             get
             {
+                // We check for throttling first, as a throttled response can also be an error (in which case, we highlight the throttling, not the error)
                 if (_isThrottled)
                 {
                     if (this.TraceType == EWSTraceType.Request)
@@ -398,9 +410,9 @@ namespace SOAPe
                 if (traceElement.TraceTag.Contains("EwsResponse"))
                 {
                     if (traceElement.Data.Contains("ResponseCode>ErrorServerBusy"))
-                    {
                         traceElement._isThrottled = true;
-                    }
+                    if (traceElement.Data.Contains("Too many concurrent connections opened."))
+                        traceElement._isThrottled = true;
                 }
                 if (traceElement._isThrottled)
                     if (!String.IsNullOrEmpty(traceElement.ClientRequestId))
