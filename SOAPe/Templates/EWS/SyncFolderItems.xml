@@ -10,10 +10,10 @@
       </ItemShape>
       <SyncFolderId>
         <!--FIELD:Folder;FolderId-->
-      </SyncFolderId>
+      </SyncFolderId><!--DELETEMARKERSTART:SyncState-->
       <SyncState>
         <!--FIELD:SyncState;string-->
-      </SyncState>
+      </SyncState><!--DELETEMARKEREND:SyncState-->
       <MaxChangesReturned>100</MaxChangesReturned>
     </SyncFolderItems>
   </soap:Body>

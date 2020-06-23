@@ -255,6 +255,33 @@ namespace SOAPe
             return String.Empty;
         }
 
+        private string GetFolderIdXml(string folderId, string fieldName = "FolderId")
+        {
+            // Parse the folder Id and return the appropriate Xml
+
+            string mailbox = "";
+            foreach (string distinguishedFolder in _distinguishedFolders)
+                if (folderId.StartsWith(distinguishedFolder))
+                {
+                    // This is a distinguished folder
+                    fieldName = "DistinguishedFolderId";
+                    if (folderId.Length>distinguishedFolder.Length)
+                    {
+                        string checkForMailbox = folderId.Substring(distinguishedFolder.Length);
+                        if (checkForMailbox.StartsWith(":"))
+                            mailbox = checkForMailbox.Substring(1);
+                    }
+                    folderId = distinguishedFolder;
+                    break;
+                }
+
+            if (String.IsNullOrEmpty(mailbox))
+                return $"<t:{fieldName} Id=\"{folderId}\" />";
+
+            string mailboxXml = $"<t:Mailbox><t:EmailAddress>{mailbox}</t:EmailAddress></t:Mailbox>";
+            return $"<t:{fieldName} Id=\"{folderId}\">{mailboxXml}</t:{fieldName}>";
+        }
+
         private void ReplaceFields()
         {
             // Replace the field placeholders with the values from the datagrid
@@ -273,12 +300,16 @@ namespace SOAPe
                     switch ((string)oRow.Tag)
                     {
                         case "DistinguishedFolderId":
-                            sFieldValue = "<t:DistinguishedFolderId Id=\"" + oRow.Cells[1].Value.ToString() + "\" />";
+                            sFieldValue = GetFolderIdXml(oRow.Cells[1].Value.ToString());
+                            // sFieldValue = "<t:DistinguishedFolderId Id=\"" + oRow.Cells[1].Value.ToString() + "\" />";
                             break;
 
                         case "FolderId":
                         case "FullFolderId":
-                            sId = oRow.Cells[1].Value.ToString();
+                            sFieldValue = GetFolderIdXml(oRow.Cells[1].Value.ToString());
+                            if (((string)oRow.Tag).Equals("FullFolderId"))
+                                sFieldValue = "#SKIP#";
+                            /*sId = oRow.Cells[1].Value.ToString();
                             if (_distinguishedFolders.Contains(sId.ToLower()))
                             {
                                 // This is a distinguished folder
@@ -289,7 +320,7 @@ namespace SOAPe
                                 sFieldValue = String.Format("<t:{0} Id=\"{1}\" />", sFieldName, sId);
                                 if (((string)oRow.Tag).Equals("FullFolderId"))
                                     sFieldValue = "#SKIP#";
-                            }
+                            }*/
                             break;
 
                         case "ItemId":
