@@ -208,7 +208,8 @@ namespace SOAPe
             sTimings.AppendLine("Latency (latency shown in milliseconds, times are in ticks)").AppendLine();
             sTimings.AppendLine($"client-request-id: {clientRequestId}").AppendLine();
             
-            oWebRequest.Headers["return-client-request-id"] = "true";
+            if (String.IsNullOrEmpty(oWebRequest.Headers.Get("return-client-request-id")))
+                oWebRequest.Headers["return-client-request-id"] = "true";
 
             oWebRequest.Method = "POST";
             XmlDocument oSOAPRequest = new XmlDocument();
