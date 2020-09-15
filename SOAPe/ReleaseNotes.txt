@@ -8,6 +8,9 @@ You can add and manage multiple configurations using the Configuration Manager. 
 Changelog
 ---------
 
+1.2.1
+- Fixed log analysis so that it works on background thread and doesn't lock UI.
+
 1.2.0
 - Added release notes and splash screen to be shown on first run.
 - Added ability to specify mailbox with distinguished folders for easier delegate access (e.g. use Inbox:x@x.com as the folder Id).
