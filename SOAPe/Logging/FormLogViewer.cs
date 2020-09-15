@@ -23,6 +23,7 @@ using System.Xml;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SOAPe
 {
@@ -197,7 +198,7 @@ namespace SOAPe
             }
             else
                 ShowStatus("Filter Active", 100, Color.MintCream);
-            ThreadPool.QueueUserWorkItem(new WaitCallback(AnalyzeTrace), null);
+            Task.Run(new Action(() => { AnalyzeTrace(); }));
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -394,7 +395,7 @@ namespace SOAPe
         }
 
 
-        private void AnalyzeTrace(object o)
+        private void AnalyzeTrace()
         {
             // Go through the listbox items and check content for errors
             // This method is intended to run on a background thread, as the checking can take a significant length of time
@@ -406,26 +407,19 @@ namespace SOAPe
 
             int i = 0;
             bool firstPass = true;
-            if (listViewLogIndex.InvokeRequired)
-            {
-                listViewLogIndex.Invoke(new MethodInvoker(delegate() {
-                    while (i < listViewLogIndex.Items.Count)
-                    {
-                        UpdateListViewItem(listViewLogIndex.Items[i], (TraceElement)listViewLogIndex.Items[i].Tag);
-                        i++;
-                        if ((i == listViewLogIndex.Items.Count) && firstPass)
-                        {
-                            i = 0;
-                            firstPass = false;
-                        }
-                    }
-                }));
-            }
-            else
+
+            try
             {
                 while (i < listViewLogIndex.Items.Count)
                 {
-                    UpdateListViewItem(listViewLogIndex.Items[i], (TraceElement)listViewLogIndex.Items[i].Tag);
+                    Action action = new Action(() =>
+                    {
+                        UpdateListViewItem(listViewLogIndex.Items[i], (TraceElement)listViewLogIndex.Items[i].Tag);
+                    });
+                    if (listViewLogIndex.InvokeRequired)
+                        listViewLogIndex.Invoke(action);
+                    else
+                        action();
                     i++;
                     if ((i == listViewLogIndex.Items.Count) && firstPass)
                     {
@@ -434,6 +428,7 @@ namespace SOAPe
                     }
                 }
             }
+            catch { }
             this._checkingForErrors = false;
         }
 

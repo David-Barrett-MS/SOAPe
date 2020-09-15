@@ -528,20 +528,23 @@ namespace SOAPe.ConfigurationManager
                         Control control = null;
                         try
                         {
-                            Control[] matchingControls = _form.Controls.Find(controlSetting[0].Trim(), true);
-                            if (matchingControls.Length>1)
+                            if (!String.IsNullOrEmpty(controlSetting[0]))
                             {
-                                foreach (Control matchingControl in matchingControls)
+                                Control[] matchingControls = _form.Controls.Find(controlSetting[0].Trim(), true);
+                                if (matchingControls.Length > 1)
                                 {
-                                    if (matchingControl.Name == controlSetting[0].Trim())
+                                    foreach (Control matchingControl in matchingControls)
                                     {
-                                        control = matchingControl;
-                                        break;
+                                        if (matchingControl.Name == controlSetting[0].Trim())
+                                        {
+                                            control = matchingControl;
+                                            break;
+                                        }
                                     }
                                 }
+                                else if (matchingControls.Length == 1)
+                                    control = matchingControls[0];
                             }
-                            else if (matchingControls.Length == 1)
-                                control = matchingControls[0];
                         }
                         catch { }
                         if (control != null)

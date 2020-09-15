@@ -617,18 +617,18 @@ namespace SOAPe
                 }
 
                 // Read the trace information
-                string sTag = xml.FirstChild.Attributes["Tag"].Value.ToString();
+                string sTag = xml.FirstChild.Attributes["Tag"]?.Value.ToString();
                 DateTime logTime = _lastKnownEventTime.AddTicks(1);
                 try
                 {
-                    logTime = DateTime.Parse(xml.FirstChild.Attributes["Time"].Value);
+                    logTime = DateTime.Parse(xml.FirstChild.Attributes["Time"]?.Value);
                 }
                 catch { }
                 _lastKnownEventTime = logTime;
                 int threadId = -1;
                 try
                 {
-                    string sThreadId = xml.FirstChild.Attributes["Tid"].Value;
+                    string sThreadId = xml.FirstChild.Attributes["Tid"]?.Value;
                     if (!int.TryParse(sThreadId, out threadId))
                     {
                         if (!String.IsNullOrEmpty(sThreadId))
@@ -651,20 +651,20 @@ namespace SOAPe
                 string sApplication = "Unknown";
                 try
                 {
-                    sApplication = xml.FirstChild.Attributes["Application"].Value;
+                    sApplication = xml.FirstChild.Attributes["Application"]?.Value;
                 }
                 catch { }
                 string sVersion = "";
                 try
                 {
-                    sVersion = xml.FirstChild.Attributes["Version"].Value;
+                    sVersion = xml.FirstChild.Attributes["Version"]?.Value;
                 }
                 catch { }
                 
                 string sClientRequestId = "";
                 try
                 {
-                    sClientRequestId = xml.FirstChild.Attributes["ClientRequestId"].Value;
+                    sClientRequestId = xml.FirstChild.Attributes["ClientRequestId"]?.Value;
                 }
                 catch { }
 

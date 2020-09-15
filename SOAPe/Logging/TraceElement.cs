@@ -234,15 +234,17 @@ namespace SOAPe
             XmlDocument xmlDoc = new XmlDocument();
             try
             {
-                xmlDoc.LoadXml(Xml);
-                return InterestingXMLElements(xmlDoc);
+                if (Xml.Substring(0, 6).Equals("<?xml ", StringComparison.OrdinalIgnoreCase))
+                {
+                    xmlDoc.LoadXml(Xml);
+                    return InterestingXMLElements(xmlDoc);
+                }
             }
             catch
             {
                 // We'll get an error if the payload is not Xml, in which case we've nothing to do
-                return new Dictionary<string, string>();
             }
-
+            return new Dictionary<string, string>();
         }
 
         public static string ExtractTraceContent(string Trace)
