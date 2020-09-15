@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages" xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <m:SetUserOofSettingsRequest>
+      <t:Mailbox>
+        <t:Address><!--FIELD:Address;string;--></t:Address>
+      </t:Mailbox>
+      <t:UserOofSettings>
+        <t:OofState><!--FIELD:OofState;list;Disabled,Enabled,Scheduled--></t:OofState>
+        <t:ExternalAudience><!--FIELD:ExternalAudience;list;None,Known,All--></t:ExternalAudience>
+        <t:Duration>
+          <t:StartTime><!--FIELD:StartTime;datetime--></t:StartTime>
+          <t:EndTime><!--FIELD:EndTime;datetime--></t:EndTime>
+        </t:Duration>
+        <t:InternalReply xml:lang="en-US">
+          <t:Message><!--FIELD:InternalReply;string;Default--></t:Message>
+        </t:InternalReply>
+        <t:ExternalReply xml:lang="en-US">
+          <t:Message><!--FIELD:ExternalReply;string;Default--></t:Message>
+        </t:ExternalReply>
+      </t:UserOofSettings>
+    </m:SetUserOofSettingsRequest>
+  </soap:Body>
+</soap:Envelope>

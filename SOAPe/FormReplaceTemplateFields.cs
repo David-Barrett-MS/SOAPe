@@ -261,7 +261,7 @@ namespace SOAPe
 
             string mailbox = "";
             foreach (string distinguishedFolder in _distinguishedFolders)
-                if (folderId.StartsWith(distinguishedFolder))
+                if (folderId.ToLower().StartsWith(distinguishedFolder))
                 {
                     // This is a distinguished folder
                     fieldName = "DistinguishedFolderId";

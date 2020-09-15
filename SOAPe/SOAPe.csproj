@@ -450,6 +450,9 @@
     <Content Include="Templates\EWS\GetUserPhoto.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\EWS\SetUserOOFSettings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\EWS\SetUserPhoto.xml" />
     <Content Include="Templates\EWS\SyncFolderHierarchy.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

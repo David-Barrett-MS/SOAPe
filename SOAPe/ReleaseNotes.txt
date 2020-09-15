@@ -10,4 +10,5 @@ Changelog
 
 1.2.0
 - Added release notes and splash screen to be shown on first run.
-- Added ability to specify mailbox with distinguished folders for easier delegate access (e.g. use Inbox:x@x.com as the folder Id)
+- Added ability to specify mailbox with distinguished folders for easier delegate access (e.g. use Inbox:x@x.com as the folder Id).
+- Throttling and error highlighting in the log analyser now working as expected.

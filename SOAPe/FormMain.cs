@@ -57,6 +57,8 @@ namespace SOAPe
             _formConfig.AddControlTypeRecurseExclusion("SOAPe.XmlEditor");
             _formConfig.ExcludedControls.Add(groupBoxResponse);
             _formConfig.ExcludedControls.Add(xmlEditorResponse);
+            _formConfig.ExcludedControls.Add(textBoxHTTPHeaderName);
+            _formConfig.ExcludedControls.Add(textBoxHTTPHeaderValue);
             ClassFormConfig.ApplyConfiguration();
 
             // Configure log file
