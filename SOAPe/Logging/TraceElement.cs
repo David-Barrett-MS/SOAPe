@@ -137,6 +137,7 @@ namespace SOAPe
         public static Color ErrorColour { get; set; } = Color.Red;
         public static Color ErrorRequestColour { get; set; } = Color.Pink;
 
+        private static string[] _mailboxContainingElements = { "FolderIds", "ParentFolderIds", "SavedItemFolderId" };
         public static Dictionary<string, string> InterestingXMLElements(XmlDocument xmlDoc)
         {
             // We have an Xml document, so we look for interesting information to extract
@@ -199,7 +200,7 @@ namespace SOAPe
                 xmlElements.Add("SOAPMethod", bodyNode.FirstChild.LocalName);
                 foreach (XmlNode xmlNode in bodyNode.FirstChild.ChildNodes)
                 {
-                    if (xmlNode.LocalName.Equals("FolderIds"))
+                    if (_mailboxContainingElements.Contains(xmlNode.LocalName))
                     {
                         foreach (XmlNode xmlFolderIdNode in xmlNode)
                         {
@@ -396,13 +397,20 @@ namespace SOAPe
                 }
                 else if (traceElement.TraceTag.Contains("EwsResponse"))
                 {
-                    // Now check the response
+                    // Check EWS response for errors
                     if (traceElement.Data.Contains("ResponseClass=\"Error\""))
                         traceElement._isError = true;
                     else if (traceElement.Data.Contains("Fault>"))
                         if (traceElement.Data.Contains("<faultcode"))
                             traceElement._isError = true;
                 }
+                else if (traceElement.TraceTag.Contains("AutodiscoverResponse"))
+                {
+                    // Check autodiscover response for errors
+                    if (traceElement.Data.Contains("<ErrorCode>"))
+                        traceElement._isError = true;
+                }
+
                 if (traceElement._isError)
                     if (!String.IsNullOrEmpty(traceElement.ClientRequestId))
                         _clientRequestIdsWithError.Add(traceElement.ClientRequestId);
@@ -419,6 +427,15 @@ namespace SOAPe
                 if (traceElement._isThrottled)
                     if (!String.IsNullOrEmpty(traceElement.ClientRequestId))
                         _clientRequestIdsThrottled.Add(traceElement.ClientRequestId);
+            }
+            else if (traceElement.TraceType == EWSTraceType.Autodiscover)
+            {
+                if (traceElement.Data.Contains("<ErrorCode>"))
+                    traceElement._isError = true;
+
+                if (traceElement._isError)
+                    if (!String.IsNullOrEmpty(traceElement.ClientRequestId))
+                        _clientRequestIdsWithError.Add(traceElement.ClientRequestId);
             }
             else
             {
