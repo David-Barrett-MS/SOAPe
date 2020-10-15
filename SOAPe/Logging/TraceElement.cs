@@ -445,6 +445,25 @@ namespace SOAPe
                     traceElement._isError = _clientRequestIdsWithError.Contains(traceElement.ClientRequestId);
                 }
             }
+
+            if (traceElement.TraceTag.EndsWith("HttpHeaders"))
+            {
+                // For HTTP headers, check if we have X-AnchorMailbox, and if we do, add it as an interesting Xml element
+                using (System.IO.StringReader reader = new System.IO.StringReader(traceElement.Data))
+                {
+                    string headerLine;
+                    while ( (headerLine = reader.ReadLine()) != null)
+                    {
+                        if (headerLine.StartsWith("X-AnchorMailbox"))
+                        {
+                            string mailbox = headerLine.Substring(16).Trim();
+                            if (!String.IsNullOrEmpty(mailbox))
+                                traceElement._xmlElements.Add("Mailbox", mailbox);
+                        }
+                    }
+                    
+                }
+            }
         }
 
         public bool IsThrottled
