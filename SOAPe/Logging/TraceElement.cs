@@ -460,8 +460,7 @@ namespace SOAPe
                             if (!String.IsNullOrEmpty(mailbox))
                                 traceElement._xmlElements.Add("Mailbox", mailbox);
                         }
-                    }
-                    
+                    }                    
                 }
             }
         }

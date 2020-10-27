@@ -673,14 +673,34 @@ namespace SOAPe
                 catch { }
             }
 
+            bool exportSelectedOnly = false;
+            if (listViewLogIndex.SelectedItems.Count>0)
+            {
+                if (MessageBox.Show("Save only selected items?", "Confirm Save", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    exportSelectedOnly = true;
+            }
+
             ShowStatus("Saving to " + oDialog.FileName,0);
             using (StreamWriter logStreamWriter = File.CreateText(oDialog.FileName))
             {
-                for (int i=0; i<listViewLogIndex.Items.Count; i++)
+                if (exportSelectedOnly)
                 {
-                    ShowStatus("Saving to " + oDialog.FileName, i / listViewLogIndex.Items.Count);
-                    logStreamWriter.WriteLine(GetTraceFromListItem(i));
-                    logStreamWriter.WriteLine();
+                    // If there are items selected, we just export those
+                    for (int i=0; i<listViewLogIndex.SelectedIndices.Count; i++)
+                    {
+                        ShowStatus("Saving to " + oDialog.FileName, i / listViewLogIndex.SelectedIndices.Count);
+                        logStreamWriter.WriteLine(GetTraceFromListItem(listViewLogIndex.SelectedIndices[i]));
+                        logStreamWriter.WriteLine();
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < listViewLogIndex.Items.Count; i++)
+                    {
+                        ShowStatus("Saving to " + oDialog.FileName, i / listViewLogIndex.Items.Count);
+                        logStreamWriter.WriteLine(GetTraceFromListItem(i));
+                        logStreamWriter.WriteLine();
+                    }
                 }
             }
             ShowStatus(null);
