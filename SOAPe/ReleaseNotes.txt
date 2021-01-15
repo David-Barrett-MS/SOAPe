@@ -9,6 +9,7 @@ Changelog
 ---------
 
 1.2.3
+- Added certificate authentication option for OAuth application flow.
 
 1.2.2
 - Added X-AnchorMailbox extraction to log viewer (it will now be displayed in Mailbox column).
