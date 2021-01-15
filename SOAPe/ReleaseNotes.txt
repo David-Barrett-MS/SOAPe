@@ -12,6 +12,7 @@ Changelog
 - Added X-AnchorMailbox extraction to log viewer (it will now be displayed in Mailbox column).
 - Added Autodiscover error highlighting to log viewer.
 - Improved target mailbox extraction logic from Xml payload.
+- Added option to save only selected items from Log Viewer (so that snippets can be extracted from large logs).
 
 1.2.1
 - Fixed log analysis so that it works on background thread and doesn't lock UI.

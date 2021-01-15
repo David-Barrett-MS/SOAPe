@@ -1074,8 +1074,8 @@ namespace SOAPe
 
         private void buttonAcquireOAuthToken_Click(object sender, EventArgs e)
         {
-            if (_oAuthAppRegForm.AcquireNativeAppToken())
-                textBoxOAuthToken.Text = _oAuthAppRegForm.AccessToken;
+            _oAuthAppRegForm.AcquireToken();
+            textBoxOAuthToken.Text = _oAuthAppRegForm.AccessToken;
         }
 
         private void buttonViewOtherLog_Click(object sender, EventArgs e)

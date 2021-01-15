@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 
 namespace SOAPe.Auth
 {
@@ -55,17 +55,7 @@ namespace SOAPe.Auth
 
         public string ResourceUrl
         {
-            get { return comboBoxResourceUrl.Text; }
-        }
-
-        public string RedirectUrl
-        {
-            get { return textBoxRedirectUrl.Text; }
-        }
-
-        public string AuthenticationUrl
-        {
-            get { return comboBoxAuthenticationUrl.Text; }
+            get { return textBoxResourceUrl.Text; }
         }
 
         public string ApplicationId
@@ -105,10 +95,9 @@ namespace SOAPe.Auth
             StringBuilder sAppInfoErrors = new StringBuilder();
 
             if (String.IsNullOrEmpty(textBoxTenantId.Text)) { sAppInfoErrors.AppendLine("Tenant Id must be specified (e.g. tenant.onmicrosoft.com)"); }
-            if (String.IsNullOrEmpty(comboBoxResourceUrl.Text)) { sAppInfoErrors.AppendLine("Resource Url must be specified (e.g. https://outlook.office365.com)"); }
-            if (String.IsNullOrEmpty(textBoxRedirectUrl.Text)) { sAppInfoErrors.AppendLine("Redirect Url must be specified (e.g. http://localhost/code)"); }
-            if (String.IsNullOrEmpty(comboBoxAuthenticationUrl.Text)) { sAppInfoErrors.AppendLine("Authentication Url must be specified (e.g. https://login.microsoftonline.com/common)"); }
+            if (String.IsNullOrEmpty(textBoxResourceUrl.Text)) { sAppInfoErrors.AppendLine("Resource Url must be specified (e.g. https://outlook.office365.com)"); }
             if (String.IsNullOrEmpty(textBoxApplicationId.Text)) { sAppInfoErrors.AppendLine("Application Id must be specified (as registered in Azure AD)"); }
+            if (radioButtonAuthWithClientSecret.Checked && String.IsNullOrEmpty(textBoxClientSecret.Text)) { sAppInfoErrors.AppendLine("Client secret cannot be empty"); }
 
             if (sAppInfoErrors.Length<1)
                 return true;
@@ -141,48 +130,66 @@ namespace SOAPe.Auth
             catch { }
         }
 
-        public bool AcquireNativeAppToken()
+        public void AcquireNativeAppToken()
+        {
+            Action action = new Action(async () =>
+            {
+                try
+                {
+                    AuthenticationResult authenticationResult = await ClassOAuthHelper.GetDelegateToken(textBoxApplicationId.Text, textBoxTenantId.Text);
+                    _lastAuthResult = authenticationResult;
+                    UpdateTokenTextbox();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Unable to acquire token", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            });
+            Task.Run(action);
+        }
+
+        public void AcquireAppTokenWithSecret()
+        {
+            Action action = new Action(async () =>
+            {
+                try
+                {
+                    AuthenticationResult authenticationResult = await ClassOAuthHelper.GetApplicationToken(textBoxApplicationId.Text, textBoxTenantId.Text,textBoxClientSecret.Text);
+                    _lastAuthResult = authenticationResult;
+                    UpdateTokenTextbox();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Unable to acquire token", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            });
+            Task.Run(action);
+        }
+
+        public void AcquireToken()
         {
             if (!HaveValidAppConfig())
             {
                 if (!this.Visible)
-                { 
+                {
                     this.ShowDialog();
                     HaveValidAppConfig(); // Do this to show the invalid configuration to the user
                 }
-                return false;
+                return;
             }
-
-            try
-            {
-                AuthenticationContext authenticationContext = new AuthenticationContext(comboBoxAuthenticationUrl.Text, _oAuthHelper.TokenCache);
-                _lastAuthResult = authenticationContext.AcquireTokenAsync(comboBoxResourceUrl.Text, textBoxApplicationId.Text, new Uri(textBoxRedirectUrl.Text), new PlatformParameters(PromptBehavior.Always)).Result;
-                UpdateTokenTextbox();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, ex.Message, "Unable to acquire token", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return false;
+            if (radioButtonAuthAsNativeApp.Checked)
+                AcquireNativeAppToken();
+            else if (radioButtonAuthWithClientSecret.Checked)
+                AcquireAppTokenWithSecret();
         }
 
         private void buttonAcquireToken_Click(object sender, EventArgs e)
         {
-            if (radioButtonAuthAsNativeApp.Checked)
-            {
-                AcquireNativeAppToken();
-                return;
-            }
+            AcquireToken();
         }
 
         private void textBoxTenantId_TextChanged(object sender, EventArgs e)
         {
-            comboBoxAuthenticationUrl.Items[1] = "https://login.microsoftonline.com/" + textBoxTenantId.Text;
-            if (comboBoxAuthenticationUrl.SelectedIndex == 1)
-            {
-                comboBoxAuthenticationUrl.Text = (String)comboBoxAuthenticationUrl.Items[1];
-            }
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -207,13 +214,11 @@ namespace SOAPe.Auth
 
         private void buttonManageTokens_Click(object sender, EventArgs e)
         {
+            /* // MSAL implements its own cache - we don't care about a viewer anymore
             FormTokenViewer formTokenViewer = new FormTokenViewer(_oAuthHelper.TokenCache);
             formTokenViewer.Show();
+            */
         }
 
-        private void buttonRegisterApplication_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

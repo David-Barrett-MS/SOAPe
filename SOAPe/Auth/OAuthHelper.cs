@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 
 namespace SOAPe.Auth
 {
@@ -43,292 +43,62 @@ namespace SOAPe.Auth
 
     public class ClassOAuthHelper
     {
-        private string _authenticationUrl = String.Empty;
-        private string _resourceUrl = String.Empty;
-        private string _applicationId = String.Empty;
-        private string _tenantId = String.Empty;
-        private string _redirectUrl = String.Empty;
-        private bool _isNativeApplication = false;
         private static Exception _lastError = null;
-        private X509Certificate2 _authCertificate = null;
-        private string _clientSecret = String.Empty;
-        private AuthenticationResult _authenticationResult = null;
-        private static List<string> _acquireTokenInProgress;
-        private bool _obtainUserConsent = false;
-        private static Auth.EncryptedTokenCache _tokenCache = null;
 
-        private static Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext _authenticationContext = null;
-
-        public ClassOAuthHelper()
-        {
-            _acquireTokenInProgress = new List<string>();
-            if (_tokenCache == null)
-                _tokenCache = new Auth.EncryptedTokenCache();
-        }
-
-        public Auth.EncryptedTokenCache TokenCache
-        {
-            get { return _tokenCache; }
-        }
-
-        public string AuthenticationUrl
-        {
-            get { return _authenticationUrl; }
-            set { _authenticationUrl = value; }
-        }
-
-        public bool IsNativeApplication
-        {
-            get { return _isNativeApplication; }
-            set { _isNativeApplication = value; }
-        }
-
-        public string ResourceUrl
-        {
-            get { return _resourceUrl; }
-            set { _resourceUrl = value; }
-        }
-
-        public string ApplicationId
-        {
-            get { return _applicationId; }
-            set { _applicationId = value; }
-        }
-
-        public string TenantId
-        {
-            get { return _tenantId; }
-            set { _tenantId = value; }
-        }
-
-        public string RedirectUrl
-        {
-            get { return _redirectUrl; }
-            set { _redirectUrl = value; }
-        }
-
-        public X509Certificate2 AuthCertificate
-        {
-            get { return _authCertificate; }
-            set { _authCertificate = value; }
-        }
-
-        public string AuthClientSecret
-        {
-            get { return _clientSecret; }
-            set { _clientSecret = value; }
-        }
-
-        public AuthenticationContext AuthenticationContext
-        {
-            get
-            {
-                if (_authenticationContext == null)
-                    return new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext(_authenticationUrl + "/" + _tenantId, _tokenCache);
-                return _authenticationContext;
-            }
-        }
-
-        public string Token
-        {
-            get
-            {
-                try
-                {
-                    return _authenticationResult.AccessToken;
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-        }
-
-        public bool TokenHasExpired
-        {
-            get
-            {
-                try
-                {
-                    return _authenticationResult.ExpiresOn < DateTime.Now;
-                }
-                catch { }
-                return true;
-            }
-        }
-
-        public bool ObtainUserConsent
-        {
-            get { return _obtainUserConsent; }
-            set { _obtainUserConsent = value; }
-        }
-
-        public bool RenewToken()
-        {
-            if (!TokenHasExpired) return true;
-            if (_authenticationResult == null) return false;
-
-            try
-            {
-                AcquireDelegateToken(_authenticationResult.UserInfo.UniqueId).Wait(10000);
-            }
-            catch
-            {
-                return false;
-            }
-            return (_authenticationResult.ExpiresOn < DateTime.Now);
-        }
-
-        public AuthenticationResult AuthenticationResult
-        {
-            get { return _authenticationResult; }
-        }
-
-        public Exception LastError
+        public static Exception LastError
         {
             get { return _lastError; }
         }
 
-        public void SaveAuthenticationResult(string ToFile)
+        public static async Task<AuthenticationResult> GetDelegateToken(string ClientId, string TenantId, string Scope = "EWS.AccessAsUser.All")
         {
-
-        }
-
-        public async Task AcquireDelegateToken(string UserId = "")
-        {
-            string configError = String.Empty;
-            if ((_authenticationUrl == String.Empty)) configError = "Authentication Url must be set.";
-            if ((_resourceUrl == String.Empty)) configError = "Resource Url must be set.";
-            if ((_tenantId == String.Empty)) configError = "Tenant Id must be set.";
-            if ((_applicationId == String.Empty)) configError = "ApplicationId must be set.";
-            if (_redirectUrl == String.Empty) configError = "Redirect Url cannot be empty when acquiring a delegate token.";
-            if (!_isNativeApplication)
-                if ((_authCertificate == null) && String.IsNullOrEmpty(_clientSecret))
-                    configError = "Client (application) authentication must be specified.";
-            if (!String.IsNullOrEmpty(configError))
+            var pcaOptions = new PublicClientApplicationOptions
             {
-                _lastError = new Exception("Invalid configuration: " + configError);
-                throw _lastError;
-            }
+                ClientId = ClientId,
+                TenantId = TenantId
+            };
 
-            if (!String.IsNullOrEmpty(UserId))
-            {
-                if (_acquireTokenInProgress.Contains(UserId))
-                {
-                    // We're already requesting a token for this user
-                    return;
-                }
-                _acquireTokenInProgress.Add(UserId);
-            }
+            var pca = PublicClientApplicationBuilder
+                .CreateWithApplicationOptions(pcaOptions).Build();
 
-            OAuthContext oAuthContext = new OAuthContext();
-            oAuthContext.adminConsent = false;
-            oAuthContext.authUrl = _authenticationUrl;
-            oAuthContext.clientId = _applicationId;
-            oAuthContext.resource = _resourceUrl;
-            oAuthContext.redirectUrl = _redirectUrl;
-            oAuthContext.tenantName = _tenantId;
-            oAuthContext.secretKey = _clientSecret;
-            oAuthContext.cert = _authCertificate;
-            oAuthContext.isV2Endpoint = false;
-            oAuthContext.isNativeApplication = _isNativeApplication;
-            oAuthContext.ObtainUserConsent = _obtainUserConsent;
-            if (!String.IsNullOrEmpty(UserId))
-                oAuthContext.userId = UserId;
+            var ewsScopes = new string[] { $"https://outlook.office.com/{Scope}" };
 
             try
             {
-                _authenticationResult = await GetToken(oAuthContext);
+                // Make the interactive token request
+                AuthenticationResult authResult = await pca.AcquireTokenInteractive(ewsScopes).ExecuteAsync();
+                return authResult;
+                //ewsClient.Credentials = new OAuthCredentials(authResult.AccessToken);
             }
             catch (Exception ex)
             {
                 _lastError = ex;
-                _authenticationResult = null;
             }
-
-            if (!String.IsNullOrEmpty(UserId))
-                _acquireTokenInProgress.Remove(UserId);
+            return null;
         }
 
-        public static async Task<AuthenticationResult> GetToken(OAuthContext oAuthContext)
+        public static async Task<AuthenticationResult> GetApplicationToken(string ClientId, string TenantId, string ClientSecret)
         {
-            // Get OAuth token using client credentials 
-            string tenantName = oAuthContext.tenantName;
+            // Configure the MSAL client to get tokens
+            var ewsScopes = new string[] { "https://outlook.office.com/.default" };
 
-            if (_authenticationContext == null)
-                _authenticationContext = new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext(oAuthContext.authUrl + "/" + tenantName, _tokenCache);
+            var app = ConfidentialClientApplicationBuilder.Create(ClientId)
+                .WithAuthority(AzureCloudInstance.AzurePublic, TenantId)
+                .WithClientSecret(ClientSecret)
+                .Build();
 
-            AuthenticationResult authenticationResult = null;
-
-            if (oAuthContext.ObtainUserConsent)
+            AuthenticationResult result = null;
+            try
             {
-                // We need to get user consent
-
-                FormGetUserPermission formGetPermission = new FormGetUserPermission(oAuthContext);
-                if (formGetPermission.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    string code = formGetPermission.Code;
-                    // When we get our token, it will be cached in the TokenCache, so next time the silent calls will work
-                    if (oAuthContext.cert == null)
-                    {
-
-                        ClientCredential clientCred = new ClientCredential(oAuthContext.clientId, oAuthContext.secretKey);
-                        authenticationResult = await _authenticationContext.AcquireTokenByAuthorizationCodeAsync(code, new Uri(oAuthContext.redirectUrl), clientCred);
-                    }
-                    else
-                    {
-                        ClientAssertionCertificate clientCert = new ClientAssertionCertificate(oAuthContext.clientId, oAuthContext.cert);
-                        authenticationResult = await _authenticationContext.AcquireTokenByAuthorizationCodeAsync(code, new Uri(oAuthContext.redirectUrl), clientCert);
-                    }
-                }
-                return authenticationResult;
+                // Make the interactive token request
+                result = await app.AcquireTokenForClient(ewsScopes)
+                    .ExecuteAsync();
             }
-
-            if (oAuthContext.isNativeApplication)
+            catch (Exception ex)
             {
-                if (oAuthContext.adminConsent)
-                {
-                    authenticationResult = await _authenticationContext.AcquireTokenAsync(oAuthContext.resource,
-                        oAuthContext.clientId,
-                        new Uri(oAuthContext.redirectUrl),
-                        new PlatformParameters(PromptBehavior.Always),
-                        UserIdentifier.AnyUser,
-                        "prompt=admin_consent");
-                }
-                else
-                {
-                    authenticationResult = await _authenticationContext.AcquireTokenAsync(oAuthContext.resource, oAuthContext.clientId, new Uri(oAuthContext.redirectUrl), new PlatformParameters(PromptBehavior.Always));
-                }
+                _lastError = ex;
             }
-            else
-            {
-                if (!String.IsNullOrEmpty(oAuthContext.userId))
-                {
-                    // We have the UserId for the mailbox we want to access, so we'll try to get a token silently (we should have a cached token)
-                    try
-                    {
-                        if (oAuthContext.cert == null)
-                        {
-                            ClientCredential clientCred = new ClientCredential(oAuthContext.clientId, oAuthContext.secretKey);
-                            authenticationResult = await _authenticationContext.AcquireTokenSilentAsync(oAuthContext.resource, clientCred, new UserIdentifier(oAuthContext.userId, UserIdentifierType.UniqueId));
-                        }
-                        else
-                        {
-                            ClientAssertionCertificate clientCert = new ClientAssertionCertificate(oAuthContext.clientId, oAuthContext.cert);
-                            authenticationResult = await _authenticationContext.AcquireTokenSilentAsync(oAuthContext.resource, clientCert, new UserIdentifier(oAuthContext.userId, UserIdentifierType.UniqueId));
-                        }
-                        return authenticationResult;
-                    }
-                    catch (Exception ex)
-                    {
-                        _lastError = ex;
-                    }
-                }
-
-
-            }
-            return authenticationResult;
+            return result;
         }
-
     }
 }
