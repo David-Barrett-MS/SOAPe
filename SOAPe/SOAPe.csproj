@@ -145,12 +145,6 @@
     </Compile>
     <Compile Include="Auth\OAuthHelper.cs" />
     <Compile Include="ConfigurationManager\ClassFormConfig.cs" />
-    <Compile Include="Auth\FormAcquireToken.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Auth\FormAcquireToken.Designer.cs">
-      <DependentUpon>FormAcquireToken.cs</DependentUpon>
-    </Compile>
     <Compile Include="ConfigurationManager\FormConfigurationName.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -309,9 +303,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormAbout.resx">
       <DependentUpon>FormAbout.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Auth\FormAcquireToken.resx">
-      <DependentUpon>FormAcquireToken.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Auth\FormChooseAuthCertificate.resx">
       <DependentUpon>FormChooseAuthCertificate.cs</DependentUpon>

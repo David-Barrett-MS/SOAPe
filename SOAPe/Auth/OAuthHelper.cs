@@ -68,7 +68,6 @@ namespace SOAPe.Auth
                 // Make the interactive token request
                 AuthenticationResult authResult = await pca.AcquireTokenInteractive(ewsScopes).ExecuteAsync();
                 return authResult;
-                //ewsClient.Credentials = new OAuthCredentials(authResult.AccessToken);
             }
             catch (Exception ex)
             {
@@ -90,7 +89,7 @@ namespace SOAPe.Auth
             AuthenticationResult result = null;
             try
             {
-                // Make the interactive token request
+                // Make the token request (should not be interactive, unless Consent required)
                 result = await app.AcquireTokenForClient(ewsScopes)
                     .ExecuteAsync();
             }

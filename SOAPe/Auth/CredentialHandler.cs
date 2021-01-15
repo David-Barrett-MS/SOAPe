@@ -96,7 +96,7 @@ namespace SOAPe.Auth
             }
         }
 
-        private void LogCredentials(ClassLogger Logger)
+        public void LogCredentials(ClassLogger Logger)
         {
             StringBuilder sCredentialInfo = new StringBuilder();
             switch (_authType)

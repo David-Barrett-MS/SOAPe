@@ -165,6 +165,7 @@ namespace SOAPe
 
             // Set authentication
             _credentialHandler.ApplyCredentialsToHttpWebRequest(oWebRequest);
+            _credentialHandler.LogCredentials(_logger);
 
             oWebRequest.ContentType = "text/xml;charset=\"utf-8\"";
             oWebRequest.Accept = "text/xml";
