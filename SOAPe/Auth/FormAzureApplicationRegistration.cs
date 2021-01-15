@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Identity.Client;
 using System.Security.Cryptography.X509Certificates;
+using SOAPe.ConfigurationManager;
 
 namespace SOAPe.Auth
 {
@@ -30,7 +31,9 @@ namespace SOAPe.Auth
         public FormAzureApplicationRegistration()
         {
             InitializeComponent();
-            _formConfig = new ConfigurationManager.ClassFormConfig(this);
+            _formConfig = new ConfigurationManager.ClassFormConfig(this,true);
+            _formConfig.ExcludedControls.Add(textBoxAuthCertificate);
+            ClassFormConfig.ApplyConfiguration();
             textBoxTenantId_TextChanged(null, null);
             UpdateAuthUI();
         }
