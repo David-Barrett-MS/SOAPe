@@ -8,6 +8,8 @@ You can add and manage multiple configurations using the Configuration Manager. 
 Changelog
 ---------
 
+1.2.3
+
 1.2.2
 - Added X-AnchorMailbox extraction to log viewer (it will now be displayed in Mailbox column).
 - Added Autodiscover error highlighting to log viewer.
