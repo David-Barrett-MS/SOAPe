@@ -111,12 +111,13 @@ namespace SOAPe.Auth
                 System.Windows.Forms.MessageBox.Show("Please select a certificate", "No certificate chosen", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            this.Dispose();
+            this.Close();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            this.Dispose();
+            _certificate = null;
+            this.Close();
         }
 
         private void buttonBrowseForCertificate_Click(object sender, EventArgs e)

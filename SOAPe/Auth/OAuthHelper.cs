@@ -23,24 +23,6 @@ using Microsoft.Identity.Client;
 
 namespace SOAPe.Auth
 {
-    public struct OAuthContext
-    {
-        public string tenantName;
-        public string authUrl;
-        public string clientId;
-        public string secretKey;
-        public X509Certificate2 cert;
-        public string resource;
-        public string userId;
-        public string redirectUrl;
-        public bool adminConsent;
-        public bool appConsent;
-        public bool isV2Endpoint;
-        public bool isNativeApplication;
-        public string UserAccessToken;
-        public bool ObtainUserConsent;
-    }
-
     public class ClassOAuthHelper
     {
         private static Exception _lastError = null;
@@ -84,6 +66,30 @@ namespace SOAPe.Auth
             var app = ConfidentialClientApplicationBuilder.Create(ClientId)
                 .WithAuthority(AzureCloudInstance.AzurePublic, TenantId)
                 .WithClientSecret(ClientSecret)
+                .Build();
+
+            AuthenticationResult result = null;
+            try
+            {
+                // Make the token request (should not be interactive, unless Consent required)
+                result = await app.AcquireTokenForClient(ewsScopes)
+                    .ExecuteAsync();
+            }
+            catch (Exception ex)
+            {
+                _lastError = ex;
+            }
+            return result;
+        }
+
+        public static async Task<AuthenticationResult> GetApplicationToken(string ClientId, string TenantId, X509Certificate2 ClientCertificate)
+        {
+            // Configure the MSAL client to get tokens
+            var ewsScopes = new string[] { "https://outlook.office.com/.default" };
+
+            var app = ConfidentialClientApplicationBuilder.Create(ClientId)
+                .WithAuthority(AzureCloudInstance.AzurePublic, TenantId)
+                .WithCertificate(ClientCertificate)
                 .Build();
 
             AuthenticationResult result = null;

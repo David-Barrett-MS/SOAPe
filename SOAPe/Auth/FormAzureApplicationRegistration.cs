@@ -21,6 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Identity.Client;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SOAPe.Auth
 {
@@ -98,6 +99,7 @@ namespace SOAPe.Auth
             if (String.IsNullOrEmpty(textBoxResourceUrl.Text)) { sAppInfoErrors.AppendLine("Resource Url must be specified (e.g. https://outlook.office365.com)"); }
             if (String.IsNullOrEmpty(textBoxApplicationId.Text)) { sAppInfoErrors.AppendLine("Application Id must be specified (as registered in Azure AD)"); }
             if (radioButtonAuthWithClientSecret.Checked && String.IsNullOrEmpty(textBoxClientSecret.Text)) { sAppInfoErrors.AppendLine("Client secret cannot be empty"); }
+            if (radioButtonAuthWithCertificate.Checked && String.IsNullOrEmpty(textBoxAuthCertificate.Text)) { sAppInfoErrors.AppendLine("Certificate required"); }
 
             if (sAppInfoErrors.Length<1)
                 return true;
@@ -113,6 +115,12 @@ namespace SOAPe.Auth
         private void UpdateTokenTextbox()
         {
             // If we have a textbox for the access token, update it with our current token
+            string tokenText = "Failed to retrieve token";
+            if (_lastAuthResult != null)
+                tokenText = _lastAuthResult.AccessToken;
+            else if (ClassOAuthHelper.LastError != null)
+                tokenText = ClassOAuthHelper.LastError.Message;
+
             if (_tokenTextBox == null)
                 return;
             try
@@ -121,11 +129,11 @@ namespace SOAPe.Auth
                 {
                     _tokenTextBox.Invoke(new MethodInvoker(delegate ()
                     {
-                        _tokenTextBox.Text = _lastAuthResult.AccessToken;
+                        _tokenTextBox.Text = tokenText;
                     }));
                 }
                 else
-                    _tokenTextBox.Text = _lastAuthResult.AccessToken;
+                    _tokenTextBox.Text = tokenText;
             }
             catch { }
         }
@@ -166,6 +174,24 @@ namespace SOAPe.Auth
             Task.Run(action);
         }
 
+        public void AcquireAppTokenWithCertificate()
+        {
+            Action action = new Action(async () =>
+            {
+                try
+                {
+                    AuthenticationResult authenticationResult = await ClassOAuthHelper.GetApplicationToken(textBoxApplicationId.Text, textBoxTenantId.Text, (X509Certificate2)textBoxAuthCertificate.Tag);
+                    _lastAuthResult = authenticationResult;
+                    UpdateTokenTextbox();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Unable to acquire token", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            });
+            Task.Run(action);
+        }
+
         public void AcquireToken()
         {
             if (!HaveValidAppConfig())
@@ -181,6 +207,8 @@ namespace SOAPe.Auth
                 AcquireNativeAppToken();
             else if (radioButtonAuthWithClientSecret.Checked)
                 AcquireAppTokenWithSecret();
+            else if (radioButtonAuthWithCertificate.Checked)
+                AcquireAppTokenWithCertificate();
         }
 
         private void buttonAcquireToken_Click(object sender, EventArgs e)
@@ -212,13 +240,16 @@ namespace SOAPe.Auth
             UpdateAuthUI();
         }
 
-        private void buttonManageTokens_Click(object sender, EventArgs e)
+        private void buttonLoadCertificate_Click(object sender, EventArgs e)
         {
-            /* // MSAL implements its own cache - we don't care about a viewer anymore
-            FormTokenViewer formTokenViewer = new FormTokenViewer(_oAuthHelper.TokenCache);
-            formTokenViewer.Show();
-            */
+            FormChooseAuthCertificate formChooseCert = new FormChooseAuthCertificate();
+            formChooseCert.ShowDialog(this);
+            if (formChooseCert.Certificate != null)
+            {
+                textBoxAuthCertificate.Tag = formChooseCert.Certificate;
+                textBoxAuthCertificate.Text = formChooseCert.Certificate.FriendlyName;
+            }
+            formChooseCert.Dispose();
         }
-
     }
 }

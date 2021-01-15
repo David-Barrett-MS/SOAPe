@@ -70,7 +70,7 @@
             // textBoxResourceUrl
             // 
             this.textBoxResourceUrl.Location = new System.Drawing.Point(123, 47);
-            this.textBoxResourceUrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxResourceUrl.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxResourceUrl.Name = "textBoxResourceUrl";
             this.textBoxResourceUrl.Size = new System.Drawing.Size(403, 20);
             this.textBoxResourceUrl.TabIndex = 22;
@@ -148,7 +148,7 @@
             this.radioButtonAuthAsNativeApp.AutoSize = true;
             this.radioButtonAuthAsNativeApp.Checked = true;
             this.radioButtonAuthAsNativeApp.Location = new System.Drawing.Point(7, 16);
-            this.radioButtonAuthAsNativeApp.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radioButtonAuthAsNativeApp.Margin = new System.Windows.Forms.Padding(2);
             this.radioButtonAuthAsNativeApp.Name = "radioButtonAuthAsNativeApp";
             this.radioButtonAuthAsNativeApp.Size = new System.Drawing.Size(384, 17);
             this.radioButtonAuthAsNativeApp.TabIndex = 32;
@@ -176,11 +176,11 @@
             this.buttonLoadCertificate.TabIndex = 30;
             this.buttonLoadCertificate.Text = "Select...";
             this.buttonLoadCertificate.UseVisualStyleBackColor = true;
+            this.buttonLoadCertificate.Click += new System.EventHandler(this.buttonLoadCertificate_Click);
             // 
             // radioButtonAuthWithCertificate
             // 
             this.radioButtonAuthWithCertificate.AutoSize = true;
-            this.radioButtonAuthWithCertificate.Enabled = false;
             this.radioButtonAuthWithCertificate.Location = new System.Drawing.Point(7, 58);
             this.radioButtonAuthWithCertificate.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.radioButtonAuthWithCertificate.Name = "radioButtonAuthWithCertificate";
@@ -215,7 +215,7 @@
             // buttonAcquireToken
             // 
             this.buttonAcquireToken.Location = new System.Drawing.Point(8, 204);
-            this.buttonAcquireToken.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonAcquireToken.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAcquireToken.Name = "buttonAcquireToken";
             this.buttonAcquireToken.Size = new System.Drawing.Size(92, 22);
             this.buttonAcquireToken.TabIndex = 37;
@@ -226,7 +226,7 @@
             // buttonClose
             // 
             this.buttonClose.Location = new System.Drawing.Point(492, 205);
-            this.buttonClose.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonClose.Margin = new System.Windows.Forms.Padding(2);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(50, 21);
             this.buttonClose.TabIndex = 50;
