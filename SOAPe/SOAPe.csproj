@@ -137,12 +137,6 @@
     <Compile Include="Auth\FormAzureApplicationRegistration.Designer.cs">
       <DependentUpon>FormAzureApplicationRegistration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Auth\FormGetUserPermission.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Auth\FormGetUserPermission.designer.cs">
-      <DependentUpon>FormGetUserPermission.cs</DependentUpon>
-    </Compile>
     <Compile Include="Auth\OAuthHelper.cs" />
     <Compile Include="ConfigurationManager\ClassFormConfig.cs" />
     <Compile Include="ConfigurationManager\FormConfigurationName.cs">
@@ -276,9 +270,6 @@
     </Compile>
     <EmbeddedResource Include="Auth\FormAzureApplicationRegistration.resx">
       <DependentUpon>FormAzureApplicationRegistration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Auth\FormGetUserPermission.resx">
-      <DependentUpon>FormGetUserPermission.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigurationManager\FormConfigurationName.resx">
       <DependentUpon>FormConfigurationName.cs</DependentUpon>
