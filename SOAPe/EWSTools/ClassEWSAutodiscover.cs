@@ -23,7 +23,6 @@ using System.Windows.Forms;
 using System.Xml;
 using System.DirectoryServices;
 using System.Globalization;
-using SOAPe.DNSTools;
 using SOAPe.Auth;
 
 namespace SOAPe.EWSTools

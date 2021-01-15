@@ -11,9 +11,6 @@
  * OF LIABILITY FOR CONSEQUENTIAL OR INCIDENTAL DAMAGES, THE ABOVE LIMITATION MAY NOT APPLY TO YOU.
  * */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace SOAPe

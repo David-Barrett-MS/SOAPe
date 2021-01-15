@@ -13,16 +13,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.Xml;
 using System.IO;
-using System.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Reflection;
@@ -1060,7 +1054,6 @@ namespace SOAPe
 
         private void buttonCreateNewLogFile_Click(object sender, EventArgs e)
         {
-
         }
 
         private void buttonBrowseLogFolder_Click(object sender, EventArgs e)

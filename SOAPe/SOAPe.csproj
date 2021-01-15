@@ -158,12 +158,6 @@
     <Compile Include="FormIntro.Designer.cs">
       <DependentUpon>FormIntro.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logging\FormCreateLogFile.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Logging\FormCreateLogFile.Designer.cs">
-      <DependentUpon>FormCreateLogFile.cs</DependentUpon>
-    </Compile>
     <Compile Include="StatusPercentBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -300,9 +294,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigurationManager\FormConfigurationManager.resx">
       <DependentUpon>FormConfigurationManager.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Logging\FormCreateLogFile.resx">
-      <DependentUpon>FormCreateLogFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormListener.resx">
       <DependentUpon>FormListener.cs</DependentUpon>
