@@ -400,7 +400,7 @@ namespace SOAPe
             oForm.Dispose();
 
             if (String.IsNullOrEmpty(sTemplateContent))
-                return xmlEditorRequest.Text;
+                return "";
 
             this.Activate(); // To stop the main window from disappearing behind other applications (Windows 10 z-order issues)
             return sTemplateContent;
