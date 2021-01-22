@@ -391,16 +391,16 @@ namespace SOAPe
             buttonChooseCertificate.Visible = bCertAuthVisible;
         }
 
-        private string LoadTemplate(string ItemId = "", string FolderId = "", string TemplateName = "")
+        private string LoadTemplate(string ItemId = "", string FolderId = "", string TemplateName = "", string ChangeKey = "")
         {
             // Reads the XML template
             string sTemplateContent = String.Empty;
-            FormReplaceTemplateFields oForm = new FormReplaceTemplateFields(ItemId, FolderId, TemplateName);
+            FormReplaceTemplateFields oForm = new FormReplaceTemplateFields(ItemId, FolderId, TemplateName, ChangeKey);
             sTemplateContent = oForm.ReadTemplate(this);
             oForm.Dispose();
 
             if (String.IsNullOrEmpty(sTemplateContent))
-                return "";
+                return xmlEditorRequest.Text;
 
             this.Activate(); // To stop the main window from disappearing behind other applications (Windows 10 z-order issues)
             return sTemplateContent;
@@ -924,7 +924,7 @@ namespace SOAPe
 
         private void xmlEditorResponse_SendItemIdToTemplate(object sender, SendItemIdEventArgs e)
         {
-            xmlEditorRequest.Text = LoadTemplate(e.ItemId, e.FolderId);
+            xmlEditorRequest.Text = LoadTemplate(e.ItemId, e.FolderId, "", e.ChangeKey);
         }
 
         private void HighlightResponseGroupbox(bool ShowError, string AdditionalInfo = "", string ToolTip = "")

@@ -39,6 +39,7 @@ namespace SOAPe
         private bool _cancel = false;
         private string _itemId = "";
         private string _folderId = "";
+        private string _changeKey = "";
 
 
         public FormReplaceTemplateFields()
@@ -62,10 +63,11 @@ namespace SOAPe
             catch { }
         }
 
-        public FormReplaceTemplateFields(string ItemId, string FolderId="", string TemplateName=""): this()
+        public FormReplaceTemplateFields(string ItemId = "", string FolderId="", string TemplateName="", string ChangeKey=""): this()
         {
             _itemId = ItemId;
             _folderId = FolderId;
+            _changeKey = ChangeKey;
             if (!String.IsNullOrEmpty(TemplateName))
             {
                 // Specific template has been requested
@@ -521,6 +523,8 @@ namespace SOAPe
                         oTextbox.Value=_itemId;
                     if (sFieldType.ToLower().EndsWith("folderid") && !String.IsNullOrEmpty(_folderId))
                         oTextbox.Value=_folderId;
+                    if (sFieldType.ToLower().EndsWith("changekey") && !String.IsNullOrEmpty(_changeKey))
+                        oTextbox.Value = _changeKey;
                     oRow.Cells.Add(oTextbox);
                     _fieldType.Add(sFieldName, sFieldType.ToLower());
                     if (sFieldType.ToLower() != "string")
@@ -531,10 +535,10 @@ namespace SOAPe
                         dataGridViewFields.Rows.Add(oRow);
                         oRow = new DataGridViewRow();
                         oTextbox = new DataGridViewTextBoxCell();
-                        oTextbox.Value = sFieldName + "ChangeKey";
+                        oTextbox.Value = sFieldName + "ChangeKey";                        
                         oRow.Cells.Add(oTextbox);
                         oTextbox = new DataGridViewTextBoxCell();
-                        oTextbox.Value = "";
+                        oTextbox.Value = _changeKey;
                         oRow.Cells.Add(oTextbox);
                         oRow.Tag = String.Format("{0}ChangeKey", sFieldType.ToLower());
                         _fieldType.Add(sFieldName + "changekey", (string)oRow.Tag);

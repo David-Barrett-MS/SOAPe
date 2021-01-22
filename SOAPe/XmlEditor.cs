@@ -270,39 +270,64 @@ namespace SOAPe
                 int iCaret = SourceTextBox.SelectionStart;
                 int iItemIdStart = sText.LastIndexOf("itemid", iCaret, iCaret, System.StringComparison.CurrentCultureIgnoreCase);
                 if (iItemIdStart < 0)
+                    iItemIdStart = sText.IndexOf("itemid", iCaret, iCaret, System.StringComparison.CurrentCultureIgnoreCase);
+
+                if (iItemIdStart < 0)
                 {
                     // No ItemId found, let's look for FolderId
                     iItemIdStart = sText.LastIndexOf("folderid", iCaret, iCaret, System.StringComparison.CurrentCultureIgnoreCase);
+                    if (iItemIdStart < 0)
+                        iItemIdStart = sText.IndexOf("folderid", iCaret, iCaret, System.StringComparison.CurrentCultureIgnoreCase);
                     if (iItemIdStart < 0) return new SendItemIdEventArgs("","");
                     bIsItemId = false;
                 }
+
+                // We've found an Id, so now read it (and ChangeKey if present)
+
                 iItemIdStart = sText.LastIndexOf("<", iItemIdStart, iItemIdStart);
                 if (iItemIdStart < 0) return new SendItemIdEventArgs("", "");
                 int iItemIdEnd = sText.IndexOf("/>", iItemIdStart) + 2;
                 if (iItemIdEnd < 0) return new SendItemIdEventArgs("", "");
 
-                string sId = sText.Substring(iItemIdStart, iItemIdEnd - iItemIdStart);
-                if (!String.IsNullOrEmpty(sId))
+                string sFullId = sText.Substring(iItemIdStart, iItemIdEnd - iItemIdStart);
+                string sIdOnly = "";
+                string sChangeKey = "";
+
+                if (!String.IsNullOrEmpty(sFullId))
                 {
-                    // We only want the actual ID (none of the XML)
-                    int iIdStart = sId.ToLower().IndexOf("id=");
+                    // Find and extract the Id
+                    int iIdStart = sFullId.ToLower().IndexOf("id=");
                     if (iIdStart > 0)
                     {
-                        iIdStart = sId.IndexOf("\"", iIdStart) + 1;
-                        int iIdEnd = sId.IndexOf("\"", iIdStart);
+                        iIdStart = sFullId.IndexOf("\"", iIdStart) + 1;
+                        int iIdEnd = sFullId.IndexOf("\"", iIdStart);
                         if (iIdEnd > iIdStart)
                         {
-                            sId = sId.Substring(iIdStart, iIdEnd - iIdStart);
+                            sIdOnly = sFullId.Substring(iIdStart, iIdEnd - iIdStart);
                             iItemIdStart = iItemIdStart + iIdStart;
-                            iItemIdEnd = iItemIdStart + sId.Length;
+                            iItemIdEnd = iItemIdStart + sIdOnly.Length;
+                        }
+                    }
+
+                    // Find and extract the ChangeKey
+                    int iChangeKeyStart = sFullId.ToLower().IndexOf("changekey=");
+                    if (iChangeKeyStart > 0)
+                    {
+                        iChangeKeyStart = sFullId.IndexOf("\"", iChangeKeyStart) + 1;
+                        int iChangeKeyEnd = sFullId.IndexOf("\"", iChangeKeyStart);
+                        if (iChangeKeyEnd > iChangeKeyStart)
+                        {
+                            sChangeKey = sFullId.Substring(iChangeKeyStart, iChangeKeyEnd - iChangeKeyStart);
+                            iChangeKeyStart = iChangeKeyStart + iIdStart;
+                            iItemIdEnd = iChangeKeyStart + sIdOnly.Length;
                         }
                     }
                 }
 
                 if (bIsItemId)
-                    return new SendItemIdEventArgs(sId, "");
+                    return new SendItemIdEventArgs(sIdOnly, "", sChangeKey);
 
-                return new SendItemIdEventArgs("", sId);
+                return new SendItemIdEventArgs("", sIdOnly, sChangeKey);
             }
             catch { }
             return new SendItemIdEventArgs("", "");
@@ -637,24 +662,22 @@ namespace SOAPe
 
     public class SendItemIdEventArgs : EventArgs
     {
-        private string _itemId;
-        private string _folderId;
-
         public SendItemIdEventArgs(string ItemId, string FolderId)
         {
-            _itemId = ItemId;
-            _folderId = FolderId;
+            this.ItemId = ItemId;
+            this.FolderId = FolderId;
         }
 
-        public string ItemId
+        public SendItemIdEventArgs(string ItemId, string FolderId, string ChangeKey): this(ItemId, FolderId)
         {
-            get { return _itemId; }
+            this.ChangeKey = ChangeKey;
         }
 
-        public string FolderId
-        {
-            get { return _folderId; }
-        }
+        public string ItemId { get; }
+
+        public string FolderId { get; }
+
+        public string ChangeKey { get; }
     }
 
     public class XmlValidatedEventArgs: EventArgs
