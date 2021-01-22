@@ -118,6 +118,8 @@ namespace SOAPe.Auth
                 tokenText = _lastAuthResult.AccessToken;
             else if (ClassOAuthHelper.LastError != null)
                 tokenText = ClassOAuthHelper.LastError.Message;
+            else if (_lastAuthResult == null)
+                tokenText = "Auth result is null";
 
             if (_tokenTextBox == null)
                 return;

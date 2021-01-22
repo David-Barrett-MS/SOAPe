@@ -383,6 +383,7 @@ namespace SOAPe
                 if (_oAuthAppRegForm is null)
                 {
                     _oAuthAppRegForm = new Auth.FormAzureApplicationRegistration();
+                    _oAuthAppRegForm.TokenTextBox = textBoxOAuthToken;
                 }
             }
 
