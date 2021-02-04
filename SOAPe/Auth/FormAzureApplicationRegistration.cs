@@ -25,7 +25,7 @@ namespace SOAPe.Auth
     {
         private ConfigurationManager.ClassFormConfig _formConfig = null;
         private AuthenticationResult _lastAuthResult = null;
-        private ClassOAuthHelper _oAuthHelper = new ClassOAuthHelper();
+        private OAuthHelper _oAuthHelper = new OAuthHelper();
         private TextBox _tokenTextBox = null;
 
         public FormAzureApplicationRegistration()
@@ -116,8 +116,8 @@ namespace SOAPe.Auth
             string tokenText = "Failed to retrieve token";
             if (_lastAuthResult != null)
                 tokenText = _lastAuthResult.AccessToken;
-            else if (ClassOAuthHelper.LastError != null)
-                tokenText = ClassOAuthHelper.LastError.Message;
+            else if (OAuthHelper.LastError != null)
+                tokenText = OAuthHelper.LastError.Message;
             else if (_lastAuthResult == null)
                 tokenText = "Auth result is null";
 
@@ -144,7 +144,7 @@ namespace SOAPe.Auth
             {
                 try
                 {
-                    AuthenticationResult authenticationResult = await ClassOAuthHelper.GetDelegateToken(textBoxApplicationId.Text, textBoxTenantId.Text);
+                    AuthenticationResult authenticationResult = await OAuthHelper.GetDelegateToken(textBoxApplicationId.Text, textBoxTenantId.Text);
                     _lastAuthResult = authenticationResult;
                     UpdateTokenTextbox();
                 }
@@ -162,7 +162,7 @@ namespace SOAPe.Auth
             {
                 try
                 {
-                    AuthenticationResult authenticationResult = await ClassOAuthHelper.GetApplicationToken(textBoxApplicationId.Text, textBoxTenantId.Text,textBoxClientSecret.Text);
+                    AuthenticationResult authenticationResult = await OAuthHelper.GetApplicationToken(textBoxApplicationId.Text, textBoxTenantId.Text,textBoxClientSecret.Text);
                     _lastAuthResult = authenticationResult;
                     UpdateTokenTextbox();
                 }
@@ -180,7 +180,7 @@ namespace SOAPe.Auth
             {
                 try
                 {
-                    AuthenticationResult authenticationResult = await ClassOAuthHelper.GetApplicationToken(textBoxApplicationId.Text, textBoxTenantId.Text, (X509Certificate2)textBoxAuthCertificate.Tag);
+                    AuthenticationResult authenticationResult = await OAuthHelper.GetApplicationToken(textBoxApplicationId.Text, textBoxTenantId.Text, (X509Certificate2)textBoxAuthCertificate.Tag);
                     _lastAuthResult = authenticationResult;
                     UpdateTokenTextbox();
                 }

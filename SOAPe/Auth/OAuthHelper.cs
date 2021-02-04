@@ -18,7 +18,7 @@ using Microsoft.Identity.Client;
 
 namespace SOAPe.Auth
 {
-    public class ClassOAuthHelper
+    public class OAuthHelper
     {
         private static Exception _lastError = null;
 
