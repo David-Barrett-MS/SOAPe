@@ -260,7 +260,8 @@ namespace SOAPe
                 // Failed to obtain request stream
                 if (String.IsNullOrEmpty(sError))
                     sError = "Failed to open connection";
-                Log(sResponse, "Response");
+                if (!String.IsNullOrEmpty(sResponse))
+                    Log(sResponse, "Response"); 
                 return "";
             }
 
