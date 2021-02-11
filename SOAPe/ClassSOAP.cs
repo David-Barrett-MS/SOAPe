@@ -253,9 +253,17 @@ namespace SOAPe
                 // Failed to send request
                 sError = ex.Message;
                 sResponse = "Error occurred: " + ex.Message + "\n\r\n\r";
+            }
+
+            if (stream == null)
+            {
+                // Failed to obtain request stream
+                if (String.IsNullOrEmpty(sError))
+                    sError = "Failed to open connection";
                 Log(sResponse, "Response");
                 return "";
             }
+
             DateTime requestSendStartTime = DateTime.Now;
             if (!string.IsNullOrEmpty(sRequest))
                 oSOAPRequest.Save(stream);
