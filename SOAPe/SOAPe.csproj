@@ -345,6 +345,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Docs\Images\SOAPe Log Viewer.png" />
+    <Content Include="Docs\Images\SOAPe OAuth.png" />
     <Content Include="Docs\Images\SOAPe1.1.6.png" />
     <Content Include="ReleaseNotes.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
