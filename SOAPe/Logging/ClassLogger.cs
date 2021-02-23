@@ -620,7 +620,16 @@ namespace SOAPe
                 {
                     logTime = DateTime.Parse(xml.FirstChild.Attributes["Time"]?.Value);
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        logTime = DateTime.Parse(xml.FirstChild.Attributes["Time"]?.Value);//, , System.Globalization.DateTimeStyles.AssumeUniversal);
+                        Console.WriteLine(logTime);
+                    }
+                    catch { }
+                    Console.WriteLine(ex.Message);
+                }
                 _lastKnownEventTime = logTime;
                 int threadId = -1;
                 try
@@ -673,6 +682,8 @@ namespace SOAPe
         public void ParseGenericRequest(string Request)
         {
             // Attempt to read an EWS request/response that has no <trace> tags
+            if (Request.Length < 50)
+                return; // There is no valid EWS request this short, so we don't even check it.  Could probably make this quite a bit bigger.
             try
             {
                 Request = Request.Trim();
@@ -680,7 +691,10 @@ namespace SOAPe
                 bool xmlLoaded = false;
                 try
                 {
-                    xml.LoadXml(Request);
+                    if (Request.StartsWith("<?xml"))
+                        xml.LoadXml(Request);
+                    else
+                        xml.LoadXml($"<?xml version=\"1.0\" encoding=\"utf - 16\"?>{Request}");
                     xmlLoaded = true;
                 }
                 catch {}

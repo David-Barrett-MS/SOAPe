@@ -121,7 +121,7 @@
             // 
             // columnHeader4
             // 
-            this.columnHeader4.Text = "SOAP Method";
+            this.columnHeader4.Text = "SOAP Method/Error";
             this.columnHeader4.Width = 115;
             // 
             // columnHeader5
@@ -164,7 +164,7 @@
             this.xmlEditor1.Name = "xmlEditor1";
             this.xmlEditor1.ReadOnly = true;
             this.xmlEditor1.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
             this.xmlEditor1.SelectionLength = 0;
             this.xmlEditor1.SelectionStart = 0;
@@ -192,7 +192,7 @@
             // buttonSaveAs
             // 
             this.buttonSaveAs.Location = new System.Drawing.Point(353, 3);
-            this.buttonSaveAs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonSaveAs.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSaveAs.Name = "buttonSaveAs";
             this.buttonSaveAs.Size = new System.Drawing.Size(64, 23);
             this.buttonSaveAs.TabIndex = 13;

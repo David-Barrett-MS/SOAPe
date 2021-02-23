@@ -189,36 +189,42 @@ namespace SOAPe
                 bodyNode = bodyNodeList[0];
             }
 
-            // Look for Mailbox (implies delegate access)
+            // Examine the Xml Body
             if (bodyNode != null)
             {
-                xmlElements.Add("SOAPMethod", bodyNode.FirstChild.LocalName);
-                foreach (XmlNode xmlNode in bodyNode.FirstChild.ChildNodes)
+                string SOAPMethod = bodyNode.FirstChild.LocalName;
+                if (SOAPMethod.Equals("Fault"))
+                    SOAPMethod = bodyNode.FirstChild.FirstChild.InnerText;
+                else
                 {
-                    if (_mailboxContainingElements.Contains(xmlNode.LocalName))
+                    foreach (XmlNode xmlNode in bodyNode.FirstChild.ChildNodes)
                     {
-                        foreach (XmlNode xmlFolderIdNode in xmlNode)
+                        if (_mailboxContainingElements.Contains(xmlNode.LocalName))
                         {
-                            if (xmlFolderIdNode.LocalName == "DistinguishedFolderId")
+                            foreach (XmlNode xmlFolderIdNode in xmlNode)
                             {
-                                // DistinguishedFolderId could have a mailbox element, so we check for that
-                                // FolderIds contain mailbox info in the Id, so normal Ids can be ignored (we can't read the mailbox info)
-                                foreach (XmlNode xmlDistinguishedFolderIdNode in xmlFolderIdNode)
+                                if (xmlFolderIdNode.LocalName == "DistinguishedFolderId")
                                 {
-                                    if (xmlDistinguishedFolderIdNode.LocalName.Equals("Mailbox"))
+                                    // DistinguishedFolderId could have a mailbox element, so we check for that
+                                    // FolderIds contain mailbox info in the Id, so normal Ids can be ignored (we can't read the mailbox info)
+                                    foreach (XmlNode xmlDistinguishedFolderIdNode in xmlFolderIdNode)
                                     {
-                                        try
+                                        if (xmlDistinguishedFolderIdNode.LocalName.Equals("Mailbox"))
                                         {
-                                            xmlElements.Add("Mailbox", xmlDistinguishedFolderIdNode.FirstChild.FirstChild.Value);
+                                            try
+                                            {
+                                                xmlElements.Add("Mailbox", xmlDistinguishedFolderIdNode.FirstChild.FirstChild.Value);
+                                            }
+                                            catch { }
                                         }
-                                        catch { }
+                                        break;
                                     }
-                                    break;
                                 }
                             }
                         }
                     }
                 }
+                xmlElements.Add("SOAPMethod", SOAPMethod);
             }
 
             return xmlElements;
@@ -230,7 +236,7 @@ namespace SOAPe
             XmlDocument xmlDoc = new XmlDocument();
             try
             {
-                if (Xml.Substring(0, 6).Equals("<?xml ", StringComparison.OrdinalIgnoreCase))
+                if (Xml.StartsWith("<"))
                 {
                     xmlDoc.LoadXml(Xml);
                     return InterestingXMLElements(xmlDoc);

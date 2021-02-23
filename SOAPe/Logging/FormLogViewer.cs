@@ -205,30 +205,34 @@ namespace SOAPe
         {
             // New log added
 
-            ListViewItem oItem = new ListViewItem(e.Trace.TraceTime.ToString());
-            string sTag = "";
-            try
+            Action action = new Action(() =>
             {
-                sTag = ClassLogger.ReadMethodFromRequest(e.Trace.Data);
-            }
-            catch { }
-            oItem.Tag = e.Trace;
-            oItem.SubItems.Add(e.Trace.TraceTag);
-            oItem.SubItems.Add(e.Trace.TraceThreadId.ToString());
-            oItem.SubItems.Add(sTag);
-            oItem.SubItems.Add(String.Empty);
-            oItem.SubItems.Add(String.Empty);
-            oItem.SubItems.Add(String.Empty);
+                ListViewItem oItem = new ListViewItem(e.Trace.TraceTime.ToString());
+                string sTag = "";
+                try
+                {
+                    sTag = ClassLogger.ReadMethodFromRequest(e.Trace.Data);
+                }
+                catch { }
+                oItem.Tag = e.Trace;
+                oItem.SubItems.Add(e.Trace.TraceTag);
+                oItem.SubItems.Add(e.Trace.TraceThreadId.ToString());
+                oItem.SubItems.Add(sTag);
+                oItem.SubItems.Add(String.Empty);
+                oItem.SubItems.Add(String.Empty);
+                oItem.SubItems.Add(String.Empty);
 
-            UpdateListViewItem(oItem, e.Trace);
+                UpdateListViewItem(oItem, e.Trace);
 
-            if (listViewLogIndex.InvokeRequired)
-            {
-                listViewLogIndex.Invoke(new MethodInvoker(delegate() { listViewLogIndex.Items.Add(oItem); }));
-            }
-            else
-                listViewLogIndex.Items.Add(oItem);
-            
+                if (listViewLogIndex.InvokeRequired)
+                {
+                    listViewLogIndex.Invoke(new MethodInvoker(delegate () { listViewLogIndex.Items.Add(oItem); }));
+                }
+                else
+                    listViewLogIndex.Items.Add(oItem);
+
+            });
+            Task.Run(action);
         }
 
         private void listViewLogIndex_SelectedIndexChanged(object sender, EventArgs e)
@@ -371,13 +375,13 @@ namespace SOAPe
 
             // Create new logger so as not to interfere with SOAPe's log
             _logger = new ClassLogger((string)e, false);
-            _logger.LogAdded += _logger_LogAdded;
             _logger.ProgressChanged += _logger_ProgressChanged;
             _haveLoadedLog = true;
             _logger.LoadLogFile((string)e);
             ShowLogIndex();
             ToggleButtons(true);
             ShowStatus(null);
+            _logger.LogAdded += _logger_LogAdded;
         }
 
         private void ReloadLogFile(object e)
