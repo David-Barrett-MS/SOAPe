@@ -36,14 +36,19 @@ namespace SOAPe.Auth
             };
 
             var pca = PublicClientApplicationBuilder
-                .CreateWithApplicationOptions(pcaOptions).Build();
+                .CreateWithApplicationOptions(pcaOptions);
+
+            if (ClientId.Equals("4a03b746-45be-488c-bfe5-0ffdac557d68"))
+                pca = pca.WithRedirectUri("http://localhost/SOAPe");
+
+            var app = pca.Build();
 
             var ewsScopes = new string[] { $"https://outlook.office.com/{Scope}" };
 
             try
             {
                 // Make the interactive token request
-                AuthenticationResult authResult = await pca.AcquireTokenInteractive(ewsScopes).ExecuteAsync();
+                AuthenticationResult authResult = await app.AcquireTokenInteractive(ewsScopes).ExecuteAsync();
                 return authResult;
             }
             catch (Exception ex)

@@ -11,6 +11,8 @@ Changelog
 1.2.3
 - Added certificate authentication option for OAuth application flow.
 - Added ChangeKey for Send Id To Template context menu (e.g. so CreateItem response can be piped straight into UpdateItem template).
+- Improved error analysis (fault codes are now populated to event list in Log Viewer).
+- Fixed redirect URL error when using SOAPe generic app registration to obtain tokens.
 
 1.2.2
 - Added X-AnchorMailbox extraction to log viewer (it will now be displayed in Mailbox column).
