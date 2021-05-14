@@ -541,7 +541,7 @@ namespace SOAPe
                 if (headerNode.HasChildNodes)
                 {
                     XmlNode envelopeNode = xmlRequest.FirstChild.NextSibling;
-                    if (envelopeNode.Name.ToLower().EndsWith("envelope"))
+                    if (envelopeNode != null && envelopeNode.Name.ToLower().EndsWith("envelope"))
                     {
                         envelopeNode.InsertBefore(headerNode, envelopeNode.FirstChild);
                     }

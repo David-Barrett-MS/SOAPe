@@ -53,10 +53,12 @@
             // richTextBoxXml
             // 
             this.richTextBoxXml.ContextMenuStrip = this.contextMenuLogXml;
+            this.richTextBoxXml.DetectUrls = false;
             this.richTextBoxXml.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBoxXml.Location = new System.Drawing.Point(0, 0);
+            this.richTextBoxXml.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.richTextBoxXml.Name = "richTextBoxXml";
-            this.richTextBoxXml.Size = new System.Drawing.Size(150, 150);
+            this.richTextBoxXml.Size = new System.Drawing.Size(225, 231);
             this.richTextBoxXml.TabIndex = 0;
             this.richTextBoxXml.Text = "";
             this.richTextBoxXml.TextChanged += new System.EventHandler(this.richTextBoxXml_TextChanged);
@@ -64,6 +66,7 @@
             // 
             // contextMenuLogXml
             // 
+            this.contextMenuLogXml.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuLogXml.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectXMLElementToolStripMenuItem,
             this.selectXmlValueToolStripMenuItem,
@@ -82,86 +85,86 @@
             this.xmlFormattingToolStripMenuItem,
             this.validateXmlincludingCharacterTestingToolStripMenuItem});
             this.contextMenuLogXml.Name = "contextMenuLogXml";
-            this.contextMenuLogXml.Size = new System.Drawing.Size(286, 308);
+            this.contextMenuLogXml.Size = new System.Drawing.Size(397, 438);
             this.contextMenuLogXml.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuLogXml_Opening);
             // 
             // selectXMLElementToolStripMenuItem
             // 
             this.selectXMLElementToolStripMenuItem.Name = "selectXMLElementToolStripMenuItem";
-            this.selectXMLElementToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.selectXMLElementToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.selectXMLElementToolStripMenuItem.Text = "Select XML Element";
             this.selectXMLElementToolStripMenuItem.Click += new System.EventHandler(this.selectXMLElementToolStripMenuItem_Click);
             // 
             // selectXmlValueToolStripMenuItem
             // 
             this.selectXmlValueToolStripMenuItem.Name = "selectXmlValueToolStripMenuItem";
-            this.selectXmlValueToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.selectXmlValueToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.selectXmlValueToolStripMenuItem.Text = "Select Xml Value";
             this.selectXmlValueToolStripMenuItem.Click += new System.EventHandler(this.selectXmlValueToolStripMenuItem_Click);
             // 
             // selectXmlAttributeToolStripMenuItem
             // 
             this.selectXmlAttributeToolStripMenuItem.Name = "selectXmlAttributeToolStripMenuItem";
-            this.selectXmlAttributeToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.selectXmlAttributeToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.selectXmlAttributeToolStripMenuItem.Text = "Select Xml Attribute";
             this.selectXmlAttributeToolStripMenuItem.Click += new System.EventHandler(this.selectXmlAttributeToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(282, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(393, 6);
             // 
             // cutToolStripMenuItem
             // 
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.cutToolStripMenuItem.Text = "Cut";
             this.cutToolStripMenuItem.Click += new System.EventHandler(this.cutToolStripMenuItem_Click);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // PasteToolStripMenuItem
             // 
             this.PasteToolStripMenuItem.Name = "PasteToolStripMenuItem";
-            this.PasteToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.PasteToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.PasteToolStripMenuItem.Text = "Paste";
             this.PasteToolStripMenuItem.Click += new System.EventHandler(this.PasteToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(282, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(393, 6);
             // 
             // copyItemIdToolStripMenuItem
             // 
             this.copyItemIdToolStripMenuItem.Name = "copyItemIdToolStripMenuItem";
-            this.copyItemIdToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.copyItemIdToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.copyItemIdToolStripMenuItem.Text = "Copy ItemId";
             this.copyItemIdToolStripMenuItem.Click += new System.EventHandler(this.copyItemIdToolStripMenuItem_Click);
             // 
             // copyItemIdwithoutChangeKeyToolStripMenuItem
             // 
             this.copyItemIdwithoutChangeKeyToolStripMenuItem.Name = "copyItemIdwithoutChangeKeyToolStripMenuItem";
-            this.copyItemIdwithoutChangeKeyToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.copyItemIdwithoutChangeKeyToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.copyItemIdwithoutChangeKeyToolStripMenuItem.Text = "Copy ItemId (without ChangeKey)";
             this.copyItemIdwithoutChangeKeyToolStripMenuItem.Click += new System.EventHandler(this.copyItemIdwithoutChangeKeyToolStripMenuItem_Click);
             // 
             // copyItemIdIdOnlyToolStripMenuItem
             // 
             this.copyItemIdIdOnlyToolStripMenuItem.Name = "copyItemIdIdOnlyToolStripMenuItem";
-            this.copyItemIdIdOnlyToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.copyItemIdIdOnlyToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.copyItemIdIdOnlyToolStripMenuItem.Text = "Copy ItemId (Id only)";
             this.copyItemIdIdOnlyToolStripMenuItem.Click += new System.EventHandler(this.copyItemIdIdOnlyToolStripMenuItem_Click);
             // 
             // SendItemIdToTemplateToolStripMenuItem
             // 
             this.SendItemIdToTemplateToolStripMenuItem.Name = "SendItemIdToTemplateToolStripMenuItem";
-            this.SendItemIdToTemplateToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.SendItemIdToTemplateToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.SendItemIdToTemplateToolStripMenuItem.Text = "Send ItemId to Template...";
             this.SendItemIdToTemplateToolStripMenuItem.Visible = false;
             this.SendItemIdToTemplateToolStripMenuItem.Click += new System.EventHandler(this.SendItemIdToTemplateToolStripMenuItem_Click);
@@ -169,13 +172,13 @@
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(282, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(393, 6);
             // 
             // syntaxHighlightingToolStripMenuItem
             // 
             this.syntaxHighlightingToolStripMenuItem.CheckOnClick = true;
             this.syntaxHighlightingToolStripMenuItem.Name = "syntaxHighlightingToolStripMenuItem";
-            this.syntaxHighlightingToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.syntaxHighlightingToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.syntaxHighlightingToolStripMenuItem.Text = "Syntax Highlighting";
             this.syntaxHighlightingToolStripMenuItem.Click += new System.EventHandler(this.syntaxHighlightingToolStripMenuItem_Click);
             // 
@@ -183,24 +186,26 @@
             // 
             this.xmlFormattingToolStripMenuItem.CheckOnClick = true;
             this.xmlFormattingToolStripMenuItem.Name = "xmlFormattingToolStripMenuItem";
-            this.xmlFormattingToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.xmlFormattingToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.xmlFormattingToolStripMenuItem.Text = "Xml Formatting (Indent)";
             this.xmlFormattingToolStripMenuItem.Click += new System.EventHandler(this.xmlFormattingToolStripMenuItem_Click);
             // 
             // validateXmlincludingCharacterTestingToolStripMenuItem
             // 
             this.validateXmlincludingCharacterTestingToolStripMenuItem.Name = "validateXmlincludingCharacterTestingToolStripMenuItem";
-            this.validateXmlincludingCharacterTestingToolStripMenuItem.Size = new System.Drawing.Size(285, 22);
+            this.validateXmlincludingCharacterTestingToolStripMenuItem.Size = new System.Drawing.Size(396, 32);
             this.validateXmlincludingCharacterTestingToolStripMenuItem.Text = "Validate Xml (includes character testing)";
             this.validateXmlincludingCharacterTestingToolStripMenuItem.Click += new System.EventHandler(this.validateXmlincludingCharacterTestingToolStripMenuItem_Click);
             // 
             // XmlEditor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.richTextBoxXml);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "XmlEditor";
+            this.Size = new System.Drawing.Size(225, 231);
             this.BackColorChanged += new System.EventHandler(this.XmlEditor_BackColorChanged);
             this.ForeColorChanged += new System.EventHandler(this.XmlEditor_ForeColorChanged);
             this.contextMenuLogXml.ResumeLayout(false);

@@ -47,6 +47,7 @@ namespace SOAPe
             _syntaxHighlighter = new ClassSyntaxHighlighter(this);
             richTextBoxXml.BackColor = this.BackColor;
             richTextBoxXml.ForeColor = this.ForeColor;
+            richTextBoxXml.DetectUrls = false; // This seems not to work - URLs are still being detected.  This breaks syntax highlighting.
             SendItemIdToTemplateToolStripMenuItem.Visible = _sendItemIdToTemplateEnabled;
         }
 
@@ -186,6 +187,8 @@ namespace SOAPe
 
         private void ApplySyntaxHighlight()
         {
+            if (!_syntaxHighlight)
+                return;
             bool bUpdating = _updating;
             _updating = true;
             if (richTextBoxXml.InvokeRequired)
@@ -500,6 +503,13 @@ namespace SOAPe
         private void syntaxHighlightingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.SyntaxHighlight = syntaxHighlightingToolStripMenuItem.Checked;
+            if (!SyntaxHighlight)
+            {
+                // Remove syntax highlighting
+                richTextBoxXml.Text = richTextBoxXml.Text;  // This clears all the RTF formatting
+            }
+            else
+                ApplySyntaxHighlight();
         }
 
         private void xmlFormattingToolStripMenuItem_Click(object sender, EventArgs e)
