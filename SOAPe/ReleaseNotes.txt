@@ -2,6 +2,8 @@
 
 This application saves configuration information automatically when closed.  This information is saved to a file that is encrypted to the current user's account.  Other users logging in on the same machine and using SOAPe will have their own configuration, and will not be able to decrypt others.
 
+The trace file that is automatically created (in the same folder as the application) is not encrypted.  What data it contains depends upon what requests you make to which service.
+
 You can add and manage multiple configurations using the Configuration Manager.  All configurations are saved to the same encrypted file.
 
 
