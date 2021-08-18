@@ -105,17 +105,20 @@ namespace SOAPe
             return traceElement;
         }
 
-        public void Analyze()
+        public bool Analyze()
         {
             if (_traceAnalysed)
             {
                 if (TraceType == EWSTraceType.Request)
-                    AnalyseErrors(this);  // We always recheck for errors as requests can only be identified retrospectively
-                return;
+                    return AnalyseErrors(this);  // We always recheck for errors as requests can only be identified retrospectively
+                return false;
             }
-            AnalyseErrors(this);
+            bool traceElementChanged = AnalyseErrors(this);
             _xmlElements = InterestingXMLElements(Data);
+            if (_xmlElements.Count > 0)
+                traceElementChanged = true;
             _traceAnalysed = true;
+            return traceElementChanged;
         }
 
         public static Dictionary<string, string> TraceTagAttributes(string TraceTag)
@@ -387,8 +390,9 @@ namespace SOAPe
             }
         }
 
-        public static void AnalyseErrors(TraceElement traceElement)
+        public static bool AnalyseErrors(TraceElement traceElement)
         {
+            bool traceElementUpdated = false;
             if (traceElement.TraceType == EWSTraceType.Response)
             {
                 // Check for errors
@@ -425,8 +429,11 @@ namespace SOAPe
                 }
 
                 if (traceElement._isError)
+                {
+                    traceElementUpdated = true;
                     if (!String.IsNullOrEmpty(traceElement.ClientRequestId))
                         _clientRequestIdsWithError.Add(traceElement.ClientRequestId);
+                }
 
                 // Check for throttling
                 // Check for server busy response
@@ -438,8 +445,11 @@ namespace SOAPe
                         traceElement._isThrottled = true;
                 }
                 if (traceElement._isThrottled)
+                {
+                    traceElementUpdated = true;
                     if (!String.IsNullOrEmpty(traceElement.ClientRequestId))
                         _clientRequestIdsThrottled.Add(traceElement.ClientRequestId);
+                }
             }
             else if (traceElement.TraceType == EWSTraceType.Autodiscover)
             {
@@ -447,15 +457,27 @@ namespace SOAPe
                     traceElement._isError = true;
 
                 if (traceElement._isError)
+                {
+                    traceElementUpdated = true;
                     if (!String.IsNullOrEmpty(traceElement.ClientRequestId))
                         _clientRequestIdsWithError.Add(traceElement.ClientRequestId);
+                }
             }
             else
             {
                 if (!String.IsNullOrEmpty(traceElement.ClientRequestId))
                 {
-                    traceElement._isThrottled = _clientRequestIdsThrottled.Contains(traceElement.ClientRequestId);
-                    traceElement._isError = _clientRequestIdsWithError.Contains(traceElement.ClientRequestId);
+                    if (!traceElement._isThrottled && _clientRequestIdsThrottled.Contains(traceElement.ClientRequestId))
+                    {
+                        traceElement._isThrottled = true;
+                        traceElementUpdated = true;
+                    }
+                    
+                    if (!traceElement._isError && _clientRequestIdsWithError.Contains(traceElement.ClientRequestId))
+                    {
+                        traceElement._isError = true;
+                        traceElementUpdated = true;
+                    }
                 }
             }
 
@@ -471,11 +493,16 @@ namespace SOAPe
                         {
                             string mailbox = headerLine.Substring(16).Trim();
                             if (!String.IsNullOrEmpty(mailbox))
+                            {
+                                traceElementUpdated = true;
                                 traceElement._xmlElements.Add("Mailbox", mailbox);
+                            }
                         }
                     }                    
                 }
             }
+
+            return traceElementUpdated;
         }
 
         public bool IsThrottled

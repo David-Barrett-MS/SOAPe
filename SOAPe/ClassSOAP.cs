@@ -31,6 +31,7 @@ namespace SOAPe
         private WebHeaderCollection _lastResponseHeaders = null;
         private CookieCollection _responseCookies = null;
         private string _requestName = null;
+        private bool _followRedirects = false;
         private List<string[]> _httpHeaders = new List<string[]>();
         private SecurityProtocolType _securityProtocol = ServicePointManager.SecurityProtocol;
 
@@ -57,6 +58,12 @@ namespace SOAPe
         {
             get { return _bypassWebProxy; }
             set { _bypassWebProxy = value; }
+        }
+
+        public bool FollowRedirects
+        {
+            get { return _followRedirects; }
+            set { _followRedirects = value; }
         }
 
         public WebHeaderCollection LastResponseHeaders
@@ -317,6 +324,26 @@ namespace SOAPe
                 }
             }
             catch { }
+
+            // Check for redirect
+            if (_followRedirects && oWebResponse != null)
+            {
+                try
+                {
+                    if (((HttpWebResponse)oWebResponse).StatusCode == HttpStatusCode.Moved ||
+                            ((HttpWebResponse)oWebResponse).StatusCode == HttpStatusCode.MovedPermanently)
+                    {
+                        //  We have a redirect
+                        String[] values = oWebResponse.Headers.GetValues("Location");
+                        if (values.Length>0)
+                        {
+                            _targetURL = values[0];
+                            SendRequest(sRequest, out sError, oCookies);
+                        }
+                    }
+                }
+                catch { }
+            }          
 
             try
             {

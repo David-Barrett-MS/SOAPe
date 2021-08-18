@@ -152,6 +152,17 @@
     <Compile Include="ConfigurationManager\FormConfigurationManager.Designer.cs">
       <DependentUpon>FormConfigurationManager.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExtendedProperties\DefaultExtendedPropertySet.cs" />
+    <Compile Include="ExtendedProperties\ExtendedPropertyDefinition.cs" />
+    <Compile Include="ExtendedProperties\KnownExtendedProperties.cs" />
+    <Compile Include="ExtendedProperties\KnownExtendedPropertyInfo.cs" />
+    <Compile Include="ExtendedProperties\MAPIPropertyType.cs" />
+    <Compile Include="ExtendedProperties\FormExtendedPropertySelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExtendedProperties\FormExtendedPropertySelector.Designer.cs">
+      <DependentUpon>FormExtendedPropertySelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormIntro.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -283,6 +294,9 @@
     <EmbeddedResource Include="EWSTools\FormEWSQuickTest.resx">
       <DependentUpon>FormEWSQuickTest.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExtendedProperties\FormExtendedPropertySelector.resx">
+      <DependentUpon>FormExtendedPropertySelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormIntro.resx">
       <DependentUpon>FormIntro.cs</DependentUpon>
     </EmbeddedResource>
@@ -353,6 +367,7 @@
     <Content Include="Templates\Autodiscover\Autodiscover.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\Autodiscover\PublicFolderInformation.xml" />
     <Content Include="Templates\EWS\ConvertId.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

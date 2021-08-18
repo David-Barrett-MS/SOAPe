@@ -146,6 +146,7 @@ namespace SOAPe.Auth
 
                 case AuthType.Basic:
                     Request.Credentials = new NetworkCredential(_userName, _password);
+                    Request.PreAuthenticate = true;
                     return true;
 
                 case AuthType.Certificate:

@@ -278,6 +278,7 @@ namespace SOAPe
 
             CredentialHandler credentialHandler = CredentialHandler();
             ClassSOAP oSOAP = new ClassSOAP(textBoxURL.Text, _logger, credentialHandler);
+            oSOAP.FollowRedirects = checkBoxFollowRedirect.Checked;
 
             SetSecurityProtocol(oSOAP);
             oSOAP.BypassWebProxy = checkBoxBypassProxySettings.Checked;
@@ -967,7 +968,8 @@ namespace SOAPe
 
         private void button1_Click(object sender, EventArgs e)
         {
-            FormUserControlTest frm = new FormUserControlTest();
+            FormExtendedPropertySelector frm = new FormExtendedPropertySelector();
+            //FormUserControlTest frm = new FormUserControlTest();
             frm.Show(this);
         }
 

@@ -375,8 +375,8 @@ namespace SOAPe
             // Create new logger so as not to interfere with SOAPe's log
             _logger = new ClassLogger((string)e, false);
             _logger.ProgressChanged += _logger_ProgressChanged;
-            _haveLoadedLog = true;
             _logger.LoadLogFile((string)e);
+            _haveLoadedLog = true;
             ShowLogIndex();
             ToggleButtons(true);
             ShowStatus(null);
@@ -432,15 +432,26 @@ namespace SOAPe
 
         public static void UpdateListViewItem(ListViewItem listViewItem, TraceElement traceElement)
         {
-            traceElement.Analyze();
-            if (traceElement.HighlightColour != null)
-                listViewItem.BackColor = (Color)traceElement.HighlightColour;
+            if (traceElement.Analyze())
+            {
+                if (traceElement.HighlightColour != null && listViewItem.BackColor != (Color)traceElement.HighlightColour)
+                    listViewItem.BackColor = (Color)traceElement.HighlightColour;
 
-            listViewItem.SubItems[1].Text = traceElement.TraceTag;
-            listViewItem.SubItems[3].Text = traceElement.SOAPMethod;
-            listViewItem.SubItems[4].Text = traceElement.Data.Length.ToString();
-            listViewItem.SubItems[5].Text = traceElement.Mailbox;
-            listViewItem.SubItems[6].Text = traceElement.Impersonating;
+                if (listViewItem.SubItems[1].Text != traceElement.TraceTag)
+                    listViewItem.SubItems[1].Text = traceElement.TraceTag;
+
+                if (listViewItem.SubItems[3].Text != traceElement.SOAPMethod)
+                    listViewItem.SubItems[3].Text = traceElement.SOAPMethod;
+
+                if (listViewItem.SubItems[4].Text != traceElement.Data.Length.ToString())
+                    listViewItem.SubItems[4].Text = traceElement.Data.Length.ToString();
+
+                if (listViewItem.SubItems[5].Text != traceElement.Mailbox)
+                    listViewItem.SubItems[5].Text = traceElement.Mailbox;
+
+                if (listViewItem.SubItems[6].Text != traceElement.Impersonating)
+                    listViewItem.SubItems[6].Text = traceElement.Impersonating;
+            }
         }
 
         private void UpdateView()

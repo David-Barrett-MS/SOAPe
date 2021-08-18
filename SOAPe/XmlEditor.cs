@@ -662,11 +662,10 @@ namespace SOAPe
                 System.Windows.Forms.MessageBox.Show("No issues found.", "XML appears to be valid", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void addExtendedPropertyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
-
-
-
-
+        }
     }
 
     public class SendItemIdEventArgs : EventArgs

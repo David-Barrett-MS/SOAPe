@@ -35,7 +35,10 @@
             this.checkBoxPersistCookies = new System.Windows.Forms.CheckBox();
             this.buttonLoadTemplate = new System.Windows.Forms.Button();
             this.buttonSend = new System.Windows.Forms.Button();
+            this.xmlEditorRequest = new SOAPe.XmlEditor();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.groupBoxResponse = new SOAPe.GroupBoxHighlight();
+            this.xmlEditorResponse = new SOAPe.XmlEditor();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAutoDiscover = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +65,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageUrl = new System.Windows.Forms.TabPage();
+            this.checkBoxFollowRedirect = new System.Windows.Forms.CheckBox();
             this.radioButtonUrlCustom = new System.Windows.Forms.RadioButton();
             this.radioButtonUrlOffice365 = new System.Windows.Forms.RadioButton();
             this.textBoxURL = new System.Windows.Forms.TextBox();
@@ -85,6 +89,7 @@
             this.textBoxAuthCertificate = new System.Windows.Forms.TextBox();
             this.textBoxOAuthToken = new System.Windows.Forms.TextBox();
             this.tabPageEWSHeader = new System.Windows.Forms.TabPage();
+            this.label10 = new System.Windows.Forms.Label();
             this.buttonUpdateEWSHeader = new System.Windows.Forms.Button();
             this.comboBoxImpersonationMethod = new System.Windows.Forms.ComboBox();
             this.checkBoxUpdateEWSHeader = new System.Windows.Forms.CheckBox();
@@ -132,15 +137,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxLogFolder = new System.Windows.Forms.TextBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
-            this.xmlEditorRequest = new SOAPe.XmlEditor();
-            this.groupBoxResponse = new SOAPe.GroupBoxHighlight();
-            this.xmlEditorResponse = new SOAPe.XmlEditor();
-            this.label10 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.groupBoxResponse.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPageUrl.SuspendLayout();
@@ -152,7 +154,6 @@
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPageLogging.SuspendLayout();
-            this.groupBoxResponse.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox2
@@ -178,7 +179,6 @@
             this.button1.TabIndex = 8;
             this.button1.Text = "Test";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // checkBoxPersistCookies
@@ -219,6 +219,28 @@
             this.buttonSend.UseVisualStyleBackColor = true;
             this.buttonSend.Click += new System.EventHandler(this.buttonSend_Click);
             // 
+            // xmlEditorRequest
+            // 
+            this.xmlEditorRequest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.xmlEditorRequest.BackColor = System.Drawing.SystemColors.Window;
+            this.xmlEditorRequest.IndentXml = true;
+            this.xmlEditorRequest.Location = new System.Drawing.Point(3, 48);
+            this.xmlEditorRequest.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.xmlEditorRequest.Name = "xmlEditorRequest";
+            this.xmlEditorRequest.ReadOnly = false;
+            this.xmlEditorRequest.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
+            this.xmlEditorRequest.SelectionLength = 0;
+            this.xmlEditorRequest.SelectionStart = 0;
+            this.xmlEditorRequest.SendItemIdToTemplateEnabled = false;
+            this.xmlEditorRequest.Size = new System.Drawing.Size(780, 184);
+            this.xmlEditorRequest.SyntaxHighlight = true;
+            this.xmlEditorRequest.TabIndex = 7;
+            this.xmlEditorRequest.Tag = "";
+            // 
             // splitContainer1
             // 
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -238,6 +260,42 @@
             this.splitContainer1.Size = new System.Drawing.Size(786, 502);
             this.splitContainer1.SplitterDistance = 238;
             this.splitContainer1.TabIndex = 2;
+            // 
+            // groupBoxResponse
+            // 
+            this.groupBoxResponse.Controls.Add(this.xmlEditorResponse);
+            this.groupBoxResponse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxResponse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxResponse.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.groupBoxResponse.HighlightColour = System.Drawing.Color.Red;
+            this.groupBoxResponse.Highlighted = false;
+            this.groupBoxResponse.Location = new System.Drawing.Point(0, 0);
+            this.groupBoxResponse.Name = "groupBoxResponse";
+            this.groupBoxResponse.Size = new System.Drawing.Size(786, 260);
+            this.groupBoxResponse.TabIndex = 0;
+            this.groupBoxResponse.TabStop = false;
+            this.groupBoxResponse.Text = "Response";
+            // 
+            // xmlEditorResponse
+            // 
+            this.xmlEditorResponse.BackColor = System.Drawing.SystemColors.Window;
+            this.xmlEditorResponse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.xmlEditorResponse.IndentXml = true;
+            this.xmlEditorResponse.Location = new System.Drawing.Point(3, 16);
+            this.xmlEditorResponse.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.xmlEditorResponse.Name = "xmlEditorResponse";
+            this.xmlEditorResponse.ReadOnly = true;
+            this.xmlEditorResponse.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
+            this.xmlEditorResponse.SelectionLength = 0;
+            this.xmlEditorResponse.SelectionStart = 0;
+            this.xmlEditorResponse.SendItemIdToTemplateEnabled = true;
+            this.xmlEditorResponse.Size = new System.Drawing.Size(780, 241);
+            this.xmlEditorResponse.SyntaxHighlight = true;
+            this.xmlEditorResponse.TabIndex = 0;
+            this.xmlEditorResponse.Tag = "NoConfigSave";
+            this.xmlEditorResponse.SendItemIdToTemplate += new SOAPe.XmlEditor.SendItemIdEventHandler(this.xmlEditorResponse_SendItemIdToTemplate);
             // 
             // menuStrip1
             // 
@@ -453,17 +511,29 @@
             // 
             // tabPageUrl
             // 
+            this.tabPageUrl.Controls.Add(this.checkBoxFollowRedirect);
             this.tabPageUrl.Controls.Add(this.radioButtonUrlCustom);
             this.tabPageUrl.Controls.Add(this.radioButtonUrlOffice365);
             this.tabPageUrl.Controls.Add(this.textBoxURL);
             this.tabPageUrl.Controls.Add(this.checkBoxBypassProxySettings);
             this.tabPageUrl.Location = new System.Drawing.Point(4, 22);
             this.tabPageUrl.Name = "tabPageUrl";
-            this.tabPageUrl.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageUrl.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageUrl.Size = new System.Drawing.Size(781, 49);
             this.tabPageUrl.TabIndex = 0;
             this.tabPageUrl.Text = "SOAP URL";
             this.tabPageUrl.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxFollowRedirect
+            // 
+            this.checkBoxFollowRedirect.AutoSize = true;
+            this.checkBoxFollowRedirect.Location = new System.Drawing.Point(461, 30);
+            this.checkBoxFollowRedirect.Name = "checkBoxFollowRedirect";
+            this.checkBoxFollowRedirect.Size = new System.Drawing.Size(204, 17);
+            this.checkBoxFollowRedirect.TabIndex = 12;
+            this.checkBoxFollowRedirect.Text = "Follow redirect (HTTP 302) responses";
+            this.toolTips.SetToolTip(this.checkBoxFollowRedirect, "Shouldn\'t be required for EWS, but is useful when manually testing AutoDiscover");
+            this.checkBoxFollowRedirect.UseVisualStyleBackColor = true;
             // 
             // radioButtonUrlCustom
             // 
@@ -536,7 +606,7 @@
             this.tabPageAuth.Controls.Add(this.textBoxOAuthToken);
             this.tabPageAuth.Location = new System.Drawing.Point(4, 22);
             this.tabPageAuth.Name = "tabPageAuth";
-            this.tabPageAuth.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageAuth.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageAuth.Size = new System.Drawing.Size(781, 49);
             this.tabPageAuth.TabIndex = 1;
             this.tabPageAuth.Text = "Authentication";
@@ -545,7 +615,7 @@
             // buttonAppRegistration
             // 
             this.buttonAppRegistration.Location = new System.Drawing.Point(680, 22);
-            this.buttonAppRegistration.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonAppRegistration.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAppRegistration.Name = "buttonAppRegistration";
             this.buttonAppRegistration.Size = new System.Drawing.Size(97, 22);
             this.buttonAppRegistration.TabIndex = 28;
@@ -556,7 +626,7 @@
             // buttonAcquireOAuthToken
             // 
             this.buttonAcquireOAuthToken.Location = new System.Drawing.Point(613, 22);
-            this.buttonAcquireOAuthToken.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonAcquireOAuthToken.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAcquireOAuthToken.Name = "buttonAcquireOAuthToken";
             this.buttonAcquireOAuthToken.Size = new System.Drawing.Size(62, 22);
             this.buttonAcquireOAuthToken.TabIndex = 27;
@@ -724,11 +794,20 @@
             this.tabPageEWSHeader.Controls.Add(this.comboBoxRequestServerVersion);
             this.tabPageEWSHeader.Location = new System.Drawing.Point(4, 22);
             this.tabPageEWSHeader.Name = "tabPageEWSHeader";
-            this.tabPageEWSHeader.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageEWSHeader.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageEWSHeader.Size = new System.Drawing.Size(781, 49);
             this.tabPageEWSHeader.TabIndex = 2;
             this.tabPageEWSHeader.Text = "EWS Header";
             this.tabPageEWSHeader.UseVisualStyleBackColor = true;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(248, 31);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(341, 13);
+            this.label10.TabIndex = 19;
+            this.label10.Text = "Note: X-AnchorMailbox is automatically set to the impersonated mailbox";
             // 
             // buttonUpdateEWSHeader
             // 
@@ -827,7 +906,7 @@
             this.tabPageHTTPHeaders.Controls.Add(this.listViewHTTPHeaders);
             this.tabPageHTTPHeaders.Location = new System.Drawing.Point(4, 22);
             this.tabPageHTTPHeaders.Name = "tabPageHTTPHeaders";
-            this.tabPageHTTPHeaders.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageHTTPHeaders.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageHTTPHeaders.Size = new System.Drawing.Size(781, 49);
             this.tabPageHTTPHeaders.TabIndex = 3;
             this.tabPageHTTPHeaders.Text = "HTTP Headers";
@@ -945,7 +1024,7 @@
             this.tabPageCookies.Controls.Add(this.listViewHTTPCookies);
             this.tabPageCookies.Location = new System.Drawing.Point(4, 22);
             this.tabPageCookies.Name = "tabPageCookies";
-            this.tabPageCookies.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageCookies.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageCookies.Size = new System.Drawing.Size(781, 49);
             this.tabPageCookies.TabIndex = 4;
             this.tabPageCookies.Text = "HTTP Cookies";
@@ -1058,7 +1137,7 @@
             this.tabPageTLS.Controls.Add(this.groupBox1);
             this.tabPageTLS.Location = new System.Drawing.Point(4, 22);
             this.tabPageTLS.Name = "tabPageTLS";
-            this.tabPageTLS.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPageTLS.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageTLS.Size = new System.Drawing.Size(781, 49);
             this.tabPageTLS.TabIndex = 5;
             this.tabPageTLS.Text = "TLS/SSL";
@@ -1156,9 +1235,9 @@
             this.tabPageLogging.Controls.Add(this.label2);
             this.tabPageLogging.Controls.Add(this.textBoxLogFolder);
             this.tabPageLogging.Location = new System.Drawing.Point(4, 22);
-            this.tabPageLogging.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageLogging.Margin = new System.Windows.Forms.Padding(2);
             this.tabPageLogging.Name = "tabPageLogging";
-            this.tabPageLogging.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageLogging.Padding = new System.Windows.Forms.Padding(2);
             this.tabPageLogging.Size = new System.Drawing.Size(781, 49);
             this.tabPageLogging.TabIndex = 6;
             this.tabPageLogging.Text = "Logging";
@@ -1167,7 +1246,7 @@
             // buttonViewOtherLog
             // 
             this.buttonViewOtherLog.Location = new System.Drawing.Point(594, 26);
-            this.buttonViewOtherLog.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonViewOtherLog.Margin = new System.Windows.Forms.Padding(2);
             this.buttonViewOtherLog.Name = "buttonViewOtherLog";
             this.buttonViewOtherLog.Size = new System.Drawing.Size(183, 21);
             this.buttonViewOtherLog.TabIndex = 7;
@@ -1178,7 +1257,7 @@
             // buttonViewLogFile
             // 
             this.buttonViewLogFile.Location = new System.Drawing.Point(324, 26);
-            this.buttonViewLogFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonViewLogFile.Margin = new System.Windows.Forms.Padding(2);
             this.buttonViewLogFile.Name = "buttonViewLogFile";
             this.buttonViewLogFile.Size = new System.Drawing.Size(121, 21);
             this.buttonViewLogFile.TabIndex = 6;
@@ -1189,7 +1268,7 @@
             // buttonCreateNewLogFile
             // 
             this.buttonCreateNewLogFile.Location = new System.Drawing.Point(242, 26);
-            this.buttonCreateNewLogFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCreateNewLogFile.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCreateNewLogFile.Name = "buttonCreateNewLogFile";
             this.buttonCreateNewLogFile.Size = new System.Drawing.Size(78, 21);
             this.buttonCreateNewLogFile.TabIndex = 5;
@@ -1210,7 +1289,7 @@
             // textBoxLogFileName
             // 
             this.textBoxLogFileName.Location = new System.Drawing.Point(64, 27);
-            this.textBoxLogFileName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxLogFileName.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxLogFileName.Name = "textBoxLogFileName";
             this.textBoxLogFileName.ReadOnly = true;
             this.textBoxLogFileName.Size = new System.Drawing.Size(175, 20);
@@ -1219,7 +1298,7 @@
             // buttonBrowseLogFolder
             // 
             this.buttonBrowseLogFolder.Location = new System.Drawing.Point(654, 4);
-            this.buttonBrowseLogFolder.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonBrowseLogFolder.Margin = new System.Windows.Forms.Padding(2);
             this.buttonBrowseLogFolder.Name = "buttonBrowseLogFolder";
             this.buttonBrowseLogFolder.Size = new System.Drawing.Size(123, 21);
             this.buttonBrowseLogFolder.TabIndex = 2;
@@ -1240,78 +1319,11 @@
             // textBoxLogFolder
             // 
             this.textBoxLogFolder.Location = new System.Drawing.Point(64, 5);
-            this.textBoxLogFolder.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxLogFolder.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxLogFolder.Name = "textBoxLogFolder";
             this.textBoxLogFolder.ReadOnly = true;
             this.textBoxLogFolder.Size = new System.Drawing.Size(586, 20);
             this.textBoxLogFolder.TabIndex = 0;
-            // 
-            // xmlEditorRequest
-            // 
-            this.xmlEditorRequest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.xmlEditorRequest.BackColor = System.Drawing.SystemColors.Window;
-            this.xmlEditorRequest.IndentXml = true;
-            this.xmlEditorRequest.Location = new System.Drawing.Point(3, 48);
-            this.xmlEditorRequest.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.xmlEditorRequest.Name = "xmlEditorRequest";
-            this.xmlEditorRequest.ReadOnly = false;
-            this.xmlEditorRequest.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
-    "d\\f0\\fs17\\par\r\n}\r\n";
-            this.xmlEditorRequest.SelectionLength = 0;
-            this.xmlEditorRequest.SelectionStart = 0;
-            this.xmlEditorRequest.SendItemIdToTemplateEnabled = false;
-            this.xmlEditorRequest.Size = new System.Drawing.Size(780, 184);
-            this.xmlEditorRequest.SyntaxHighlight = true;
-            this.xmlEditorRequest.TabIndex = 7;
-            this.xmlEditorRequest.Tag = "";
-            // 
-            // groupBoxResponse
-            // 
-            this.groupBoxResponse.Controls.Add(this.xmlEditorResponse);
-            this.groupBoxResponse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxResponse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxResponse.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBoxResponse.HighlightColour = System.Drawing.Color.Red;
-            this.groupBoxResponse.Highlighted = false;
-            this.groupBoxResponse.Location = new System.Drawing.Point(0, 0);
-            this.groupBoxResponse.Name = "groupBoxResponse";
-            this.groupBoxResponse.Size = new System.Drawing.Size(786, 260);
-            this.groupBoxResponse.TabIndex = 0;
-            this.groupBoxResponse.TabStop = false;
-            this.groupBoxResponse.Text = "Response";
-            // 
-            // xmlEditorResponse
-            // 
-            this.xmlEditorResponse.BackColor = System.Drawing.SystemColors.Window;
-            this.xmlEditorResponse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xmlEditorResponse.IndentXml = true;
-            this.xmlEditorResponse.Location = new System.Drawing.Point(3, 16);
-            this.xmlEditorResponse.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.xmlEditorResponse.Name = "xmlEditorResponse";
-            this.xmlEditorResponse.ReadOnly = true;
-            this.xmlEditorResponse.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
-    "d\\f0\\fs17\\par\r\n}\r\n";
-            this.xmlEditorResponse.SelectionLength = 0;
-            this.xmlEditorResponse.SelectionStart = 0;
-            this.xmlEditorResponse.SendItemIdToTemplateEnabled = true;
-            this.xmlEditorResponse.Size = new System.Drawing.Size(780, 241);
-            this.xmlEditorResponse.SyntaxHighlight = true;
-            this.xmlEditorResponse.TabIndex = 0;
-            this.xmlEditorResponse.Tag = "NoConfigSave";
-            this.xmlEditorResponse.SendItemIdToTemplate += new SOAPe.XmlEditor.SendItemIdEventHandler(this.xmlEditorResponse_SendItemIdToTemplate);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(248, 31);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(341, 13);
-            this.label10.TabIndex = 19;
-            this.label10.Text = "Note: X-AnchorMailbox is automatically set to the impersonated mailbox";
             // 
             // FormMain
             // 
@@ -1332,6 +1344,7 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.groupBoxResponse.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -1353,7 +1366,6 @@
             this.groupBox1.PerformLayout();
             this.tabPageLogging.ResumeLayout(false);
             this.tabPageLogging.PerformLayout();
-            this.groupBoxResponse.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1467,6 +1479,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem releaseNotesToolStripMenuItem;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.CheckBox checkBoxFollowRedirect;
     }
 }
 
