@@ -26,12 +26,15 @@ namespace SOAPe
 
         private string _rawTrace = ""; // The whole of the trace element (includes <trace/> tags)
         private Dictionary<string, string> _traceTagAttributes; // Trace tag attributes (e.g. Tag, Time, Tid), names all lower-cased
-        private Dictionary<string, string> _xmlElements; // We extract certain useful elements from the Xml
+        private Dictionary<string, string> _interestingElements; // We extract certain useful elements from the Xml
         private static List<string> _clientRequestIdsWithError = new List<string>();
         private static List<string> _clientRequestIdsThrottled = new List<string>();
+        private static Dictionary<string, DateTime> _clientRequestIdsRequestTime = new Dictionary<string, DateTime>();
         private bool _traceAnalysed = false;
         private bool _isThrottled = false;
         private bool _isError = false;
+
+        public string Data { get; private set; } = "";
 
         private TraceElement()
         {
@@ -43,22 +46,29 @@ namespace SOAPe
             _rawTrace = Trace;
             _traceTagAttributes = TraceTagAttributes(_rawTrace);
             Data = ExtractTraceContent(_rawTrace);
-            _xmlElements = InterestingXMLElements(Data);
+
+            if (_traceTagAttributes.ContainsKey("tag") && _traceTagAttributes["tag"].EndsWith("Headers"))
+            {
+                //  Headers
+                string[] headers = Data.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.None);
+            }
+            else
+                _interestingElements = InterestingXMLElements(Data);
             AnalyseErrors(this);
             _traceAnalysed = true;
         }
 
-        public TraceElement(string TraceData, string TraceTag)
+        /*public TraceElement(string TraceData, string TraceTag)
         {
             // Create and analyse a trace
             _rawTrace = TraceData;
             _traceTagAttributes = TraceTagAttributes(TraceTag);
             _traceTagAttributes.Add("tag", TraceTag);
             Data = TraceData;
-            _xmlElements = InterestingXMLElements(Data);
+            _interestingElements = InterestingXMLElements(Data);
             AnalyseErrors(this);
             _traceAnalysed = true;
-        }
+        }*/
 
         public static TraceElement CreateFromDataTableRow(DataRow dataRow)
         {
@@ -66,7 +76,7 @@ namespace SOAPe
 
             TraceElement traceElement = new TraceElement();
             traceElement._traceTagAttributes = new Dictionary<string, string>();
-            traceElement._xmlElements = new Dictionary<string, string>();
+            traceElement._interestingElements = new Dictionary<string, string>();
 
             foreach (DataColumn dataColumn in dataRow.Table.Columns)
             {
@@ -79,7 +89,7 @@ namespace SOAPe
                     case "SOAPMethod":
                     case "Mailbox":
                     case "ExchangeImpersonation":
-                        traceElement._xmlElements.Add(dataColumn.ColumnName.ToLower(), dataRow[dataColumn.ColumnName].ToString());
+                        traceElement._interestingElements.Add(dataColumn.ColumnName.ToLower(), dataRow[dataColumn.ColumnName].ToString());
                         break;
 
                     default:
@@ -113,9 +123,21 @@ namespace SOAPe
                     return AnalyseErrors(this);  // We always recheck for errors as requests can only be identified retrospectively
                 return false;
             }
+
+
             bool traceElementChanged = AnalyseErrors(this);
-            _xmlElements = InterestingXMLElements(Data);
-            if (_xmlElements.Count > 0)
+            _interestingElements = InterestingXMLElements(Data);
+            if (TraceType == EWSTraceType.Request && ClientRequestId != "" && _traceTagAttributes.ContainsKey("time"))
+            {
+                if (!_clientRequestIdsRequestTime.ContainsKey(ClientRequestId))
+                {
+                    // We store the request time so that we can compare to response time and check latency
+                    DateTime requestTime;
+                    if (DateTime.TryParse(_traceTagAttributes["time"], out requestTime))
+                        _clientRequestIdsRequestTime.Add(ClientRequestId, requestTime);
+                }
+            }
+            if (_interestingElements.Count > 0)
                 traceElementChanged = true;
             _traceAnalysed = true;
             return traceElementChanged;
@@ -247,7 +269,6 @@ namespace SOAPe
 
         public static Dictionary<string,string> InterestingXMLElements(string Xml)
         {
-
             XmlDocument xmlDoc = new XmlDocument();
             try
             {
@@ -277,7 +298,7 @@ namespace SOAPe
             return "";
         }
 
-        public string Data { get; private set; } = "";
+
 
         public int TraceThreadId
         {
@@ -364,8 +385,8 @@ namespace SOAPe
 
         public string InterestingXmlElement(string ElementTag)
         {
-            if (_xmlElements.ContainsKey(ElementTag))
-                return _xmlElements[ElementTag];
+            if (_interestingElements.ContainsKey(ElementTag))
+                return _interestingElements[ElementTag];
             return null;
         }
 
@@ -425,7 +446,7 @@ namespace SOAPe
                 {
                     // Check autodiscover response for errors
                     if (traceElement.Data.Contains("<ErrorCode>"))
-                        traceElement._isError = true;
+                        traceElement._isError = !traceElement.Data.Contains("<ErrorCode>NoError");
                 }
 
                 if (traceElement._isError)
@@ -495,7 +516,7 @@ namespace SOAPe
                             if (!String.IsNullOrEmpty(mailbox))
                             {
                                 traceElementUpdated = true;
-                                traceElement._xmlElements.Add("Mailbox", mailbox);
+                                traceElement._interestingElements.Add("Mailbox", mailbox);
                             }
                         }
                     }                    

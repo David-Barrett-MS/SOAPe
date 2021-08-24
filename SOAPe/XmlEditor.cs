@@ -664,7 +664,18 @@ namespace SOAPe
 
         private void addExtendedPropertyToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            FormExtendedPropertySelector frm = new FormExtendedPropertySelector();
+            //FormUserControlTest frm = new FormUserControlTest();
+            frm.ShowDialog(this);
+            AddExtendedPropertyToRequest(frm.ExtendedPropertyXml());
+            frm.Dispose();
+        }
 
+        private void AddExtendedPropertyToRequest(string ExtendedPropertyXml)
+        {
+            if (String.IsNullOrEmpty(ExtendedPropertyXml))
+                return;
+            Console.WriteLine(ExtendedPropertyXml);
         }
     }
 
