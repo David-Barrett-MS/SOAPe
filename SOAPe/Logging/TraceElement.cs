@@ -30,6 +30,7 @@ namespace SOAPe
         private static List<string> _clientRequestIdsWithError = new List<string>();
         private static List<string> _clientRequestIdsThrottled = new List<string>();
         private static Dictionary<string, DateTime> _clientRequestIdsRequestTime = new Dictionary<string, DateTime>();
+        private static Dictionary<string, List<TraceElement>> _clientRequestIdElements = new Dictionary<string, List<TraceElement>>();
         private bool _traceAnalysed = false;
         private bool _isThrottled = false;
         private bool _isError = false;

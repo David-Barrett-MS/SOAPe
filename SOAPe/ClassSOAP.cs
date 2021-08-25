@@ -235,16 +235,19 @@ namespace SOAPe
             oWebRequest.CookieContainer = new CookieContainer();
             if (!(oCookies == null))
             {
+                Uri targetUri = new Uri(_targetURL);
                 // Add cookies to the request
                 foreach (Cookie oCookie in oCookies)
                 {
                     try
                     {
+                        oCookie.Domain = targetUri.Host;
+                        oCookie.Path = targetUri.AbsolutePath;
                         oWebRequest.CookieContainer.Add(oCookie);
                     }
                     catch { }
                 }
-                LogCookies(oCookies, "Request Cookies");
+                LogCookies(oWebRequest.CookieContainer.GetCookies(new Uri(_targetURL)), "Request Cookies");
             }
 
             LogSSLSettings();
