@@ -527,7 +527,7 @@
             // checkBoxFollowRedirect
             // 
             this.checkBoxFollowRedirect.AutoSize = true;
-            this.checkBoxFollowRedirect.Location = new System.Drawing.Point(461, 30);
+            this.checkBoxFollowRedirect.Location = new System.Drawing.Point(468, 30);
             this.checkBoxFollowRedirect.Name = "checkBoxFollowRedirect";
             this.checkBoxFollowRedirect.Size = new System.Drawing.Size(181, 17);
             this.checkBoxFollowRedirect.TabIndex = 12;
@@ -577,11 +577,11 @@
             // 
             this.checkBoxBypassProxySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxBypassProxySettings.AutoSize = true;
-            this.checkBoxBypassProxySettings.Location = new System.Drawing.Point(673, 30);
+            this.checkBoxBypassProxySettings.Location = new System.Drawing.Point(652, 30);
             this.checkBoxBypassProxySettings.Name = "checkBoxBypassProxySettings";
-            this.checkBoxBypassProxySettings.Size = new System.Drawing.Size(102, 17);
+            this.checkBoxBypassProxySettings.Size = new System.Drawing.Size(123, 17);
             this.checkBoxBypassProxySettings.TabIndex = 7;
-            this.checkBoxBypassProxySettings.Text = "Bypass IE Proxy";
+            this.checkBoxBypassProxySettings.Text = "Bypass system proxy";
             this.toolTips.SetToolTip(this.checkBoxBypassProxySettings, "Connect directly to the specified URL (bypassing any proxy settings)");
             this.checkBoxBypassProxySettings.UseVisualStyleBackColor = true;
             // 

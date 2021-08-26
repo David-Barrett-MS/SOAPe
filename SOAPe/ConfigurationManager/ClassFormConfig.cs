@@ -36,6 +36,11 @@ namespace SOAPe.ConfigurationManager
         public static event EventHandler UpdateConfig = delegate { };
         public static event EventHandler UpdateAndSaveConfig = delegate { };
 
+        public bool StoreButtonInfo { get; set; } = false;
+        public bool StoreLabelInfo { get; set; } = false;
+        public bool StoreCheckBoxState { get; set; } = true;
+        public bool StoreRadioButtonState { get; set; } = true;
+
         public ClassFormConfig(System.Windows.Forms.Form form, bool DoNotApply = false)
         {
             Initialise(form, DoNotApply);
@@ -143,9 +148,7 @@ namespace SOAPe.ConfigurationManager
             set { _doNotStoreConfig = !value; }
         }
 
-        public bool StoreButtonInfo { get; set; } = false;
 
-        public bool StoreLabelInfo { get; set; } = false;
 
         public bool SaveConfiguration()
         {
@@ -411,11 +414,19 @@ namespace SOAPe.ConfigurationManager
 
             if ((control is Label) && !StoreLabelInfo) return;
             if ((control is Button) && !StoreButtonInfo) return;
+            if ((control is RadioButton) && !StoreRadioButtonState) return;
+            if ((control is CheckBox) && !StoreCheckBoxState) return;
+
             if (ExcludedControls.Contains(control)) return;
             if (control.Tag != null)
             {
                 if (control.Tag.Equals("NoConfigSave"))
                     return;  // This control isn't being stored
+            }
+            else
+            {
+                if ( (control is RadioButton) || (control is CheckBox) )
+                    control.Tag = "NoTextSave"; // We don't want to store the text for radio buttons or checkboxes
             }
 
             if (control.Tag != null)

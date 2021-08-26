@@ -83,6 +83,7 @@
             this.textBoxTenantId.Name = "textBoxTenantId";
             this.textBoxTenantId.Size = new System.Drawing.Size(403, 20);
             this.textBoxTenantId.TabIndex = 20;
+            this.textBoxTenantId.Text = "common";
             this.textBoxTenantId.TextChanged += new System.EventHandler(this.textBoxTenantId_TextChanged);
             // 
             // label1
