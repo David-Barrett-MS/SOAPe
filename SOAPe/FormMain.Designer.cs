@@ -529,9 +529,9 @@
             this.checkBoxFollowRedirect.AutoSize = true;
             this.checkBoxFollowRedirect.Location = new System.Drawing.Point(461, 30);
             this.checkBoxFollowRedirect.Name = "checkBoxFollowRedirect";
-            this.checkBoxFollowRedirect.Size = new System.Drawing.Size(204, 17);
+            this.checkBoxFollowRedirect.Size = new System.Drawing.Size(181, 17);
             this.checkBoxFollowRedirect.TabIndex = 12;
-            this.checkBoxFollowRedirect.Text = "Follow redirect (HTTP 302) responses";
+            this.checkBoxFollowRedirect.Text = "Follow HTTP redirects (301/302)";
             this.toolTips.SetToolTip(this.checkBoxFollowRedirect, "Shouldn\'t be required for EWS, but is useful when manually testing AutoDiscover");
             this.checkBoxFollowRedirect.UseVisualStyleBackColor = true;
             // 

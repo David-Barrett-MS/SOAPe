@@ -247,7 +247,7 @@ namespace SOAPe
                     }
                     catch { }
                 }
-                LogCookies(oWebRequest.CookieContainer.GetCookies(new Uri(_targetURL)), "Request Cookies");
+                LogCookies(oWebRequest.CookieContainer.GetCookies(targetUri), "Request Cookies");
             }
 
             LogSSLSettings();
@@ -334,13 +334,14 @@ namespace SOAPe
                 try
                 {
                     if (((HttpWebResponse)oWebResponse).StatusCode == HttpStatusCode.Moved ||
-                            ((HttpWebResponse)oWebResponse).StatusCode == HttpStatusCode.MovedPermanently)
+                            ((HttpWebResponse)oWebResponse).StatusCode == HttpStatusCode.Redirect)
                     {
                         //  We have a redirect
                         String[] values = oWebResponse.Headers.GetValues("Location");
                         if (values.Length>0)
                         {
                             _targetURL = values[0];
+                            Log(_targetURL, "Response Redirect", clientRequestId);
                             SendRequest(sRequest, out sError, oCookies);
                         }
                     }

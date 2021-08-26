@@ -261,10 +261,8 @@ namespace SOAPe
             return credentialHandler;
         }
 
-        private void buttonSend_Click(object sender, EventArgs e)
+        private void SendRequest()
         {
-            if (checkBoxUpdateEWSHeader.Checked)
-                UpdateSOAPHeader();
             string sSOAPRequest = xmlEditorRequest.Text;
             string sSOAPResponse = "";
             string sErrorResponse = "";
@@ -272,17 +270,13 @@ namespace SOAPe
             xmlEditorResponse.Text = "";
             HighlightResponseGroupbox(false);
 
-            buttonSend.Enabled = false;
-            xmlEditorRequest.Enabled = false;
-            this.Update();
-
             CredentialHandler credentialHandler = CredentialHandler();
             ClassSOAP oSOAP = new ClassSOAP(textBoxURL.Text, _logger, credentialHandler);
             oSOAP.FollowRedirects = checkBoxFollowRedirect.Checked;
 
             SetSecurityProtocol(oSOAP);
             oSOAP.BypassWebProxy = checkBoxBypassProxySettings.Checked;
-            if ( (listViewHTTPHeaders.Items.Count > 0) || radioButtonOAuth.Checked)
+            if ((listViewHTTPHeaders.Items.Count > 0) || radioButtonOAuth.Checked)
             {
                 // Add the HTTP headers
                 List<string[]> headers = new List<string[]>();
@@ -302,7 +296,12 @@ namespace SOAPe
 
             sSOAPResponse = oSOAP.SendRequest(sSOAPRequest, out sErrorResponse, RequestCookies());
 
-            xmlEditorResponse.Text = sSOAPResponse;
+            Action action = new Action(() => { xmlEditorResponse.Text = sSOAPResponse; });
+            if (xmlEditorResponse.InvokeRequired)
+                xmlEditorResponse.Invoke(action);
+            else
+                action();
+
             if (!String.IsNullOrEmpty(sErrorResponse))
             {
                 HighlightResponseGroupbox(true, sErrorResponse);
@@ -312,8 +311,31 @@ namespace SOAPe
             PersistCookies(oSOAP.ResponseCookies);
             UpdateHTTPCookieControls();
             UpdateHTTPHeaderControls();
-            buttonSend.Enabled = true;
-            xmlEditorRequest.Enabled = true;
+            
+            action = new Action(() => { buttonSend.Enabled = true; });
+            if (buttonSend.InvokeRequired)
+                buttonSend.Invoke(action);
+            else
+                action();
+
+            action = new Action(() => { xmlEditorRequest.Enabled = true; });
+            if (xmlEditorRequest.InvokeRequired)
+                xmlEditorRequest.Invoke(action);
+            else
+                action();
+        }
+
+        private void buttonSend_Click(object sender, EventArgs e)
+        {
+            if (checkBoxUpdateEWSHeader.Checked)
+                UpdateSOAPHeader();
+
+            buttonSend.Enabled = false;
+            xmlEditorRequest.Enabled = false;
+            this.Update();
+            Thread t = new Thread(new ThreadStart(SendRequest));
+            t.Start();
+            //SendRequest();
         }
 
         private void PersistCookies(CookieCollection Cookies)
@@ -776,16 +798,44 @@ namespace SOAPe
 
         private void UpdateHTTPHeaderControls()
         {
-            buttonHTTPHeadersClear.Enabled = (listViewHTTPHeaders.Items.Count > 0);
-            buttonHTTPHeaderRemove.Enabled = (listViewHTTPHeaders.SelectedItems.Count > 0);
-            buttonHTTPHeaderAdd.Enabled = !String.IsNullOrEmpty(textBoxHTTPHeaderName.Text);
+            Action action = (() => { buttonHTTPHeadersClear.Enabled = (listViewHTTPHeaders.Items.Count > 0); });
+            if (buttonHTTPHeadersClear.InvokeRequired)
+                buttonHTTPHeadersClear.Invoke(action);
+            else
+                action();
+
+            action = (() => { buttonHTTPHeaderRemove.Enabled = (listViewHTTPHeaders.SelectedItems.Count > 0); });
+            if (buttonHTTPHeaderRemove.InvokeRequired)
+                buttonHTTPHeaderRemove.Invoke(action);
+            else
+                action();
+
+            action = (() => { buttonHTTPHeaderAdd.Enabled = !String.IsNullOrEmpty(textBoxHTTPHeaderName.Text); });
+            if (buttonHTTPHeaderAdd.InvokeRequired)
+                buttonHTTPHeaderAdd.Invoke(action);
+            else
+                action();
         }
 
         private void UpdateHTTPCookieControls()
         {
-            buttonHTTPCookiesClear.Enabled = (listViewHTTPCookies.Items.Count > 0);
-            buttonHTTPCookieRemove.Enabled = (listViewHTTPCookies.SelectedItems.Count > 0);
-            buttonHTTPCookieAdd.Enabled = !String.IsNullOrEmpty(textBoxHTTPCookieName.Text);
+            Action action = (() => { buttonHTTPCookiesClear.Enabled = (listViewHTTPCookies.Items.Count > 0); });
+            if (buttonHTTPCookiesClear.InvokeRequired)
+                buttonHTTPCookiesClear.Invoke(action);
+            else
+                action();
+
+            action = (() => { buttonHTTPCookieRemove.Enabled = (listViewHTTPCookies.SelectedItems.Count > 0); });
+            if (buttonHTTPCookieRemove.InvokeRequired)
+                buttonHTTPCookieRemove.Invoke(action);
+            else
+                action();
+
+            action = (() => { buttonHTTPCookieAdd.Enabled = !String.IsNullOrEmpty(textBoxHTTPCookieName.Text); });
+            if (buttonHTTPCookieAdd.InvokeRequired)
+                buttonHTTPCookieAdd.Invoke(action);
+            else
+                action();
         }
 
         private void textBoxHTTPHeaderName_TextChanged(object sender, EventArgs e)
@@ -934,23 +984,17 @@ namespace SOAPe
             if (!String.IsNullOrEmpty(AdditionalInfo))
                 title += " - " + AdditionalInfo;
 
-            if (groupBoxResponse.InvokeRequired)
-            {
-                groupBoxResponse.Invoke(new MethodInvoker(delegate()
-                {
-                    groupBoxResponse.Highlighted = ShowError;
-                    groupBoxResponse.Text = title;
-                    toolTips.SetToolTip(groupBoxResponse, ToolTip);
-                    this.Refresh();
-                }));
-            }
-            else
+            Action action = new Action(() =>
             {
                 groupBoxResponse.Highlighted = ShowError;
                 groupBoxResponse.Text = title;
                 toolTips.SetToolTip(groupBoxResponse, ToolTip);
                 this.Refresh();
-            }
+            });
+            if (groupBoxResponse.InvokeRequired)
+                groupBoxResponse.Invoke(action);
+            else
+                action();
             
         }
 
