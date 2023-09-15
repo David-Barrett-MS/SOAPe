@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types" xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages">
+  <soap:Header>
+    <RequestServerVersion Version="Exchange2013" xmlns="http://schemas.microsoft.com/exchange/services/2006/types" />
+  </soap:Header>
+  <soap:Body>
+    <m:CreateItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages" SendMeetingInvitations="SendToAllAndSaveCopy" MessageDisposition="SendAndSaveCopy" MessageDispositionSpecified="True">
+      <m:Items>
+        <t:AcceptItem>
+          <t:Body BodyType="Text">This time works better for the HiPPO.</t:Body>
+          <t:ReferenceItemId Id="AAMkADA1NGQ1ZTVlLWE2ODgtNGRiZi1hMDAyLTc5NGNhMGIzOTkxOABGAAAAAADiZiemeYYNS7/0VKnxnIEZBwATbanj54Um&#xA;Q5oWpGYkH0dKAAAAAAENAAATbanj54UmQ5oWpGYkH0dKAACnYSnvAAA=" />
+          <t:ProposedStart>2022-11-30T04:00:00Z</t:ProposedStart>
+          <t:ProposedEnd>2022-11-30T04:30:00Z</t:ProposedEnd>
+        </t:AcceptItem>
+      </m:Items>
+    </m:CreateItem>
+  </soap:Body>
+</soap:Envelope>
