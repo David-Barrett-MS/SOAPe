@@ -296,7 +296,6 @@ namespace SOAPe
                     {
                         case "DistinguishedFolderId":
                             sFieldValue = GetFolderIdXml(oRow.Cells[1].Value.ToString());
-                            // sFieldValue = "<t:DistinguishedFolderId Id=\"" + oRow.Cells[1].Value.ToString() + "\" />";
                             break;
 
                         case "FolderId":
@@ -304,18 +303,6 @@ namespace SOAPe
                             sFieldValue = GetFolderIdXml(oRow.Cells[1].Value.ToString());
                             if (((string)oRow.Tag).Equals("FullFolderId"))
                                 sFieldValue = "#SKIP#";
-                            /*sId = oRow.Cells[1].Value.ToString();
-                            if (_distinguishedFolders.Contains(sId.ToLower()))
-                            {
-                                // This is a distinguished folder
-                                sFieldValue = "<t:DistinguishedFolderId Id=\"" + sId.ToLower() + "\" />";
-                            }
-                            else
-                            {
-                                sFieldValue = String.Format("<t:{0} Id=\"{1}\" />", sFieldName, sId);
-                                if (((string)oRow.Tag).Equals("FullFolderId"))
-                                    sFieldValue = "#SKIP#";
-                            }*/
                             break;
 
                         case "ItemId":

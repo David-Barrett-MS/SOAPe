@@ -19,7 +19,7 @@ namespace SOAPe.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -65,7 +65,7 @@ namespace SOAPe.Properties {
         ///&lt;soap:Envelope xmlns:soap=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;
         ///               xmlns:t=&quot;http://schemas.microsoft.com/exchange/services/2006/types&quot;&gt;
         ///  &lt;soap:Header&gt;
-        ///    &lt;t:RequestServerVersion Version=&quot;Exchange2007_SP1&quot;/&gt;
+        ///    &lt;t:RequestServerVersion Version=&quot;Exchange2010_SP2&quot;/&gt;
         ///  &lt;/soap:Header&gt;
         ///  &lt;soap:Body&gt;
         ///    &lt;ConvertId xmlns=&quot;http://schemas.microsoft.com/exchange/services/2006/messages&quot;

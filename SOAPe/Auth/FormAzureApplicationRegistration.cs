@@ -24,8 +24,11 @@ namespace SOAPe.Auth
     {
         private ConfigurationManager.ClassFormConfig _formConfig = null;
         private AuthenticationResult _lastAuthResult = null;
-        private OAuthHelper _oAuthHelper = new OAuthHelper();
         private TextBox _tokenTextBox = null;
+
+        // Events
+        public delegate void AuthCompleteEventHandler(object sender, EventArgs e);
+        public event AuthCompleteEventHandler AuthComplete;
 
         public FormAzureApplicationRegistration()
         {
@@ -33,7 +36,6 @@ namespace SOAPe.Auth
             _formConfig = new ConfigurationManager.ClassFormConfig(this,true);
             _formConfig.ExcludedControls.Add(textBoxAuthCertificate);
             ClassFormConfig.ApplyConfiguration();
-            textBoxTenantId_TextChanged(null, null);
             UpdateAuthUI();
         }
 
@@ -69,20 +71,24 @@ namespace SOAPe.Auth
 
         private void UpdateAuthUI()
         {
-            // Native application does not authenticate
-            bool authEnabled = !radioButtonAuthAsNativeApp.Checked;
-            foreach (Control control in groupBoxAuth.Controls)
-            {
-                if (!(control is RadioButton))
-                    control.Enabled = authEnabled;
-            }
+            bool appAuthEnabled = !radioButtonAuthAsNativeApp.Checked && !radioButtonIntegratedWindowsAuth.Checked && !radioButtonROPCAuth.Checked;
 
-            if (authEnabled)
+            if (appAuthEnabled)
             {
                 bool bUsingClientSecret = radioButtonAuthWithClientSecret.Checked;
                 textBoxAuthCertificate.Enabled = !bUsingClientSecret;
                 buttonLoadCertificate.Enabled = !bUsingClientSecret;
                 textBoxClientSecret.Enabled = bUsingClientSecret;
+                labelRedirectURL.Enabled = false;
+                textBoxRedirectUrl.Enabled = false;
+            }
+            else
+            {
+                labelRedirectURL.Enabled = true;
+                textBoxRedirectUrl.Enabled = true;
+                textBoxAuthCertificate.Enabled = false;
+                buttonLoadCertificate.Enabled = false;
+                textBoxClientSecret.Enabled = false;
             }
         }
 
@@ -92,11 +98,17 @@ namespace SOAPe.Auth
 
             StringBuilder sAppInfoErrors = new StringBuilder();
 
-            if (String.IsNullOrEmpty(textBoxTenantId.Text)) { sAppInfoErrors.AppendLine("Tenant Id must be specified (e.g. tenant.onmicrosoft.com)"); }
-            if (String.IsNullOrEmpty(textBoxResourceUrl.Text)) { sAppInfoErrors.AppendLine("Resource Url must be specified (e.g. https://outlook.office365.com)"); }
-            if (String.IsNullOrEmpty(textBoxApplicationId.Text)) { sAppInfoErrors.AppendLine("Application Id must be specified (as registered in Azure AD)"); }
-            if (radioButtonAuthWithClientSecret.Checked && String.IsNullOrEmpty(textBoxClientSecret.Text)) { sAppInfoErrors.AppendLine("Client secret cannot be empty"); }
-            if (radioButtonAuthWithCertificate.Checked && String.IsNullOrEmpty(textBoxAuthCertificate.Text)) { sAppInfoErrors.AppendLine("Certificate required"); }
+            if (String.IsNullOrEmpty(textBoxTenantId.Text)) { sAppInfoErrors.AppendLine("Tenant Id must be specified (e.g. tenant.onmicrosoft.com)."); }
+            if (String.IsNullOrEmpty(textBoxResourceUrl.Text))
+                sAppInfoErrors.AppendLine("Resource Url must be specified (e.g. https://outlook.office365.com).");
+            else
+                OAuthHelper.ResourceUrl = textBoxResourceUrl.Text;
+            if (String.IsNullOrEmpty(textBoxApplicationId.Text)) { sAppInfoErrors.AppendLine("Application Id must be specified (as registered in Azure AD)."); }
+
+            // Flow specific checks
+            if (radioButtonAuthWithClientSecret.Checked && String.IsNullOrEmpty(textBoxClientSecret.Text)) { sAppInfoErrors.AppendLine("Client secret cannot be empty."); }
+            if (radioButtonAuthWithCertificate.Checked && String.IsNullOrEmpty(textBoxAuthCertificate.Text)) { sAppInfoErrors.AppendLine("Certificate required."); }
+            if (radioButtonAuthAsNativeApp.Checked && String.IsNullOrEmpty(textBoxRedirectUrl.Text)) { sAppInfoErrors.AppendLine("Redirect URL required."); }
 
             if (sAppInfoErrors.Length<1)
                 return true;
@@ -118,7 +130,12 @@ namespace SOAPe.Auth
             else if (OAuthHelper.LastError != null)
                 tokenText = OAuthHelper.LastError.Message;
             else if (_lastAuthResult == null)
-                tokenText = "Auth result is null";
+            {
+                if (radioButtonIntegratedWindowsAuth.Checked)
+                    tokenText = "Authentication failed";
+                else
+                    tokenText = "Auth result is null";
+            }
 
             if (_tokenTextBox == null)
                 return;
@@ -151,6 +168,8 @@ namespace SOAPe.Auth
                 {
                     MessageBox.Show(ex.Message, "Unable to acquire token", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                if (AuthComplete != null)
+                    AuthComplete(this, new EventArgs());
             });
             Task.Run(action);
         }
@@ -169,6 +188,8 @@ namespace SOAPe.Auth
                 {
                     MessageBox.Show(ex.Message, "Unable to acquire token", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                if (AuthComplete != null)
+                    AuthComplete(this, new EventArgs());
             });
             Task.Run(action);
         }
@@ -187,8 +208,45 @@ namespace SOAPe.Auth
                 {
                     MessageBox.Show(ex.Message, "Unable to acquire token", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                if (AuthComplete != null)
+                    AuthComplete(this, new EventArgs());
             });
             Task.Run(action);
+        }
+
+        public void AcquireIntegratedWindowsAuthToken()
+        {
+            Action action = new Action(async () =>
+            {
+                try
+                {
+                    Form parentForm = this;
+                    if (!this.Visible)
+                        parentForm = (Form)_tokenTextBox.TopLevelControl;
+                    AuthenticationResult authenticationResult = await OAuthHelper.IntegratedWindowsAuth(textBoxApplicationId.Text, parentForm);
+                    _lastAuthResult = authenticationResult;
+                    UpdateTokenTextbox();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Unable to acquire token", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                if (AuthComplete != null)
+                    AuthComplete(this, new EventArgs());
+            });
+            Task.Run(action);
+        }
+
+        public void AcquireROPCToken()
+        {
+            Form parentForm = this;
+            if (!this.Visible)
+                parentForm = (Form)_tokenTextBox.TopLevelControl;
+            FormROPCAuth formROPCAuth = new FormROPCAuth(_tokenTextBox, this);
+            if (formROPCAuth.ShowDialog(parentForm) != DialogResult.Cancel)
+                Hide();
+            if (AuthComplete != null)
+                AuthComplete(this, new EventArgs());
         }
 
         public void AcquireToken()
@@ -208,15 +266,15 @@ namespace SOAPe.Auth
                 AcquireAppTokenWithSecret();
             else if (radioButtonAuthWithCertificate.Checked)
                 AcquireAppTokenWithCertificate();
+            else if (radioButtonIntegratedWindowsAuth.Checked)
+                AcquireIntegratedWindowsAuthToken();
+            else if (radioButtonROPCAuth.Checked)
+                AcquireROPCToken();
         }
 
         private void buttonAcquireToken_Click(object sender, EventArgs e)
         {
             AcquireToken();
-        }
-
-        private void textBoxTenantId_TextChanged(object sender, EventArgs e)
-        {
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -246,9 +304,49 @@ namespace SOAPe.Auth
             if (formChooseCert.Certificate != null)
             {
                 textBoxAuthCertificate.Tag = formChooseCert.Certificate;
-                textBoxAuthCertificate.Text = formChooseCert.Certificate.FriendlyName;
+                if (!String.IsNullOrEmpty(formChooseCert.Certificate.FriendlyName))
+                    textBoxAuthCertificate.Text = formChooseCert.Certificate.FriendlyName;
+                else
+                    textBoxAuthCertificate.Text = formChooseCert.Certificate.Thumbprint;
             }
             formChooseCert.Dispose();
+        }
+
+        private void buttonROPCAuth_Click(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(textBoxTenantId.Text) || String.IsNullOrEmpty(textBoxApplicationId.Text))
+            {
+                MessageBox.Show("Set Tenant Id and Application Id before attempting ROPC.",
+                    "Information Required", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            FormROPCAuth formROPCAuth = new FormROPCAuth(_tokenTextBox, this);
+            if (formROPCAuth.ShowDialog(this) != DialogResult.Cancel)
+            {
+                Hide();
+                if (AuthComplete != null)
+                    AuthComplete(this, new EventArgs());
+            }
+        }
+
+        private void textBoxRedirectUrl_Validated(object sender, EventArgs e)
+        {
+            OAuthHelper.RedirectUrl = textBoxRedirectUrl.Text;
+        }
+
+        private void textBoxResourceUrl_Validated(object sender, EventArgs e)
+        {
+            OAuthHelper.ResourceUrl = textBoxResourceUrl.Text;
+        }
+
+        private void FormAzureApplicationRegistration_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; // Don't close the form, just hide it
+                this.Hide();
+            }
         }
     }
 }

@@ -5,7 +5,7 @@
                xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">
   <soap:Body>
     <CreateItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages"
-                MessageDisposition="SendAndSaveCopy">
+                MessageDisposition="%%FIELD:MessageDisposition;list;SaveOnly,SendOnly,SendAndSaveCopy%%">
       <Items>
         <t:Task>
           <t:Subject>
@@ -25,6 +25,7 @@
             <t:EventTypes>
               <!--FIELD:ElementCheckedList;ElementCheckedList;t:EventType;CreatedEvent,DeletedEvent,ModifiedEvent,CopiedEvent,MovedEvent,NewMailEvent,FreeBusyChangedEvent-->
             </t:EventTypes>
+            <!--FIELD:ItemId;ItemId-->
             <!--FIELD:FolderId;FolderId-->
             <!--FIELD:DistinguishedFolderId;DistinguishedFolderId-->
             <!--FIELD:ListenerURL;ListenerURL-->

@@ -166,7 +166,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(786, 238);
+            this.groupBox2.Size = new System.Drawing.Size(786, 237);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Request";
@@ -179,6 +179,7 @@
             this.button1.TabIndex = 8;
             this.button1.Text = "Test";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // checkBoxPersistCookies
@@ -231,12 +232,12 @@
             this.xmlEditorRequest.Name = "xmlEditorRequest";
             this.xmlEditorRequest.ReadOnly = false;
             this.xmlEditorRequest.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.22000}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
             this.xmlEditorRequest.SelectionLength = 0;
             this.xmlEditorRequest.SelectionStart = 0;
             this.xmlEditorRequest.SendItemIdToTemplateEnabled = false;
-            this.xmlEditorRequest.Size = new System.Drawing.Size(780, 184);
+            this.xmlEditorRequest.Size = new System.Drawing.Size(780, 183);
             this.xmlEditorRequest.SyntaxHighlight = true;
             this.xmlEditorRequest.TabIndex = 7;
             this.xmlEditorRequest.Tag = "";
@@ -258,7 +259,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBoxResponse);
             this.splitContainer1.Size = new System.Drawing.Size(786, 502);
-            this.splitContainer1.SplitterDistance = 238;
+            this.splitContainer1.SplitterDistance = 237;
             this.splitContainer1.TabIndex = 2;
             // 
             // groupBoxResponse
@@ -271,7 +272,7 @@
             this.groupBoxResponse.Highlighted = false;
             this.groupBoxResponse.Location = new System.Drawing.Point(0, 0);
             this.groupBoxResponse.Name = "groupBoxResponse";
-            this.groupBoxResponse.Size = new System.Drawing.Size(786, 260);
+            this.groupBoxResponse.Size = new System.Drawing.Size(786, 261);
             this.groupBoxResponse.TabIndex = 0;
             this.groupBoxResponse.TabStop = false;
             this.groupBoxResponse.Text = "Response";
@@ -286,12 +287,12 @@
             this.xmlEditorResponse.Name = "xmlEditorResponse";
             this.xmlEditorResponse.ReadOnly = true;
             this.xmlEditorResponse.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.22000}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
             this.xmlEditorResponse.SelectionLength = 0;
             this.xmlEditorResponse.SelectionStart = 0;
             this.xmlEditorResponse.SendItemIdToTemplateEnabled = true;
-            this.xmlEditorResponse.Size = new System.Drawing.Size(780, 241);
+            this.xmlEditorResponse.Size = new System.Drawing.Size(780, 242);
             this.xmlEditorResponse.SyntaxHighlight = true;
             this.xmlEditorResponse.TabIndex = 0;
             this.xmlEditorResponse.Tag = "NoConfigSave";
@@ -538,7 +539,7 @@
             // radioButtonUrlCustom
             // 
             this.radioButtonUrlCustom.AutoSize = true;
-            this.radioButtonUrlCustom.Location = new System.Drawing.Point(86, 29);
+            this.radioButtonUrlCustom.Location = new System.Drawing.Point(150, 29);
             this.radioButtonUrlCustom.Name = "radioButtonUrlCustom";
             this.radioButtonUrlCustom.Size = new System.Drawing.Size(60, 17);
             this.radioButtonUrlCustom.TabIndex = 11;
@@ -619,7 +620,7 @@
             this.buttonAppRegistration.Name = "buttonAppRegistration";
             this.buttonAppRegistration.Size = new System.Drawing.Size(97, 22);
             this.buttonAppRegistration.TabIndex = 28;
-            this.buttonAppRegistration.Text = "App registration...";
+            this.buttonAppRegistration.Text = "OAuth Settings...";
             this.buttonAppRegistration.UseVisualStyleBackColor = true;
             this.buttonAppRegistration.Click += new System.EventHandler(this.buttonAppRegistration_Click);
             // 
@@ -1010,7 +1011,7 @@
             // columnHeaderValue
             // 
             this.columnHeaderValue.Text = "Value";
-            this.columnHeaderValue.Width = 238;
+            this.columnHeaderValue.Width = 235;
             // 
             // tabPageCookies
             // 
@@ -1128,7 +1129,7 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "Value";
-            this.columnHeader2.Width = 238;
+            this.columnHeader2.Width = 235;
             // 
             // tabPageTLS
             // 
@@ -1334,7 +1335,7 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(812, 382);
+            this.MinimumSize = new System.Drawing.Size(810, 376);
             this.Name = "FormMain";
             this.Text = "SOAPe";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);

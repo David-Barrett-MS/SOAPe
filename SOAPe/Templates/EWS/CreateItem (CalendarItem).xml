@@ -5,7 +5,7 @@
                xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">
   <soap:Body>
     <CreateItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages"
-                SendMeetingInvitations="SendToAllAndSaveCopy" >
+                SendMeetingInvitations="%%FIELD:SendMeetingInvitations;list;SendToNone,SendOnlyToAll,SendToAllAndSaveCopy%%" >
       <SavedItemFolderId>
         <t:DistinguishedFolderId Id="calendar"/>
       </SavedItemFolderId>
@@ -19,7 +19,7 @@
           <End><!--FIELD:End;date--></End>
           <IsAllDayEvent><!--FIELD:IsAllDayEvent;list;True,False--></IsAllDayEvent>
           <LegacyFreeBusyStatus><!--FIELD:LegacyFreeBusyStatus;list;Free,Tentative,Busy,OOF;Busy--></LegacyFreeBusyStatus><!--DELETEMARKERSTART:Location-->
-          <Location><!--FIELD:Location;string--></Location><!--DELETEMARKEREND:Location--><!--DELETEMARKERSTART:RequiredAttendee1-->      
+          <Location><!--FIELD:Location;string--></Location><!--DELETEMARKEREND:Location--><!--DELETEMARKERSTART:RequiredAttendee1-->
           <RequiredAttendees>
             <Attendee>
               <Mailbox>

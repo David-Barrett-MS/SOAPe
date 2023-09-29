@@ -30,7 +30,6 @@ namespace SOAPe
         private static List<string> _clientRequestIdsWithError = new List<string>();
         private static List<string> _clientRequestIdsThrottled = new List<string>();
         private static Dictionary<string, DateTime> _clientRequestIdsRequestTime = new Dictionary<string, DateTime>();
-        private static Dictionary<string, List<TraceElement>> _clientRequestIdElements = new Dictionary<string, List<TraceElement>>();
         private bool _traceAnalysed = false;
         private bool _isThrottled = false;
         private bool _isError = false;
@@ -169,6 +168,7 @@ namespace SOAPe
         public static Color ThrottledRequestColour { get; set; } = Color.DarkOrange;
         public static Color ErrorColour { get; set; } = Color.Red;
         public static Color ErrorRequestColour { get; set; } = Color.Pink;
+        public static Color ClientRequestIdMatchesColour { get; set; } = Color.Cyan;
 
         private static string[] _mailboxContainingElements = { "FolderIds", "ParentFolderIds", "SavedItemFolderId" };
         public static Dictionary<string, string> InterestingXMLElements(XmlDocument xmlDoc)
@@ -354,6 +354,13 @@ namespace SOAPe
                     return _traceTagAttributes["clientrequestid"];
                 return "";
             }
+            private set
+            {
+                if (_traceTagAttributes.ContainsKey("clientrequestid"))
+                    _traceTagAttributes["clientrequestid"] = value;
+                else
+                    _traceTagAttributes.Add("clientrequestid", value);
+            }
         }
 
         public EWSTraceType TraceType
@@ -420,7 +427,7 @@ namespace SOAPe
                 // Check for errors
 
                 // Check if we have response headers...
-                if (traceElement.TraceTag.StartsWith("EwsResponseHttpHeaders") || traceElement.TraceTag.StartsWith("Response Headers"))
+                if (traceElement.TraceTag.EndsWith("ResponseHttpHeaders") || traceElement.TraceTag.StartsWith("Response Headers"))
                 {
                     // Check for server error
                     try
@@ -518,6 +525,15 @@ namespace SOAPe
                             {
                                 traceElementUpdated = true;
                                 traceElement._interestingElements.Add("Mailbox", mailbox);
+                            }
+                        }
+                        else if (headerLine.StartsWith("client-request-id",StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            string clientrequestid = headerLine.Substring(18).Trim();
+                            if (!String.IsNullOrEmpty(clientrequestid))
+                            {
+                                traceElementUpdated = true;
+                                traceElement.ClientRequestId = clientrequestid;
                             }
                         }
                     }                    

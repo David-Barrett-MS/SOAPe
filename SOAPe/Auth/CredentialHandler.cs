@@ -150,8 +150,10 @@ namespace SOAPe.Auth
                     return true;
 
                 case AuthType.Certificate:
-                    Request.ClientCertificates = new X509CertificateCollection();
-                    Request.ClientCertificates.Add(_certificate);
+                    Request.ClientCertificates = new X509CertificateCollection
+                    {
+                        _certificate
+                    };
                     return true;
 
                 case AuthType.OAuth:

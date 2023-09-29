@@ -19,6 +19,8 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Data;
 using System.Net;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace SOAPe
 {
@@ -84,7 +86,9 @@ namespace SOAPe
         private DataTable _logDataTable = null;
         private static Dictionary<string, int> _threadNameToNumber;
         private readonly object _lockObject = new object();
+        private readonly object _dataTableLockObject = new object();
         private DateTime _lastKnownEventTime = DateTime.MinValue; // This is used to get the responses in the correct order for EWSEditor logs (to work around EWSEditor bug)
+        private int _eventTimeOffset = 1;
 
         // Events
         public delegate void LogAddedEventHandler(object sender, LogAddedEventArgs e);
@@ -239,19 +243,22 @@ namespace SOAPe
         {
             // Write the trace information to the local database (which is used for the log viewer)
 
-            DataRow row = _logDataTable.NewRow();
-            row["Tag"] = Tag;
-            row["Tid"] = ThreadId;
-            row["Time"] = LogTime;
-            row["Version"] = LogVersion;
-            row["Application"] = LogApplication;
-            row["SOAPMethod"] = ""; // Populated during analysis to speed up log import
-            row["Data"] = Data;
-            row["Size"] = Data.Length;
-            row["Mailbox"] = Mailbox;
-            row["ExchangeImpersonation"] = Impersonating;
-            row["ClientRequestId"] = ClientRequestId;
-            _logDataTable.Rows.Add(row);
+            lock (_dataTableLockObject)
+            {
+                DataRow row = _logDataTable.NewRow();
+                row["Tag"] = Tag;
+                row["Tid"] = ThreadId;
+                row["Time"] = LogTime;
+                row["Version"] = LogVersion;
+                row["Application"] = LogApplication;
+                row["SOAPMethod"] = ""; // Populated during analysis to speed up log import
+                row["Data"] = Data;
+                row["Size"] = Data.Length;
+                row["Mailbox"] = Mailbox;
+                row["ExchangeImpersonation"] = Impersonating;
+                row["ClientRequestId"] = ClientRequestId;
+                _logDataTable.Rows.Add(row);
+            }           
         }
 
         public void Log(string Details, string Description, string clientRequestId = "")
@@ -388,7 +395,11 @@ namespace SOAPe
 
             if (ClearHistory) this.ClearHistory();
 
+            List<Task> parseTasks = new List<Task>();
+            Action action;
+
             DateTime readStartTime = DateTime.Now;
+            int i = 0;
             try
             {
                 // Read and analyse log.  Regular expressions work, but are expensive (therefore slow) for large files
@@ -406,7 +417,6 @@ namespace SOAPe
                     StringBuilder sTag=null;
                     bool bCollectTag = false;
                     bool bInTraceTag = false;
-                    int i = 0;
                     byte lastShowProgressPercent = 0;
 
                     while (!logFileReader.EndOfStream)
@@ -414,6 +424,7 @@ namespace SOAPe
                         char c=(char)logFileReader.Read();
                         sTrace.Append(c);
                         percentComplete = ((float)readBytes++ / (float)streamLength) * (float)100;
+
                         if (ShowProgress)
                         {
                             // Ensure we update progress at least once per percentage of the way through the file we are
@@ -436,8 +447,14 @@ namespace SOAPe
                                 {
                                     // We have a complete trace, so process it
                                     if (ShowProgress)
-                                        OnProgressChanged(new ProgressEventArgs(String.Format("Processing {0}", i++), percentComplete));
-                                    ParseTrace(sTrace.ToString());
+                                        OnProgressChanged(new ProgressEventArgs($"Processing {_logDataTable.Rows.Count}/{i++}", percentComplete));
+                                    // When we try to offload this onto a new thread, we lose events.  No idea why currently, will
+                                    // investigate when I have more time (there don't seem to be any errors)
+                                    //action = new Action(() =>
+                                    //{
+                                        ParseTrace(sTrace.ToString());
+                                    //});
+                                    //parseTasks.Add(Task.Run(() => action()));
                                     sTrace = new StringBuilder();
                                     bInTraceTag = false;
                                 }
@@ -449,7 +466,7 @@ namespace SOAPe
                                         // As we've now found another trace tag, we try to parse everything we have collected in between as Xml
 
                                         if (ShowProgress)
-                                            OnProgressChanged(new ProgressEventArgs(String.Format("Processing {0}", i++), percentComplete));
+                                            OnProgressChanged(new ProgressEventArgs($"Processing {_logDataTable.Rows.Count}/{i++}", percentComplete));
                                         sTrace.Remove(sTrace.Length - sTag.Length, sTag.Length);
 
                                         // Now we remove any trailing characters until we reach a > (which should be the closing tag of the Xml)
@@ -459,7 +476,12 @@ namespace SOAPe
                                         {
                                             xmlData = xmlData.Substring(0, closingTag+1);
                                         }
-                                        ParseGenericRequest(xmlData);
+                                        //action = new Action(() =>
+                                        //{
+                                            ParseGenericRequest(xmlData);
+                                        //});
+                                        //parseTasks.Add(Task.Run(() => action()));
+
                                         bInXml = false;
                                     }
                                     sTrace = new StringBuilder(sTag.ToString());
@@ -472,15 +494,19 @@ namespace SOAPe
                                     if (!bInTraceTag)
                                     {
                                         // We've found the xml opening tag outside <trace> tag.  EWSEditor has a bug that causes some responses
-                                        // to be presented this way, so we'll capture this Xml
+                                        // to be presented this way, so we'll capture this Xml.  This also helps parse other logs.
                                         if (bFoundXmlTag)
                                         {
                                             // We've already found one Xml tag, so this file must contain more than one xml dump
                                             // We  process the collected trace as Xml
                                             if (ShowProgress)
-                                                OnProgressChanged(new ProgressEventArgs(String.Format("Processing {0}", i++), percentComplete));
-                                            sTrace.Remove(sTrace.Length - 4, 4);
-                                            ParseGenericRequest(sTrace.ToString());
+                                                OnProgressChanged(new ProgressEventArgs($"Processing {_logDataTable.Rows.Count}/{i++}", percentComplete));
+                                            sTrace.Remove(sTrace.Length - sTag.Length, sTag.Length);
+                                            //action = new Action(() =>
+                                            //{
+                                                ParseGenericRequest(sTrace.ToString());
+                                            //});
+                                            //parseTasks.Add(Task.Run(() => action()));
                                         }
                                         else
                                         {
@@ -514,8 +540,12 @@ namespace SOAPe
                     if (bFoundXmlTag)
                     {
                         if (ShowProgress)
-                            OnProgressChanged(new ProgressEventArgs(String.Format("Processing {0}", i++), percentComplete));
-                        ParseGenericRequest(sTrace.ToString());
+                            OnProgressChanged(new ProgressEventArgs($"Processing {_logDataTable.Rows.Count}/{i++}", percentComplete));
+                        //action = new Action(() =>
+                        //{
+                            ParseGenericRequest(sTrace.ToString());
+                        //});
+                        //parseTasks.Add(Task.Run(() => action()));
                     }
                 }
             }
@@ -526,12 +556,22 @@ namespace SOAPe
             finally
             {
                 if (ShowProgress)
-                    OnProgressChanged(new ProgressEventArgs(""));
+                    OnProgressChanged(new ProgressEventArgs($"Imported {_logDataTable.Rows.Count} of {i} potential events"));
                 DebugLog(String.Format("Closing log file {0}", LogFileName));
                 readLogFileStream.Close();
             }
+
+            while (parseTasks.Count>0)
+            {
+                while (parseTasks[0].Status == TaskStatus.Running || parseTasks[0].Status == TaskStatus.WaitingToRun)
+                    Thread.Yield();
+                parseTasks.RemoveAt(0);
+            }
             TimeSpan loadDuration = DateTime.Now.Subtract(readStartTime);
             DebugLog(String.Format("{0} loaded in {1}", LogFileName, loadDuration));
+            DebugLog($"Imported {_logDataTable.Rows.Count} of {i} potential events");
+            if (ShowProgress)
+                OnProgressChanged(new ProgressEventArgs($"Imported {_logDataTable.Rows.Count} of {i} potential events"));
         }
 
         private string ReadTraceTag(string Trace)
@@ -593,89 +633,134 @@ namespace SOAPe
         private void ParseTrace(string Trace)
         {
             // Attempt to parse <trace> entry (as generated by EWS Managed API, and SOAPe), and add to the database
+
+            XmlDocument xml = new XmlDocument();
+            string sEWSData = "";
+
+            // Extract the EWS payload (everything in the <Trace></Trace>)
+            int iContentStart = Trace.IndexOf(">") + 1;
+            int iContentEnd = Trace.LastIndexOf("</Trace>", StringComparison.OrdinalIgnoreCase);
+            if (iContentStart < 0 || iContentEnd < 0 || (iContentEnd-iContentStart<1) )
+                return;
+
+            sEWSData = Trace.Substring(iContentStart, iContentEnd - iContentStart).TrimStart();
+            StringBuilder sTraceInfo = new StringBuilder(Trace.Substring(0, iContentStart)).Append(Trace.Substring(iContentEnd));
             try
             {
-                XmlDocument xml = new XmlDocument();
-                string sEWSData = "";
+                xml.LoadXml(sTraceInfo.ToString());
+            }
+            catch
+            {
+                // Failed to load Xml, test for double-quotes (occurs when data is wrapped in CSV)
+                string sTraceFixed = sTraceInfo.ToString().Replace("\"\"", "\"");
                 try
                 {
-                    // We have invalid Xml (this happens when we have the actual requests/responses, as the tracer doesn't make nice Xml! :) )
-                    // We strip out the contents (everything in the <Trace></Trace>), and try again
-                    int iContentStart = Trace.IndexOf(">") + 1;
-                    int iContentEnd = Trace.LastIndexOf("</Trace>", StringComparison.OrdinalIgnoreCase);
-                    sEWSData = Trace.Substring(iContentStart, iContentEnd - iContentStart).TrimStart();
-                    StringBuilder sTraceInfo = new StringBuilder(Trace.Substring(0, iContentStart)).Append(Trace.Substring(iContentEnd));
-                    xml.LoadXml(sTraceInfo.ToString());
+                    xml.LoadXml(sTraceFixed);
                 }
                 catch
                 {
                     return;
                 }
+                // If removing additional quotes worked for the <trace> tag, we need to do the same for the payload
+                sEWSData = sEWSData.Replace("\"\"", "\"");
+            }
 
-                // Read the trace information
-                string sTag = xml.FirstChild.Attributes["Tag"]?.Value.ToString();
-                DateTime logTime = _lastKnownEventTime.AddTicks(1);
-                try
+            // Read the trace information
+            string sTag = xml.FirstChild?.Attributes["Tag"]?.Value.ToString();
+
+            if (sTag.EndsWith("Headers"))
+            {
+                // Some logs can mangle headers (remove the CR/LF).  We try to unmangle them here
+                if (!sEWSData.Contains(Environment.NewLine))
                 {
-                    logTime = DateTime.Parse(xml.FirstChild.Attributes["Time"]?.Value);
-                }
-                catch (Exception ex)
-                {
-                    try
+                    // No newline in the headers implies they have all been merged onto one line
+                    StringBuilder sHeaderData = new StringBuilder();
+                    int copyPos = 0;
+                    int colonPos = sEWSData.IndexOf(':');
+                    while (colonPos>0)
                     {
-                        logTime = DateTime.Parse(xml.FirstChild.Attributes["Time"]?.Value);//, , System.Globalization.DateTimeStyles.AssumeUniversal);
-                        Console.WriteLine(logTime);
-                    }
-                    catch { }
-                    Console.WriteLine(ex.Message);
-                }
-                _lastKnownEventTime = logTime;
-                int threadId = -1;
-                try
-                {
-                    string sThreadId = xml.FirstChild.Attributes["Tid"]?.Value;
-                    if (!int.TryParse(sThreadId, out threadId))
-                    {
-                        if (!String.IsNullOrEmpty(sThreadId))
+                        // Step backward to previous whitespace, and insert newline
+                        int whiteSpacePos = colonPos - 1;
+                        while (sEWSData[whiteSpacePos] != ' ' && whiteSpacePos > copyPos)
+                            whiteSpacePos--;
+                        if (whiteSpacePos==copyPos)
                         {
-                            // We have a thread Id, but it isn't a number...
-                            // We use a dictionary to map names to numbers
-                            if (_threadNameToNumber.ContainsKey(sThreadId))
-                            {
-                                threadId = _threadNameToNumber[sThreadId];
-                            }
-                            else
-                            {
-                                threadId = _threadNameToNumber.Count;
-                                _threadNameToNumber.Add(sThreadId, threadId);
-                            }
+                            // No whitespace found before already copied data, this is part of same header
+                            sHeaderData.Append(sEWSData.Substring(copyPos, colonPos-copyPos));
+                            copyPos = colonPos;
+                            colonPos = sEWSData.IndexOf(':', colonPos + 1);
+                        }
+                        else
+                        {
+                            sHeaderData.AppendLine(sEWSData.Substring(copyPos, whiteSpacePos - copyPos));
+                            copyPos = whiteSpacePos + 1;
+                            colonPos = sEWSData.IndexOf(':', colonPos + 1);
                         }
                     }
+                    if (copyPos < sEWSData.Length)
+                        sHeaderData.AppendLine(sEWSData.Substring(copyPos));
+                    sEWSData = sHeaderData.ToString();
                 }
-                catch { }
-                string sApplication = "Unknown";
-                try
-                {
-                    sApplication = xml.FirstChild.Attributes["Application"]?.Value;
-                }
-                catch { }
-                string sVersion = "";
-                try
-                {
-                    sVersion = xml.FirstChild.Attributes["Version"]?.Value;
-                }
-                catch { }
-                
-                string sClientRequestId = "";
-                try
-                {
-                    sClientRequestId = xml.FirstChild.Attributes["ClientRequestId"]?.Value;
-                }
-                catch { }
+            }
 
-                LogToDatabase(sEWSData,sTag,logTime,threadId, sApplication, sVersion, "", "", sClientRequestId);
+            DateTime logTime = _lastKnownEventTime.AddTicks(1);
+            string sLogTime = xml.FirstChild.Attributes["Time"]?.Value;
+            if (!String.IsNullOrEmpty(sLogTime))
+                logTime = DateTime.Parse(sLogTime);
+
+            if (logTime.Equals(_lastKnownEventTime))
+            {
+                // If the log time is the same as the previous imported event, we add an offset so time sorting works (and assume that the requests
+                // were sequential - this might break multithreaded traces and needs more testing)
+                logTime = logTime.AddMilliseconds(_eventTimeOffset++);
+            }
+            else
+            {
+                _lastKnownEventTime = logTime;
+                _eventTimeOffset = 1;
+            }
+
+            int threadId = -1;
+            string sThreadId = xml.FirstChild.Attributes["Tid"]?.Value;
+            if (!String.IsNullOrEmpty(sThreadId) )
+            {
+                if (!int.TryParse(sThreadId, out threadId))
+                {
+                    // We have a thread Id, but it isn't a number...
+                    // We use a dictionary to map names to numbers
+                    if (_threadNameToNumber.ContainsKey(sThreadId))
+                    {
+                        threadId = _threadNameToNumber[sThreadId];
+                    }
+                    else
+                    {
+                        threadId = _threadNameToNumber.Count;
+                        _threadNameToNumber.Add(sThreadId, threadId);
+                    }
+                }
+            }
+
+            string sApplication = "Unknown";
+            try
+            {
+                sApplication = xml.FirstChild.Attributes["Application"]?.Value;
             }
             catch { }
+            string sVersion = "";
+            try
+            {
+                sVersion = xml.FirstChild.Attributes["Version"]?.Value;
+            }
+            catch { }
+                
+            string sClientRequestId = "";
+            try
+            {
+                sClientRequestId = xml.FirstChild.Attributes["ClientRequestId"]?.Value;
+            }
+            catch { }
+
+            LogToDatabase(sEWSData,sTag,logTime,threadId, sApplication, sVersion, "", "", sClientRequestId);
         }
 
         public void ParseGenericRequest(string Request)
@@ -700,7 +785,7 @@ namespace SOAPe
                 if (!xmlLoaded)
                 {
                     // This isn't valid XML.  We'll do a final check to see if we can find the closing <Envelope> tag and parse again
-                    int i = Request.LastIndexOf("envelope>", StringComparison.OrdinalIgnoreCase);
+                    int i = Request.IndexOf("envelope>", StringComparison.OrdinalIgnoreCase);
                     if (i < 0) return;
                     Request = Request.Substring(0, i + 9);
                     try

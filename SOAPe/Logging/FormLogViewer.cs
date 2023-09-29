@@ -13,6 +13,8 @@
 using System;
 using System.Data;
 using System.Drawing;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
@@ -31,7 +33,9 @@ namespace SOAPe
         private bool _haveLoadedLog = false;
         private bool _suppressUIUpdates = false;
         private const string _fileFilter = "All Files|*.*|Log files (*.log)|*.log|XML files (*.xml)|*.xml|Text files (*.txt)|*.txt|Trace files (*.trace)|*.trace";
-
+        private static string _lastLogFolderOpenPath = "";
+        private List<ListViewItem> _clientRequestIdTracking = new List<ListViewItem>();
+        private string _trackedClientRequestId = "";
 
         public FormLogViewer()
         {
@@ -46,6 +50,7 @@ namespace SOAPe
             }
 
             listViewLogIndex.Items.Clear();
+            SortByColumn(0);
             xmlEditor1.Text = "Please select a log to view.";
             this.Text = String.Format("Log Viewer - {0}", logFile);
             ShowStatus("Processing...");
@@ -117,14 +122,11 @@ namespace SOAPe
             if (iTraceCount==0)
                 return;
 
-            string sOrderBy = (String)listViewLogIndex.Tag;
-            if (String.IsNullOrEmpty(sOrderBy))
-                sOrderBy = "Time ASC,Tid ASC";
             DataRow[] logRows = null;
             string sFilter = GetLogFilter();
             try
             {
-                logRows = _logger.LogDataTable.Select(sFilter, sOrderBy);
+                logRows = _logger.LogDataTable.Select(sFilter);
             }
             catch (Exception ex)
             {
@@ -134,23 +136,21 @@ namespace SOAPe
                 _logger.DebugLogError(ex);
                 return;
             }
-            
-            xmlEditor1.Text = "No data found for this session.";
+
+            xmlEditor1.Text = "Select trace to view.";
+            // We disable sorting while we load the listview
+            IComparer sorter = listViewLogIndex.ListViewItemSorter;
 
             int i=-1;
-            if (listViewLogIndex.InvokeRequired)
-            {
-                listViewLogIndex.Invoke(new MethodInvoker(delegate()
-                {
-                    listViewLogIndex.BeginUpdate();
-                    listViewLogIndex.Items.Clear();
-                }));
-            }
-            else
-            {
+            Action action = new Action(() => {
+                listViewLogIndex.ListViewItemSorter = null;
                 listViewLogIndex.BeginUpdate();
                 listViewLogIndex.Items.Clear();
-            }
+            });
+            if (listViewLogIndex.InvokeRequired)
+                listViewLogIndex.Invoke(action);
+            else
+                action();
 
             iTraceCount = logRows.Length;
 
@@ -176,15 +176,16 @@ namespace SOAPe
                 else
                     listViewLogIndex.Items.Add(item);
             }
-            if (listViewLogIndex.InvokeRequired)
-            {
-                listViewLogIndex.Invoke(new MethodInvoker(delegate()
-                {
-                    listViewLogIndex.EndUpdate();
-                }));
-            }
-            else
+
+            action = new Action(() => {
                 listViewLogIndex.EndUpdate();
+                listViewLogIndex.ListViewItemSorter = sorter;
+            });
+
+            if (listViewLogIndex.InvokeRequired)
+                listViewLogIndex.Invoke(action);
+            else
+                action();
 
             if (String.IsNullOrEmpty(sFilter))
             {
@@ -255,6 +256,46 @@ namespace SOAPe
             else
                 _lastSelectedItem = null;
             xmlEditor1.Text = sDetails;
+
+
+            // client-request-id tracking
+            string clientRequestId = "";
+            if (listViewLogIndex.FocusedItem != null)
+                clientRequestId = ((TraceElement)listViewLogIndex.FocusedItem.Tag).ClientRequestId;
+
+            if (clientRequestId != _trackedClientRequestId)
+            {
+                if (_clientRequestIdTracking.Count > 0)
+                {
+                    // Remove highlighting from previous id tracking
+                    foreach (ListViewItem item in _clientRequestIdTracking)
+                    {
+                        Color restoreColour = Color.White;
+                        if (item.SubItems[0].Tag != null)
+                            restoreColour = (Color)item.SubItems[0].Tag;
+                        item.BackColor = restoreColour;
+                        item.SubItems[0].Tag = null;
+                    }
+                    _clientRequestIdTracking.Clear();
+                    _trackedClientRequestId = "";
+                }
+
+                if (listViewLogIndex.FocusedItem != null)
+                {
+                    if (!String.IsNullOrEmpty(clientRequestId))
+                    {
+                        // We have a client request Id, so highlight any matching items
+                        foreach (ListViewItem item in listViewLogIndex.Items)
+                            if (((TraceElement)item.Tag).ClientRequestId == clientRequestId)
+                            {
+                                _clientRequestIdTracking.Add(item);
+                                item.SubItems[0].Tag = item.BackColor;
+                                item.BackColor = TraceElement.ClientRequestIdMatchesColour;
+                            }
+                        _trackedClientRequestId = clientRequestId;
+                    }
+                }
+            }
         }
 
         private void buttonClearLog_Click(object sender, EventArgs e)
@@ -378,6 +419,7 @@ namespace SOAPe
             _logger.LoadLogFile((string)e);
             _haveLoadedLog = true;
             ShowLogIndex();
+            SortByColumn(0);
             ToggleButtons(true);
             ShowStatus(null);
             _logger.LogAdded += _logger_LogAdded;
@@ -404,6 +446,9 @@ namespace SOAPe
             this._checkingForErrors = true;
 
             int i = 0;
+            int itemsInPass = 10;
+            //if (listViewLogIndex.Items.Count > 1000)
+            //    itemsInPass = 100;
             bool firstPass = true;
 
             try
@@ -412,13 +457,22 @@ namespace SOAPe
                 {
                     Action action = new Action(() =>
                     {
-                        UpdateListViewItem(listViewLogIndex.Items[i], (TraceElement)listViewLogIndex.Items[i].Tag);
+                        // Update several at a time
+                        int j = i + itemsInPass;
+                        if (j > listViewLogIndex.Items.Count)
+                            j = listViewLogIndex.Items.Count;
+                        listViewLogIndex.BeginUpdate();
+                        while (i < j)
+                        {
+                            UpdateListViewItem(listViewLogIndex.Items[i], (TraceElement)listViewLogIndex.Items[i].Tag);
+                            i++;
+                        }
+                        listViewLogIndex.EndUpdate();
                     });
                     if (listViewLogIndex.InvokeRequired)
                         listViewLogIndex.Invoke(action);
                     else
                         action();
-                    i++;
                     if ((i == listViewLogIndex.Items.Count) && firstPass)
                     {
                         i = 0;
@@ -471,75 +525,27 @@ namespace SOAPe
             UpdateView();
         }
 
+        /// <summary>
+        /// Creates the appropriate IComparer to sort the list view based on the given column
+        /// </summary>
+        /// <param name="col">The column that will be sorted</param>
+        private void SortByColumn(int col)
+        {
+            bool sortAscending = !((String)listViewLogIndex.Tag).EndsWith("ASC");
+            bool sortAsDateTime = col == 0;
+            bool sortAsNumber = col == 2 || col == 4;
+
+            if (sortAscending)
+                listViewLogIndex.Tag = "ASC";
+            else
+                listViewLogIndex.Tag = "DESC";
+
+            listViewLogIndex.ListViewItemSorter = new ListViewItemComparer(col, sortAscending, sortAsDateTime, sortAsNumber);
+        }
 
         private void listViewLogIndex_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            switch (e.Column)
-            {
-                case 0:
-                    {
-                        // Sort by time
-                        if (listViewLogIndex.Tag.Equals("Time ASC,Tid ASC"))
-                        {
-                            listViewLogIndex.Tag = "Time DESC,Tid ASC";
-                        }
-                        else
-                            listViewLogIndex.Tag = "Time ASC,Tid ASC";
-                        break;
-                    }
-
-                case 1:
-                    {
-                        // Sort by time
-                        if (listViewLogIndex.Tag.Equals("Tag ASC,Time ASC"))
-                        {
-                            listViewLogIndex.Tag = "Tag DESC,Time ASC";
-                        }
-                        else
-                            listViewLogIndex.Tag = "Tag ASC,Time ASC";
-                        break;
-                    }
-
-                case 2:
-                    {
-                        // Sort by thread id
-                        if (listViewLogIndex.Tag.Equals("Tid ASC,Time ASC"))
-                        {
-                            listViewLogIndex.Tag = "Tid DESC,Time ASC";
-                        }
-                        else
-                            listViewLogIndex.Tag = "Tid ASC,Time ASC";
-                        break;
-                    }
-
-                case 3:
-                    {
-                        // Sort by SOAP Method
-                        if (listViewLogIndex.Tag.Equals("SOAPMethod ASC,Time ASC"))
-                        {
-                            listViewLogIndex.Tag = "SOAPMethod DESC,Time ASC";
-                        }
-                        else
-                            listViewLogIndex.Tag = "SOAPMethod ASC,Time ASC";
-                        break;
-                    }
-
-                case 4:
-                    {
-                        // Sort by size
-                        if (listViewLogIndex.Tag.Equals("Size ASC,Time ASC"))
-                        {
-                            listViewLogIndex.Tag = "Size DESC,Time ASC";
-                        }
-                        else
-                            listViewLogIndex.Tag = "Size ASC,Time ASC";
-                        break;
-                    }
-
-                default:
-                    return;
-            }
-            ShowLogIndex();
+            SortByColumn(e.Column);
         }
 
         private void buttonFilter_Click(object sender, EventArgs e)
@@ -554,8 +560,14 @@ namespace SOAPe
             FolderBrowserDialog oDialog = new FolderBrowserDialog();
             oDialog.ShowNewFolderButton = false;
             oDialog.Description = "All files from the selected folder will be loaded (if valid)";
+
+            if (!String.IsNullOrEmpty(_lastLogFolderOpenPath))
+                oDialog.SelectedPath = _lastLogFolderOpenPath;
+
             if (oDialog.ShowDialog() != DialogResult.OK)
                 return;
+
+            _lastLogFolderOpenPath = oDialog.SelectedPath;
 
             listViewLogIndex.Items.Clear();
             xmlEditor1.Text = "Please select a log to view.";
@@ -721,6 +733,71 @@ namespace SOAPe
             {
                 _logger.Dispose();
             }
+        }
+    }
+
+    /// <summary>
+    /// Implements the sort by column comparer
+    /// </summary>
+    class ListViewItemComparer : IComparer
+    {
+        private int col;
+        private bool asc = true;
+        private bool isDateTime = false;
+        private bool isNumber = false;
+
+        public ListViewItemComparer()
+        {
+            col = 0;
+        }
+        public ListViewItemComparer(int column, bool Ascending = true, bool typeIsDateTime = false, bool typeIsNumber = false)
+        {
+            col = column;
+            asc = Ascending;
+            isDateTime = typeIsDateTime;
+            isNumber = typeIsNumber;
+        }
+        public int Compare(object x, object y)
+        {
+            if (isDateTime)
+            {
+                try
+                {
+                    DateTime dx = DateTime.Parse(((ListViewItem)x).SubItems[col].Text);
+                    DateTime dy = DateTime.Parse(((ListViewItem)y).SubItems[col].Text);
+                    if (asc)
+                        return DateTime.Compare(dx, dy);
+
+                    return DateTime.Compare(dy, dx);
+                }
+                catch { }
+                return 0;
+            }
+            else if (isNumber)
+            {
+                try
+                {
+                    long lx = long.Parse(((ListViewItem)x).SubItems[col].Text);
+                    long ly = long.Parse(((ListViewItem)y).SubItems[col].Text);
+                    long diff = lx - ly;
+
+                    if (asc)
+                        diff = ly - lx;
+
+                    if (diff < 0)
+                        return -1;
+                    else if (diff > 0)
+                        return 1;
+                }
+                catch { }
+                return 0;
+            }
+
+            // Default is to use string comparison
+            if (asc)
+                return String.Compare(((ListViewItem)x).SubItems[col].Text, ((ListViewItem)y).SubItems[col].Text);
+
+            return String.Compare(((ListViewItem)y).SubItems[col].Text, ((ListViewItem)x).SubItems[col].Text);
         }
     }
 }

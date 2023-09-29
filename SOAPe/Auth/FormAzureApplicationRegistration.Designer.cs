@@ -37,6 +37,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxApplicationId = new System.Windows.Forms.TextBox();
             this.groupBoxAuth = new System.Windows.Forms.GroupBox();
+            this.labelRedirectURL = new System.Windows.Forms.Label();
+            this.textBoxRedirectUrl = new System.Windows.Forms.TextBox();
+            this.radioButtonIntegratedWindowsAuth = new System.Windows.Forms.RadioButton();
             this.radioButtonAuthAsNativeApp = new System.Windows.Forms.RadioButton();
             this.textBoxAuthCertificate = new System.Windows.Forms.TextBox();
             this.buttonLoadCertificate = new System.Windows.Forms.Button();
@@ -45,6 +48,7 @@
             this.textBoxClientSecret = new System.Windows.Forms.TextBox();
             this.buttonAcquireToken = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
+            this.radioButtonROPCAuth = new System.Windows.Forms.RadioButton();
             this.groupBox2.SuspendLayout();
             this.groupBoxAuth.SuspendLayout();
             this.SuspendLayout();
@@ -52,7 +56,9 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.textBoxResourceUrl);
+            this.groupBox2.Controls.Add(this.labelRedirectURL);
             this.groupBox2.Controls.Add(this.textBoxTenantId);
+            this.groupBox2.Controls.Add(this.textBoxRedirectUrl);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label3);
@@ -61,7 +67,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Size = new System.Drawing.Size(535, 103);
+            this.groupBox2.Size = new System.Drawing.Size(535, 131);
             this.groupBox2.TabIndex = 36;
             this.groupBox2.TabStop = false;
             this.groupBox2.Tag = "NoConfigSave";
@@ -74,7 +80,8 @@
             this.textBoxResourceUrl.Name = "textBoxResourceUrl";
             this.textBoxResourceUrl.Size = new System.Drawing.Size(403, 20);
             this.textBoxResourceUrl.TabIndex = 22;
-            this.textBoxResourceUrl.Text = "https://outlook.office365.com";
+            this.textBoxResourceUrl.Text = "https://outlook.office365.com/";
+            this.textBoxResourceUrl.Validated += new System.EventHandler(this.textBoxResourceUrl_Validated);
             // 
             // textBoxTenantId
             // 
@@ -84,7 +91,6 @@
             this.textBoxTenantId.Size = new System.Drawing.Size(403, 20);
             this.textBoxTenantId.TabIndex = 20;
             this.textBoxTenantId.Text = "common";
-            this.textBoxTenantId.TextChanged += new System.EventHandler(this.textBoxTenantId_TextChanged);
             // 
             // label1
             // 
@@ -128,27 +134,58 @@
             // 
             // groupBoxAuth
             // 
+            this.groupBoxAuth.Controls.Add(this.radioButtonROPCAuth);
+            this.groupBoxAuth.Controls.Add(this.radioButtonIntegratedWindowsAuth);
             this.groupBoxAuth.Controls.Add(this.radioButtonAuthAsNativeApp);
             this.groupBoxAuth.Controls.Add(this.textBoxAuthCertificate);
             this.groupBoxAuth.Controls.Add(this.buttonLoadCertificate);
             this.groupBoxAuth.Controls.Add(this.radioButtonAuthWithCertificate);
             this.groupBoxAuth.Controls.Add(this.radioButtonAuthWithClientSecret);
             this.groupBoxAuth.Controls.Add(this.textBoxClientSecret);
-            this.groupBoxAuth.Location = new System.Drawing.Point(8, 114);
+            this.groupBoxAuth.Location = new System.Drawing.Point(9, 142);
             this.groupBoxAuth.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.groupBoxAuth.Name = "groupBoxAuth";
             this.groupBoxAuth.Padding = new System.Windows.Forms.Padding(2, 1, 2, 1);
-            this.groupBoxAuth.Size = new System.Drawing.Size(535, 87);
+            this.groupBoxAuth.Size = new System.Drawing.Size(535, 128);
             this.groupBoxAuth.TabIndex = 40;
             this.groupBoxAuth.TabStop = false;
             this.groupBoxAuth.Tag = "NoConfigSave";
-            this.groupBoxAuth.Text = "Authentication";
+            this.groupBoxAuth.Text = "Authentication Flow";
+            // 
+            // labelRedirectURL
+            // 
+            this.labelRedirectURL.AutoSize = true;
+            this.labelRedirectURL.Location = new System.Drawing.Point(7, 103);
+            this.labelRedirectURL.Name = "labelRedirectURL";
+            this.labelRedirectURL.Size = new System.Drawing.Size(75, 13);
+            this.labelRedirectURL.TabIndex = 35;
+            this.labelRedirectURL.Text = "Redirect URL:";
+            // 
+            // textBoxRedirectUrl
+            // 
+            this.textBoxRedirectUrl.Location = new System.Drawing.Point(124, 100);
+            this.textBoxRedirectUrl.Name = "textBoxRedirectUrl";
+            this.textBoxRedirectUrl.Size = new System.Drawing.Size(402, 20);
+            this.textBoxRedirectUrl.TabIndex = 34;
+            this.textBoxRedirectUrl.Text = "http://localhost/SOAPe";
+            this.textBoxRedirectUrl.Validated += new System.EventHandler(this.textBoxRedirectUrl_Validated);
+            // 
+            // radioButtonIntegratedWindowsAuth
+            // 
+            this.radioButtonIntegratedWindowsAuth.AutoSize = true;
+            this.radioButtonIntegratedWindowsAuth.Location = new System.Drawing.Point(9, 17);
+            this.radioButtonIntegratedWindowsAuth.Name = "radioButtonIntegratedWindowsAuth";
+            this.radioButtonIntegratedWindowsAuth.Size = new System.Drawing.Size(227, 17);
+            this.radioButtonIntegratedWindowsAuth.TabIndex = 33;
+            this.radioButtonIntegratedWindowsAuth.TabStop = true;
+            this.radioButtonIntegratedWindowsAuth.Text = "Integrated Windows Authentication (WAM)";
+            this.radioButtonIntegratedWindowsAuth.UseVisualStyleBackColor = true;
             // 
             // radioButtonAuthAsNativeApp
             // 
             this.radioButtonAuthAsNativeApp.AutoSize = true;
             this.radioButtonAuthAsNativeApp.Checked = true;
-            this.radioButtonAuthAsNativeApp.Location = new System.Drawing.Point(7, 16);
+            this.radioButtonAuthAsNativeApp.Location = new System.Drawing.Point(9, 39);
             this.radioButtonAuthAsNativeApp.Margin = new System.Windows.Forms.Padding(2);
             this.radioButtonAuthAsNativeApp.Name = "radioButtonAuthAsNativeApp";
             this.radioButtonAuthAsNativeApp.Size = new System.Drawing.Size(384, 17);
@@ -162,7 +199,7 @@
             // 
             // textBoxAuthCertificate
             // 
-            this.textBoxAuthCertificate.Location = new System.Drawing.Point(96, 58);
+            this.textBoxAuthCertificate.Location = new System.Drawing.Point(98, 82);
             this.textBoxAuthCertificate.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.textBoxAuthCertificate.Name = "textBoxAuthCertificate";
             this.textBoxAuthCertificate.Size = new System.Drawing.Size(375, 20);
@@ -170,7 +207,7 @@
             // 
             // buttonLoadCertificate
             // 
-            this.buttonLoadCertificate.Location = new System.Drawing.Point(474, 56);
+            this.buttonLoadCertificate.Location = new System.Drawing.Point(476, 80);
             this.buttonLoadCertificate.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.buttonLoadCertificate.Name = "buttonLoadCertificate";
             this.buttonLoadCertificate.Size = new System.Drawing.Size(50, 21);
@@ -182,7 +219,7 @@
             // radioButtonAuthWithCertificate
             // 
             this.radioButtonAuthWithCertificate.AutoSize = true;
-            this.radioButtonAuthWithCertificate.Location = new System.Drawing.Point(7, 58);
+            this.radioButtonAuthWithCertificate.Location = new System.Drawing.Point(9, 82);
             this.radioButtonAuthWithCertificate.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.radioButtonAuthWithCertificate.Name = "radioButtonAuthWithCertificate";
             this.radioButtonAuthWithCertificate.Size = new System.Drawing.Size(75, 17);
@@ -195,7 +232,7 @@
             // radioButtonAuthWithClientSecret
             // 
             this.radioButtonAuthWithClientSecret.AutoSize = true;
-            this.radioButtonAuthWithClientSecret.Location = new System.Drawing.Point(7, 37);
+            this.radioButtonAuthWithClientSecret.Location = new System.Drawing.Point(9, 59);
             this.radioButtonAuthWithClientSecret.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.radioButtonAuthWithClientSecret.Name = "radioButtonAuthWithClientSecret";
             this.radioButtonAuthWithClientSecret.Size = new System.Drawing.Size(86, 17);
@@ -207,7 +244,7 @@
             // 
             // textBoxClientSecret
             // 
-            this.textBoxClientSecret.Location = new System.Drawing.Point(96, 36);
+            this.textBoxClientSecret.Location = new System.Drawing.Point(98, 58);
             this.textBoxClientSecret.Name = "textBoxClientSecret";
             this.textBoxClientSecret.Size = new System.Drawing.Size(429, 20);
             this.textBoxClientSecret.TabIndex = 27;
@@ -215,7 +252,7 @@
             // 
             // buttonAcquireToken
             // 
-            this.buttonAcquireToken.Location = new System.Drawing.Point(8, 204);
+            this.buttonAcquireToken.Location = new System.Drawing.Point(398, 273);
             this.buttonAcquireToken.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAcquireToken.Name = "buttonAcquireToken";
             this.buttonAcquireToken.Size = new System.Drawing.Size(92, 22);
@@ -226,20 +263,31 @@
             // 
             // buttonClose
             // 
-            this.buttonClose.Location = new System.Drawing.Point(492, 205);
+            this.buttonClose.Location = new System.Drawing.Point(494, 273);
             this.buttonClose.Margin = new System.Windows.Forms.Padding(2);
             this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(50, 21);
+            this.buttonClose.Size = new System.Drawing.Size(50, 22);
             this.buttonClose.TabIndex = 50;
             this.buttonClose.Text = "Close";
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
+            // radioButtonROPCAuth
+            // 
+            this.radioButtonROPCAuth.AutoSize = true;
+            this.radioButtonROPCAuth.Location = new System.Drawing.Point(9, 103);
+            this.radioButtonROPCAuth.Name = "radioButtonROPCAuth";
+            this.radioButtonROPCAuth.Size = new System.Drawing.Size(55, 17);
+            this.radioButtonROPCAuth.TabIndex = 36;
+            this.radioButtonROPCAuth.TabStop = true;
+            this.radioButtonROPCAuth.Text = "ROPC";
+            this.radioButtonROPCAuth.UseVisualStyleBackColor = true;
+            // 
             // FormAzureApplicationRegistration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(553, 234);
+            this.ClientSize = new System.Drawing.Size(553, 300);
             this.Controls.Add(this.buttonAcquireToken);
             this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.groupBoxAuth);
@@ -251,6 +299,7 @@
             this.Name = "FormAzureApplicationRegistration";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Azure Application Registration";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAzureApplicationRegistration_FormClosing);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBoxAuth.ResumeLayout(false);
@@ -277,5 +326,9 @@
         private System.Windows.Forms.Button buttonClose;
         private System.Windows.Forms.RadioButton radioButtonAuthAsNativeApp;
         private System.Windows.Forms.TextBox textBoxResourceUrl;
+        private System.Windows.Forms.RadioButton radioButtonIntegratedWindowsAuth;
+        private System.Windows.Forms.Label labelRedirectURL;
+        private System.Windows.Forms.TextBox textBoxRedirectUrl;
+        private System.Windows.Forms.RadioButton radioButtonROPCAuth;
     }
 }

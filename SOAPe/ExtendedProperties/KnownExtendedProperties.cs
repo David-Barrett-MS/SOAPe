@@ -1208,7 +1208,7 @@ namespace SOAPe.ExtendedProperties
         public readonly ExtendedPropertyDefinition PidLidAppointmentTimeZoneDefinitionEndDisplay = new ExtendedPropertyDefinition(DefaultExtendedPropertySet.Appointment, 0x0000825F, MapiPropertyType.Binary);
         public readonly ExtendedPropertyDefinition PidLidAppointmentTimeZoneDefinitionRecur = new ExtendedPropertyDefinition(DefaultExtendedPropertySet.Appointment, 0x00008260, MapiPropertyType.Binary);
         public readonly ExtendedPropertyDefinition PidLidAppointmentTimeZoneDefinitionStartDisplay = new ExtendedPropertyDefinition(DefaultExtendedPropertySet.Appointment, 0x0000825E, MapiPropertyType.Binary);
-        public readonly ExtendedPropertyDefinition PidLidAppointmentUnsendableRecipients = new ExtendedPropertyDefinition(DefaultExtendedPropertySet.Appointment, 0x0000823D, MapiPropertyType.Binary);
+        public readonly ExtendedPropertyDefinition PidLidAppointmentUnsendableRecipients = new ExtendedPropertyDefinition(DefaultExtendedPropertySet.Appointment, 0x0000825D, MapiPropertyType.Binary);
         public readonly ExtendedPropertyDefinition PidLidAppointmentUpdateTime = new ExtendedPropertyDefinition(DefaultExtendedPropertySet.Appointment, 0x00008226, MapiPropertyType.SystemTime);
         public readonly ExtendedPropertyDefinition PidLidAttendeeCriticalChange = new ExtendedPropertyDefinition(DefaultExtendedPropertySet.Meeting, 0x00000001, MapiPropertyType.SystemTime);
         public readonly ExtendedPropertyDefinition PidLidAutoFillLocation = new ExtendedPropertyDefinition(DefaultExtendedPropertySet.Appointment, 0x0000823A, MapiPropertyType.Boolean);
@@ -2377,30 +2377,5 @@ namespace SOAPe.ExtendedProperties
 
 
         #endregion
-    }
-
-    public struct KnownExtendedPropertyInfo
-    {
-        public string CanonicalNames;
-        public string AlternateNames;
-        public string Areas;
-        public string References;
-
-        public KnownExtendedPropertyInfo(
-            string canonicalNames,
-            string alternateNames,
-            string areas,
-            string references)
-        {
-            CanonicalNames = canonicalNames;
-            AlternateNames = alternateNames;
-            Areas = areas;
-            References = references;
-        }
-
-        public override string ToString()
-        {
-            return CanonicalNames;
-        }
     }
 }

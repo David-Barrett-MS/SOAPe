@@ -656,25 +656,37 @@ namespace SOAPe
                 {
                     errorList.Add(error.Message);
                 }
-                System.Windows.Forms.MessageBox.Show(String.Join(Environment.NewLine, errorList), "XML failed validation", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(String.Join(Environment.NewLine, errorList), "XML failed validation", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
-                System.Windows.Forms.MessageBox.Show("No issues found.", "XML appears to be valid", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No issues found.", "XML appears to be valid", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
 
         private void addExtendedPropertyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormExtendedPropertySelector frm = new FormExtendedPropertySelector();
-            //FormUserControlTest frm = new FormUserControlTest();
             frm.ShowDialog(this);
-            AddExtendedPropertyToRequest(frm.ExtendedPropertyXml());
+            AddExtendedPropertyToRequest(frm.ExtendedPropertyXml(), frm.ExtendedPropertyXmlDescription());
             frm.Dispose();
         }
 
-        private void AddExtendedPropertyToRequest(string ExtendedPropertyXml)
+        /// <summary>
+        /// Add the given extended property to the displayed XML
+        /// </summary>
+        /// <param name="ExtendedPropertyXml">Full XML definition of the extended property</param>
+        private void AddExtendedPropertyToRequest(string ExtendedPropertyXml, string PropertyDescription)
         {
             if (String.IsNullOrEmpty(ExtendedPropertyXml))
                 return;
+
+            string PropXmlWithNS = $"<t:{ExtendedPropertyXml.Substring(1)}";
+
+            if (richTextBoxXml.Text.Contains(ExtendedPropertyXml) || richTextBoxXml.Text.Contains(PropXmlWithNS))
+            { 
+                MessageBox.Show("This extended property is already in the request.", "Extended property already exists", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             Console.WriteLine(ExtendedPropertyXml);
         }
     }

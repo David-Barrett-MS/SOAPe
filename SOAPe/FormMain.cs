@@ -45,6 +45,13 @@ namespace SOAPe
         {
             InitializeComponent();
 
+            // The auth form needs to remain open as Windows Auth requires a window handle
+            _oAuthAppRegForm = new Auth.FormAzureApplicationRegistration();
+            _oAuthAppRegForm.Show(this);
+            _oAuthAppRegForm.Hide();
+            _oAuthAppRegForm.TokenTextBox = textBoxOAuthToken;
+            _oAuthAppRegForm.AuthComplete += _oAuthAppRegForm_AuthComplete;
+
             // Add our form configuration helper
             _formConfig = new ConfigurationManager.ClassFormConfig(this, true);
             _formConfig.AddControlTypeRecurseExclusion("SOAPe.XmlEditor");
@@ -52,6 +59,7 @@ namespace SOAPe
             _formConfig.ExcludedControls.Add(xmlEditorResponse);
             _formConfig.ExcludedControls.Add(textBoxHTTPHeaderName);
             _formConfig.ExcludedControls.Add(textBoxHTTPHeaderValue);
+            _formConfig.ExcludedControls.Add(textBoxOAuthToken);
             ClassFormConfig.ApplyConfiguration();
 
             // Configure log file
@@ -77,7 +85,7 @@ namespace SOAPe
             {
                 if (!NativeMethods.IsProcessElevated())
                 {
-                    // The HTTP listener requires elevation, check if we have this  hTTPListenerToolStripMenuItem
+                    // The HTTP listener requires elevation
                     hTTPListenerToolStripMenuItem.Image = NativeMethods.GetStockIcon(NativeMethods.SHSTOCKICONID.SIID_SHIELD, NativeMethods.SHGSI.SHGSI_ICON).ToBitmap();
                 }
             }
@@ -92,6 +100,18 @@ namespace SOAPe
             _logger.DebugLog("Initialisation complete");
 
             this.Shown += FormMain_Shown;
+        }
+
+        private void _oAuthAppRegForm_AuthComplete(object sender, EventArgs e)
+        {
+            Action action = new Action(() =>
+            {
+                buttonAcquireOAuthToken.Enabled = true;
+            });
+            if (buttonAcquireOAuthToken.InvokeRequired)
+                buttonAcquireOAuthToken.Invoke(action);
+            else
+                action();
         }
 
         private void FormMain_Shown(object sender, EventArgs e)
@@ -405,6 +425,8 @@ namespace SOAPe
                 if (_oAuthAppRegForm is null)
                 {
                     _oAuthAppRegForm = new Auth.FormAzureApplicationRegistration();
+                    _oAuthAppRegForm.Show(this);
+                    _oAuthAppRegForm.Hide();
                     _oAuthAppRegForm.TokenTextBox = textBoxOAuthToken;
                 }
             }
@@ -1113,8 +1135,8 @@ namespace SOAPe
 
         private void buttonAcquireOAuthToken_Click(object sender, EventArgs e)
         {
+            buttonAcquireOAuthToken.Enabled = false;
             _oAuthAppRegForm.AcquireToken();
-            textBoxOAuthToken.Text = _oAuthAppRegForm.AccessToken;
         }
 
         private void buttonViewOtherLog_Click(object sender, EventArgs e)

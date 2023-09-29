@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="SOAPe.Logging.WPFLogViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SOAPe.Logging"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" >
+            </RowDefinition>
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <ListView x:Name="listViewIndex" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Column="0" Grid.Row="0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <RichTextBox x:Name="xmlEditor1" Grid.Column="1" Grid.Row="0"/>
+        <WrapPanel Grid.Row="1" Grid.Column="0" Margin="2,2,2,2">
+            <Button x:Name="ClearLogButton" Margin="0,0,1,0" Click="ClearLogButton_Click">Clear Log</Button>
+            <Button x:Name="ReloadLogButton" Margin="0,0,1,0">Reload Log</Button>
+            <Button x:Name="LoadLogButton" Margin="0,0,1,0" Click="LoadLogButton_Click" >Load Log...</Button>
+            <Button x:Name="LoadLogFolderButton" Margin="0,0,1,0" Click="LoadLogFolderButton_Click">Load Log Folder...</Button>
+            <Button x:Name="SaveAsButton" Margin="0,0,1,0" Click="SaveAsButton_Click">Save As...</Button>
+            <Button x:Name="FilterButton" Margin="0,0,1,0" Click="FilterButton_Click">Filter...</Button>
+        </WrapPanel>
+        <WrapPanel Grid.Row="1" Grid.Column="1" Margin="2,2,2,2" HorizontalAlignment="Right">
+            <ProgressBar x:Name="AnalysisProgressBar" Width="356" Margin="0,0,5,0"/>
+            <Button x:Name="CloseButton" Click="CloseButton_Click">Close</Button>
+        </WrapPanel>
+    </Grid>
+</UserControl>

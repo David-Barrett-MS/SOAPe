@@ -5,7 +5,7 @@
                xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
                xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages">
   <soap:Body>
-    <m:CreateItem MessageDisposition="SendOnly">
+    <m:CreateItem MessageDisposition="%%FIELD:MessageDisposition;list;SaveOnly,SendOnly,SendAndSaveCopy%%">
       <m:Items>
         <t:Message>
           <t:Subject><!--FIELD:Subject;string--></t:Subject>

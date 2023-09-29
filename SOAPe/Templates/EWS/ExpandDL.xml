@@ -4,8 +4,8 @@
                xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
                xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">
   <soap:Body>
-    <ExpandDL xmlns="https://schemas.microsoft.com/exchange/services/2006/messages"
-              xmlns:t="https://schemas.microsoft.com/exchange/services/2006/types">
+    <ExpandDL xmlns="http://schemas.microsoft.com/exchange/services/2006/messages"
+              xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">
       <Mailbox>
         <t:EmailAddress><!--FIELD:EmailAddress;string;--></t:EmailAddress>
       </Mailbox>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types" xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages">
+  <soap:Body>
+    <m:CreateItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages" 
+                  SendMeetingInvitations="%%FIELD:SendMeetingInvitations;list;SendToNone,SendOnlyToAll,SendToAllAndSaveCopy%%">
+      <m:Items>
+        <t:AcceptItem>
+          <t:Body BodyType="Text"><!--FIELD:Body;string;--></t:Body>
+          <!--FIELD:ReferenceItemId;ItemId-->
+          <t:ProposedStart><!--FIELD:ProposedStart;date--></t:ProposedStart>
+          <t:ProposedEnd><!--FIELD:ProposedEnd;date--></t:ProposedEnd>
+        </t:AcceptItem>
+      </m:Items>
+    </m:CreateItem>
+  </soap:Body>
+</soap:Envelope>

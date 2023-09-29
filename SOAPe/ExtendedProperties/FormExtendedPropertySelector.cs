@@ -29,11 +29,15 @@ namespace SOAPe
 
         private void InitPropertyCombo()
         {
-            comboBoxKnownMAPIProperties.Items.Clear();
-            foreach (ExtendedPropertyDefinition propertyDefinition in knownExtendedProperties.PropertyDictionary.Keys)
-            {                
-                comboBoxKnownMAPIProperties.Items.Add(knownExtendedProperties.PropertyDictionary[propertyDefinition].CanonicalNames);
-            }
+            comboBoxKnownMAPIProperties.DataSource = null;
+            comboBoxKnownMAPIProperties.DisplayMember = "Value";
+            comboBoxKnownMAPIProperties.ValueMember = "Key";
+            comboBoxKnownMAPIProperties.DataSource = new BindingSource(knownExtendedProperties.PropertyDictionary, null);
+            //comboBoxKnownMAPIProperties.Items.Clear();
+            //foreach (ExtendedPropertyDefinition propertyDefinition in knownExtendedProperties.PropertyDictionary.Keys)
+            //{                
+            //    comboBoxKnownMAPIProperties.Items.Add(knownExtendedProperties.PropertyDictionary[propertyDefinition].CanonicalNames);
+            //}
         }
 
         private void InitPropertySetIdCombo()
@@ -85,18 +89,42 @@ namespace SOAPe
             UpdatePropertyType();
         }
 
+        /// <summary>
+        /// Return a description of the currently selected property as an Xml comment
+        /// </summary>
+        /// <returns>A description of the currently selected property as an Xml comment</returns>
+        public string ExtendedPropertyXmlDescription()
+        {
+            if (radioButtonMAPIProperty.Checked)
+            {
+                if (comboBoxKnownMAPIProperties.SelectedIndex > -1)
+                {
+                    string mapiProp = ((KeyValuePair<ExtendedPropertyDefinition, KnownExtendedPropertyInfo>)comboBoxKnownMAPIProperties.SelectedItem).Value.ToString();
+                    return $"<!-- {mapiProp} -->";
+                }
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// Return the Xml for the currently selected property
+        /// </summary>
+        /// <returns>Xml for the currently selected property</returns>
         public string ExtendedPropertyXml()
         {
             // If a custom MAPI property is selected, we return the Xml for that
             if (radioButtonMAPIProperty.Checked)
             {
                 if (comboBoxKnownMAPIProperties.SelectedIndex > -1)
-                    return knownExtendedProperties.GetDefinitionByCanonicalNames((string)comboBoxKnownMAPIProperties.SelectedItem).Xml;
+                {
+                    string mapiProp = ((KeyValuePair<ExtendedPropertyDefinition, KnownExtendedPropertyInfo>)comboBoxKnownMAPIProperties.SelectedItem).Value.ToString();
+                    return knownExtendedProperties.GetDefinitionByCanonicalNames(mapiProp).Xml;
+                }
                 return "";
             }
 
             // Custom property.  We just build the Xml from the provided information - no validation is done
-            StringBuilder xml = new StringBuilder("<t:ExtendedFieldURI");
+            StringBuilder xml = new StringBuilder("<ExtendedFieldURI");
             if (comboBoxPropertySetId.SelectedIndex > -1)
                 xml.Append($" DistinguishedPropertySetId=\"{comboBoxPropertySetId.SelectedItem}\"");
             else
