@@ -77,7 +77,7 @@ namespace SOAPe
 
         public bool SyntaxHighlightIfValidXml(bool Indent=false)
         {
-            if (String.IsNullOrEmpty(_xmlEditor.Text))
+            if (String.IsNullOrEmpty(_xmlEditor.Text) || !_xmlEditor.Text.StartsWith("<"))
                 return true;
 
             XmlDocument xml = new XmlDocument();
@@ -100,7 +100,7 @@ namespace SOAPe
             // We test the Xml for validity
 
             ValidationErrors = new List<string>();
-            if (String.IsNullOrEmpty(_xmlEditor.Text))
+            if (String.IsNullOrEmpty(_xmlEditor.Text) || !_xmlEditor.Text.StartsWith("<"))
                 return true;
 
             StringBuilder validXml = new StringBuilder();

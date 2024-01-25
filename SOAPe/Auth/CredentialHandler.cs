@@ -91,7 +91,7 @@ namespace SOAPe.Auth
             }
         }
 
-        public void LogCredentials(ClassLogger Logger)
+        public void LogCredentials(ClassLogger Logger, string ClientRequestId)
         {
             StringBuilder sCredentialInfo = new StringBuilder();
             switch (_authType)
@@ -130,7 +130,7 @@ namespace SOAPe.Auth
 
             }
 
-            Logger.Log(sCredentialInfo.ToString(), "Request Credentials");
+            Logger.Log(sCredentialInfo.ToString(), "Request Credentials", ClientRequestId);
         }
 
         public bool ApplyCredentialsToHttpWebRequest(HttpWebRequest Request)

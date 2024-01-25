@@ -38,11 +38,12 @@ namespace SOAPe.Logging
         {
             InitializeComponent();
 
-            string logFile = OpenExistingLogFile();
+            //string logFile = OpenExistingLogFile();
 
             listViewIndex.Items.Clear();
             //SortByColumn(0);
-            //rtfData.Document.Blocks.Add(new Paragraph(new Run("Please select a log to view.")));
+            xmlEditor1.Document.Blocks.Clear();
+            xmlEditor1.Document.Blocks.Add(new Paragraph(new Run("Please select a log to view.")));
             //ShowStatus("Processing...");
             //ThreadPool.QueueUserWorkItem(new WaitCallback(LoadLogFile), logFile);
             //_syntaxHighlighter = new ClassSyntaxHighlighter(xmlEditor1);

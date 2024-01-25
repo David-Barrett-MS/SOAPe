@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.IO;
 using System.Threading.Tasks;
+using System.Diagnostics.Eventing.Reader;
 
 namespace SOAPe
 {
@@ -334,7 +335,7 @@ namespace SOAPe
             listViewLogIndex.Items.Clear();
             xmlEditor1.Text = "Please select a log to view.";
             this.Text = String.Format("Log Viewer - {0}", loadLogFilename);
-            ShowStatus("Processing...");
+            ShowStatus($"Opening {loadLogFilename}");
             ThreadPool.QueueUserWorkItem(new WaitCallback(LoadLogFile), loadLogFilename);
         }
 
@@ -355,52 +356,48 @@ namespace SOAPe
             ToggleButton(Enabled, buttonLoadLogFolder);
             ToggleButton(Enabled, buttonReload);
             ToggleButton(Enabled, buttonFilter);
+            ToggleButton(Enabled, buttonSaveAs);
         }
 
         private void ShowStatus(string Status, double PercentComplete = 0, Color? Colour = null)
         {
             // Update the status information
+
             if (String.IsNullOrEmpty(Status))
             {
                 // No status, so hide the control
-                if (statusPercentBar1.InvokeRequired)
-                {
-                    statusPercentBar1.Invoke(new MethodInvoker(delegate()
-                    {
-                        statusPercentBar1.Status = "";
-                        statusPercentBar1.PercentComplete = PercentComplete;
-                        statusPercentBar1.Visible = false;
-                    }));
-                }
-                else
+                Action hideStatusAction = new Action(() =>
                 {
                     statusPercentBar1.Status = "";
                     statusPercentBar1.PercentComplete = PercentComplete;
                     statusPercentBar1.Visible = false;
-                }
+                });
+
+                if (statusPercentBar1.InvokeRequired)
+                    statusPercentBar1.Invoke(hideStatusAction);
+                else
+                    hideStatusAction();
+
                 return;
             }
 
             // Show the status
             if (Colour == null)
                 Colour = Color.PaleGreen;
-            if (statusPercentBar1.InvokeRequired)
-            {
-                statusPercentBar1.Invoke(new MethodInvoker(delegate()
-                {
-                    statusPercentBar1.Status = Status;
-                    statusPercentBar1.PercentComplete = PercentComplete;
-                    statusPercentBar1.BarColour = (Color)Colour; 
-                    statusPercentBar1.Visible = true;
-                }));
-            }
-            else
+
+            Action showStatusAction = new Action(() =>
             {
                 statusPercentBar1.Status = Status;
                 statusPercentBar1.PercentComplete = PercentComplete;
                 statusPercentBar1.BarColour = (Color)Colour;
                 statusPercentBar1.Visible = true;
-            }
+                statusPercentBar1.Refresh();
+            });
+
+            if (statusPercentBar1.InvokeRequired)
+                statusPercentBar1.Invoke(showStatusAction);
+            else
+                showStatusAction();
         }
 
         private void LoadLogFile(object e)
@@ -445,40 +442,55 @@ namespace SOAPe
 
             this._checkingForErrors = true;
 
-            int i = 0;
-            int itemsInPass = 10;
-            //if (listViewLogIndex.Items.Count > 1000)
-            //    itemsInPass = 100;
-            bool firstPass = true;
-
             try
             {
-                while (i < listViewLogIndex.Items.Count)
-                {
-                    Action action = new Action(() =>
+                Action action;
+                Dictionary<ListViewItem, TraceElement> updatedElements = new Dictionary<ListViewItem, TraceElement>();
+                string status = "Cross-referencing and error checking...";
+
+                // Analyse all the elements (two passes), and store any that have been updated
+                double percentComplete = 0;
+                ShowStatus(status, percentComplete);
+                int updateCount = 0;
+                for (int j = 1; j < 3; j++)
+                    for (int i = 0; i < listViewLogIndex.Items.Count; i++)
                     {
-                        // Update several at a time
-                        int j = i + itemsInPass;
-                        if (j > listViewLogIndex.Items.Count)
-                            j = listViewLogIndex.Items.Count;
-                        listViewLogIndex.BeginUpdate();
-                        while (i < j)
+                        action = new Action(() =>
                         {
-                            UpdateListViewItem(listViewLogIndex.Items[i], (TraceElement)listViewLogIndex.Items[i].Tag);
-                            i++;
+                            TraceElement traceElement = (TraceElement)listViewLogIndex.Items[i].Tag;
+                            if (traceElement.Analyze())
+                                if (!updatedElements.ContainsKey(listViewLogIndex.Items[i]))
+                                    updatedElements.Add(listViewLogIndex.Items[i], traceElement);
+                        });
+
+                        if (listViewLogIndex.InvokeRequired)
+                            listViewLogIndex.Invoke(action);
+                        else
+                            action();
+
+                        if (updateCount++ > 100)
+                        {
+                            percentComplete = ((((double)i / (double)listViewLogIndex.Items.Count) / 2) + (((double)j-1) / 2)) * 100;
+                            ShowStatus(status, percentComplete);
+                            updateCount = 0;
                         }
-                        listViewLogIndex.EndUpdate();
-                    });
-                    if (listViewLogIndex.InvokeRequired)
-                        listViewLogIndex.Invoke(action);
-                    else
-                        action();
-                    if ((i == listViewLogIndex.Items.Count) && firstPass)
-                    {
-                        i = 0;
-                        firstPass = false;
                     }
-                }
+
+                ShowStatus($"Updating UI ({updatedElements.Count} items)", 100);
+                action = new Action(() =>
+                {
+                    // Update UI
+                    listViewLogIndex.BeginUpdate();
+                    foreach (ListViewItem listViewItem in updatedElements.Keys)
+                        UpdateListViewItem(listViewItem, updatedElements[listViewItem]);
+
+                    listViewLogIndex.EndUpdate();
+                    ShowStatus(null);
+                });
+                if (listViewLogIndex.InvokeRequired)
+                    listViewLogIndex.Invoke(action);
+                else
+                    action();
             }
             catch { }
             this._checkingForErrors = false;
@@ -486,26 +498,23 @@ namespace SOAPe
 
         public static void UpdateListViewItem(ListViewItem listViewItem, TraceElement traceElement)
         {
-            if (traceElement.Analyze())
-            {
-                if (traceElement.HighlightColour != null && listViewItem.BackColor != (Color)traceElement.HighlightColour)
-                    listViewItem.BackColor = (Color)traceElement.HighlightColour;
+            if (traceElement.HighlightColour != null && listViewItem.BackColor != (Color)traceElement.HighlightColour)
+                listViewItem.BackColor = (Color)traceElement.HighlightColour;
 
-                if (listViewItem.SubItems[1].Text != traceElement.TraceTag)
-                    listViewItem.SubItems[1].Text = traceElement.TraceTag;
+            if (listViewItem.SubItems[1].Text != traceElement.TraceTag)
+                listViewItem.SubItems[1].Text = traceElement.TraceTag;
 
-                if (listViewItem.SubItems[3].Text != traceElement.SOAPMethod)
-                    listViewItem.SubItems[3].Text = traceElement.SOAPMethod;
+            if (listViewItem.SubItems[3].Text != traceElement.SOAPMethod)
+                listViewItem.SubItems[3].Text = traceElement.SOAPMethod;
 
-                if (listViewItem.SubItems[4].Text != traceElement.Data.Length.ToString())
-                    listViewItem.SubItems[4].Text = traceElement.Data.Length.ToString();
+            if (listViewItem.SubItems[4].Text != traceElement.Data.Length.ToString())
+                listViewItem.SubItems[4].Text = traceElement.Data.Length.ToString();
 
-                if (listViewItem.SubItems[5].Text != traceElement.Mailbox)
-                    listViewItem.SubItems[5].Text = traceElement.Mailbox;
+            if (listViewItem.SubItems[5].Text != traceElement.Mailbox)
+                listViewItem.SubItems[5].Text = traceElement.Mailbox;
 
-                if (listViewItem.SubItems[6].Text != traceElement.Impersonating)
-                    listViewItem.SubItems[6].Text = traceElement.Impersonating;
-            }
+            if (listViewItem.SubItems[6].Text != traceElement.Impersonating)
+                listViewItem.SubItems[6].Text = traceElement.Impersonating;
         }
 
         private void UpdateView()
@@ -540,7 +549,16 @@ namespace SOAPe
             else
                 listViewLogIndex.Tag = "DESC";
 
-            listViewLogIndex.ListViewItemSorter = new ListViewItemComparer(col, sortAscending, sortAsDateTime, sortAsNumber);
+            
+            if (listViewLogIndex.InvokeRequired)
+            {
+                listViewLogIndex.Invoke(new MethodInvoker(delegate ()
+                {
+                    listViewLogIndex.ListViewItemSorter = new ListViewItemComparer(col, sortAscending, sortAsDateTime, sortAsNumber);
+                }));
+            }
+            else
+                listViewLogIndex.ListViewItemSorter = new ListViewItemComparer(col, sortAscending, sortAsDateTime, sortAsNumber);
         }
 
         private void listViewLogIndex_ColumnClick(object sender, ColumnClickEventArgs e)

@@ -111,13 +111,13 @@ namespace SOAPe
             _logger.LogWebHeaders(Headers, Description, Url, Response);
         }
 
-        private void LogCookies(CookieCollection Cookies, string Description)
+        private void LogCookies(CookieCollection Cookies, string Description, string ClientRequestId)
         {
             if (_logger == null) return;
-            _logger.LogCookies(Cookies, Description);
+            _logger.LogCookies(Cookies, Description, ClientRequestId);
         }
 
-        private void LogSSLSettings()
+        private void LogSSLSettings(string ClientRequestId)
         {
             StringBuilder sSSL = new StringBuilder("SSL/TLS protocols available: ");
 
@@ -134,7 +134,7 @@ namespace SOAPe
 
             sSSL.AppendLine(String.Join("; ", protocols));
 
-            _logger.Log(sSSL.ToString(), "Connection Security");
+            _logger.Log(sSSL.ToString(), "Connection Security", ClientRequestId);
         }
 
         public string SendRequest(string sRequest, out string sError, CookieCollection oCookies = null)
@@ -166,12 +166,46 @@ namespace SOAPe
             if (_bypassWebProxy)
                 oWebRequest.Proxy = null;
 
+            // We add a client-request-id header (if not already present) so that we can easily match request/response
+            string clientRequestId = Guid.NewGuid().ToString();
+            foreach (string[] header in _httpHeaders)
+                if (header[0] == "client-request-id")
+                {
+                    clientRequestId = header[1];
+                    break;
+                }
+            oWebRequest.Headers["client-request-id"] = clientRequestId;
+            oWebRequest.Headers["return-client-request-id"] = "true";
+
             // Set authentication
             _credentialHandler.ApplyCredentialsToHttpWebRequest(oWebRequest);
-            _credentialHandler.LogCredentials(_logger);
+            _credentialHandler.LogCredentials(_logger, clientRequestId);
 
             oWebRequest.ContentType = "text/xml; charset=utf-8";
             oWebRequest.Accept = "text/xml";
+
+            StringBuilder sTimings = new StringBuilder();
+            sTimings.AppendLine("Latency (latency shown in milliseconds, times are in ticks)").AppendLine();
+            sTimings.AppendLine($"client-request-id: {clientRequestId}").AppendLine();
+            
+            oWebRequest.Method = "POST";
+            XmlDocument oSOAPRequest = new XmlDocument();
+            if (!String.IsNullOrEmpty(sRequest))
+            {
+                try
+                {
+                    oSOAPRequest.LoadXml(sRequest);
+                }
+                catch (Exception ex)
+                {
+                    sError = ex.Message;
+                    sResponse = "Request was invalid XML (not sent): " + ex.Message + "\n\r\n\r" + sRequest;
+                    Log(sResponse, "Response");
+                    return "";
+                }
+            }
+
+            // Apply any HTTP headers
             if (_httpHeaders.Count > 0)
             {
                 foreach (string[] header in _httpHeaders)
@@ -188,9 +222,18 @@ namespace SOAPe
                                 oWebRequest.ContentType = header[1];
                                 break;
 
+                            case "content-length":
+                                long contentLength = 0;
+                                if (long.TryParse(header[1], out contentLength))
+                                    oWebRequest.ContentLength = contentLength;
+                                break;
+
                             case "accept":
                                 oWebRequest.Accept = header[1];
                                 break;
+
+                            case "client-request-id":
+                                break; // Already applied
 
                             default:
                                 oWebRequest.Headers[header[0]] = header[1];
@@ -198,37 +241,6 @@ namespace SOAPe
                         }
                     }
                     catch { }
-                }
-            }
-
-            // We add a client-request-id header so that we can easily match request/response
-            string clientRequestId = oWebRequest.Headers.Get("client-request-id");
-            if (String.IsNullOrEmpty(clientRequestId))
-            {
-                clientRequestId = Guid.NewGuid().ToString();
-                oWebRequest.Headers["client-request-id"] = clientRequestId;
-            }
-            StringBuilder sTimings = new StringBuilder();
-            sTimings.AppendLine("Latency (latency shown in milliseconds, times are in ticks)").AppendLine();
-            sTimings.AppendLine($"client-request-id: {clientRequestId}").AppendLine();
-            
-            if (String.IsNullOrEmpty(oWebRequest.Headers.Get("return-client-request-id")))
-                oWebRequest.Headers["return-client-request-id"] = "true";
-
-            oWebRequest.Method = "POST";
-            XmlDocument oSOAPRequest = new XmlDocument();
-            if (!String.IsNullOrEmpty(sRequest))
-            {
-                try
-                {
-                    oSOAPRequest.LoadXml(sRequest);
-                }
-                catch (Exception ex)
-                {
-                    sError = ex.Message;
-                    sResponse = "Request was invalid XML (not sent): " + ex.Message + "\n\r\n\r" + sRequest;
-                    Log(sResponse, "Response");
-                    return "";
                 }
             }
 
@@ -247,10 +259,10 @@ namespace SOAPe
                     }
                     catch { }
                 }
-                LogCookies(oWebRequest.CookieContainer.GetCookies(targetUri), "Request Cookies");
+                LogCookies(oWebRequest.CookieContainer.GetCookies(targetUri), "Request Cookies", clientRequestId);
             }
 
-            LogSSLSettings();
+            LogSSLSettings(clientRequestId);
 
             Stream stream = null;
             try
@@ -275,9 +287,26 @@ namespace SOAPe
             }
 
             DateTime requestSendStartTime = DateTime.Now;
-            if (!string.IsNullOrEmpty(sRequest))
+
+            try
+            {
                 oSOAPRequest.Save(stream);
-            stream.Close();
+                stream.Close();
+            }
+            catch (Exception ex)
+            {
+                // Failed to send request
+                sError = ex.Message;
+                if (ex.InnerException != null)
+                    sError = ex.InnerException.Message;
+                
+                sResponse = $"Error occurred during send: {sError}\n\r\n\r";
+
+                return "";
+            }
+
+
+
             DateTime requestSendEndTime = DateTime.Now;
             LogHeaders(oWebRequest.Headers, "Request Headers", _targetURL);
             Log(oSOAPRequest.OuterXml, "Request", clientRequestId);
@@ -297,7 +326,7 @@ namespace SOAPe
                 _lastResponseHeaders = oWebResponse.Headers;
                 LogHeaders(oWebResponse.Headers, "Response Headers","",(oWebResponse as HttpWebResponse));
                 _responseCookies = (oWebResponse as HttpWebResponse).Cookies;
-                LogCookies(_responseCookies, "Response Cookies");
+                LogCookies(_responseCookies, "Response Cookies", clientRequestId);
             }
             catch (Exception ex)
             {
@@ -363,7 +392,7 @@ namespace SOAPe
             sTimings.AppendLine($"Response complete: {(long)(responseReceiveEndTime.Ticks / 10000)}");
             sTimings.AppendLine($"Response latency: {(long)((responseReceiveEndTime.Ticks - responseReceiveStartTime.Ticks) / 10000)}").AppendLine();
             sTimings.AppendLine($"Total time taken (includes processing time): {(long)((responseReceiveEndTime.Ticks - requestSendStartTime.Ticks) / 10000)}");
-            Log(sTimings.ToString(), "Latency Report");
+            Log(sTimings.ToString(), "Latency Report", clientRequestId);
 
             return sResponse;
         }

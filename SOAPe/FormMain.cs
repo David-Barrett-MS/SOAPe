@@ -286,6 +286,7 @@ namespace SOAPe
             string sSOAPRequest = xmlEditorRequest.Text;
             string sSOAPResponse = "";
             string sErrorResponse = "";
+            Action action;
 
             xmlEditorResponse.Text = "";
             HighlightResponseGroupbox(false);
@@ -300,13 +301,20 @@ namespace SOAPe
             {
                 // Add the HTTP headers
                 List<string[]> headers = new List<string[]>();
-                foreach (ListViewItem item in listViewHTTPHeaders.Items)
-                {
-                    string[] sHeader = new string[2];
-                    sHeader[0] = item.Text;
-                    sHeader[1] = item.SubItems[1].Text;
-                    headers.Add(sHeader);
-                }
+                action = new Action(() => {
+                    foreach (ListViewItem item in listViewHTTPHeaders.Items)
+                    {
+                        string[] sHeader = new string[2];
+                        sHeader[0] = item.Text;
+                        sHeader[1] = item.SubItems[1].Text;
+                        headers.Add(sHeader);
+                    }
+                });
+                if (listViewHTTPHeaders.InvokeRequired)
+                    listViewHTTPHeaders.Invoke(action);
+                else
+                    action();
+
                 if (radioButtonOAuth.Checked)
                 {
                     oSOAP.AuthorizationHeader = String.Format("Bearer {0}", textBoxOAuthToken.Text); // Add OAuth token
@@ -316,7 +324,7 @@ namespace SOAPe
 
             sSOAPResponse = oSOAP.SendRequest(sSOAPRequest, out sErrorResponse, RequestCookies());
 
-            Action action = new Action(() => { xmlEditorResponse.Text = sSOAPResponse; });
+            action = new Action(() => { xmlEditorResponse.Text = sSOAPResponse; });
             if (xmlEditorResponse.InvokeRequired)
                 xmlEditorResponse.Invoke(action);
             else

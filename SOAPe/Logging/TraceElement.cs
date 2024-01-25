@@ -26,7 +26,7 @@ namespace SOAPe
 
         private string _rawTrace = ""; // The whole of the trace element (includes <trace/> tags)
         private Dictionary<string, string> _traceTagAttributes; // Trace tag attributes (e.g. Tag, Time, Tid), names all lower-cased
-        private Dictionary<string, string> _interestingElements; // We extract certain useful elements from the Xml
+        private Dictionary<string, string> _interestingElements = new Dictionary<string, string>(); // We extract certain useful elements from the Xml
         private static List<string> _clientRequestIdsWithError = new List<string>();
         private static List<string> _clientRequestIdsThrottled = new List<string>();
         private static Dictionary<string, DateTime> _clientRequestIdsRequestTime = new Dictionary<string, DateTime>();
@@ -47,10 +47,22 @@ namespace SOAPe
             _traceTagAttributes = TraceTagAttributes(_rawTrace);
             Data = ExtractTraceContent(_rawTrace);
 
-            if (_traceTagAttributes.ContainsKey("tag") && _traceTagAttributes["tag"].EndsWith("Headers"))
+            if (_traceTagAttributes.ContainsKey("tag") && (_traceTagAttributes["tag"].EndsWith("Latency Report") || _traceTagAttributes["tag"].EndsWith("Headers")))
             {
-                //  Headers
+                // Extract the client request id from data (works for header and latency reports)
                 string[] headers = Data.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.None);
+                foreach (string header in headers)
+                {
+                    if (header.Length > 18 && header.StartsWith("client-request-id:"))
+                    {
+                        string clientRequestId = header.Substring(18).Trim();
+                        if (!String.IsNullOrEmpty(clientRequestId))
+                        { 
+                            ClientRequestId = clientRequestId;
+                            break;
+                        }
+                    }
+                }
             }
             else
                 _interestingElements = InterestingXMLElements(Data);
@@ -113,6 +125,14 @@ namespace SOAPe
             */
 
             return traceElement;
+        }
+
+        internal void AddInterestingElement(string ElementName, string ElementValue)
+        {
+            if (_interestingElements.ContainsKey(ElementName))
+                _interestingElements[ElementName] = ElementValue;
+            else
+                _interestingElements.Add(ElementName, ElementValue);
         }
 
         public bool Analyze()
@@ -460,7 +480,7 @@ namespace SOAPe
                 if (traceElement._isError)
                 {
                     traceElementUpdated = true;
-                    if (!String.IsNullOrEmpty(traceElement.ClientRequestId))
+                    if (!String.IsNullOrEmpty(traceElement.ClientRequestId) && !_clientRequestIdsWithError.Contains(traceElement.ClientRequestId))
                         _clientRequestIdsWithError.Add(traceElement.ClientRequestId);
                 }
 
@@ -476,7 +496,7 @@ namespace SOAPe
                 if (traceElement._isThrottled)
                 {
                     traceElementUpdated = true;
-                    if (!String.IsNullOrEmpty(traceElement.ClientRequestId))
+                    if (!String.IsNullOrEmpty(traceElement.ClientRequestId) && !_clientRequestIdsThrottled.Contains(traceElement.ClientRequestId))
                         _clientRequestIdsThrottled.Add(traceElement.ClientRequestId);
                 }
             }
@@ -488,7 +508,7 @@ namespace SOAPe
                 if (traceElement._isError)
                 {
                     traceElementUpdated = true;
-                    if (!String.IsNullOrEmpty(traceElement.ClientRequestId))
+                    if (!String.IsNullOrEmpty(traceElement.ClientRequestId) && !_clientRequestIdsWithError.Contains(traceElement.ClientRequestId))
                         _clientRequestIdsWithError.Add(traceElement.ClientRequestId);
                 }
             }
@@ -524,16 +544,19 @@ namespace SOAPe
                             if (!String.IsNullOrEmpty(mailbox))
                             {
                                 traceElementUpdated = true;
-                                traceElement._interestingElements.Add("Mailbox", mailbox);
+                                traceElement.AddInterestingElement("Mailbox", mailbox);
                             }
                         }
-                        else if (headerLine.StartsWith("client-request-id",StringComparison.CurrentCultureIgnoreCase))
+                        else if (String.IsNullOrEmpty(traceElement.ClientRequestId) && headerLine.StartsWith("client-request-id", StringComparison.CurrentCultureIgnoreCase))
                         {
-                            string clientrequestid = headerLine.Substring(18).Trim();
-                            if (!String.IsNullOrEmpty(clientrequestid))
+                            if (headerLine.Length > 18)
                             {
-                                traceElementUpdated = true;
-                                traceElement.ClientRequestId = clientrequestid;
+                                string clientrequestid = headerLine.Substring(18).Trim();
+                                if (!String.IsNullOrEmpty(clientrequestid))
+                                {
+                                    traceElementUpdated = true;
+                                    traceElement.ClientRequestId = clientrequestid;
+                                }
                             }
                         }
                     }                    

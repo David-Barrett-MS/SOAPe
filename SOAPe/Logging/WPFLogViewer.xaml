@@ -24,7 +24,7 @@
             </ListView.View>
         </ListView>
         <RichTextBox x:Name="xmlEditor1" Grid.Column="1" Grid.Row="0"/>
-        <WrapPanel Grid.Row="1" Grid.Column="0" Margin="2,2,2,2">
+        <WrapPanel Grid.Row="1" Grid.Column="0" Margin="1,1,1,1">
             <Button x:Name="ClearLogButton" Margin="0,0,1,0" Click="ClearLogButton_Click">Clear Log</Button>
             <Button x:Name="ReloadLogButton" Margin="0,0,1,0">Reload Log</Button>
             <Button x:Name="LoadLogButton" Margin="0,0,1,0" Click="LoadLogButton_Click" >Load Log...</Button>

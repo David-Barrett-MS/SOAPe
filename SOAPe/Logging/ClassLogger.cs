@@ -21,6 +21,7 @@ using System.Data;
 using System.Net;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Web.UI.WebControls;
 
 namespace SOAPe
 {
@@ -410,6 +411,7 @@ namespace SOAPe
                 bool bFoundXmlTag = false;
                 bool bFoundTraceTag = false;
                 bool bInXml = false;
+                string status = "Extracting traces / XML content";
 
                 using (StreamReader logFileReader = new StreamReader(readLogFileStream))
                 {
@@ -431,10 +433,7 @@ namespace SOAPe
                             if ((byte)percentComplete > lastShowProgressPercent)
                             {
                                 lastShowProgressPercent = (byte)percentComplete;
-                                if (i>0)
-                                    OnProgressChanged(new ProgressEventArgs($"Processing {i}", percentComplete));
-                                else
-                                    OnProgressChanged(new ProgressEventArgs($"Processing...", percentComplete));
+                                OnProgressChanged(new ProgressEventArgs($"{status}: {i}", percentComplete));
                             }
                         }
 
@@ -447,7 +446,7 @@ namespace SOAPe
                                 {
                                     // We have a complete trace, so process it
                                     if (ShowProgress)
-                                        OnProgressChanged(new ProgressEventArgs($"Processing {_logDataTable.Rows.Count}/{i++}", percentComplete));
+                                        OnProgressChanged(new ProgressEventArgs($"{status}: {i++}", percentComplete));
                                     // When we try to offload this onto a new thread, we lose events.  No idea why currently, will
                                     // investigate when I have more time (there don't seem to be any errors)
                                     //action = new Action(() =>
@@ -466,7 +465,7 @@ namespace SOAPe
                                         // As we've now found another trace tag, we try to parse everything we have collected in between as Xml
 
                                         if (ShowProgress)
-                                            OnProgressChanged(new ProgressEventArgs($"Processing {_logDataTable.Rows.Count}/{i++}", percentComplete));
+                                            OnProgressChanged(new ProgressEventArgs($"{status}: {i++}", percentComplete));
                                         sTrace.Remove(sTrace.Length - sTag.Length, sTag.Length);
 
                                         // Now we remove any trailing characters until we reach a > (which should be the closing tag of the Xml)
@@ -500,7 +499,7 @@ namespace SOAPe
                                             // We've already found one Xml tag, so this file must contain more than one xml dump
                                             // We  process the collected trace as Xml
                                             if (ShowProgress)
-                                                OnProgressChanged(new ProgressEventArgs($"Processing {_logDataTable.Rows.Count}/{i++}", percentComplete));
+                                                OnProgressChanged(new ProgressEventArgs($"{status}: {i++}", percentComplete));
                                             sTrace.Remove(sTrace.Length - sTag.Length, sTag.Length);
                                             //action = new Action(() =>
                                             //{
@@ -540,7 +539,7 @@ namespace SOAPe
                     if (bFoundXmlTag)
                     {
                         if (ShowProgress)
-                            OnProgressChanged(new ProgressEventArgs($"Processing {_logDataTable.Rows.Count}/{i++}", percentComplete));
+                            OnProgressChanged(new ProgressEventArgs($"{status}: {i++}", percentComplete));
                         //action = new Action(() =>
                         //{
                             ParseGenericRequest(sTrace.ToString());
@@ -671,9 +670,15 @@ namespace SOAPe
             if (sTag.EndsWith("Headers"))
             {
                 // Some logs can mangle headers (remove the CR/LF).  We try to unmangle them here
+
+                // Convert \n to Environment.NewLine
+                if (!sEWSData.Contains(Environment.NewLine) && sEWSData.Contains("\n"))
+                    sEWSData = sEWSData.Replace("\n", Environment.NewLine);
+
                 if (!sEWSData.Contains(Environment.NewLine))
                 {
                     // No newline in the headers implies they have all been merged onto one line
+
                     StringBuilder sHeaderData = new StringBuilder();
                     int copyPos = 0;
                     int colonPos = sEWSData.IndexOf(':');
@@ -681,6 +686,7 @@ namespace SOAPe
                     {
                         // Step backward to previous whitespace, and insert newline
                         int whiteSpacePos = colonPos - 1;
+                        if (sEWSData[whiteSpacePos] == ' ') whiteSpacePos--;
                         while (sEWSData[whiteSpacePos] != ' ' && whiteSpacePos > copyPos)
                             whiteSpacePos--;
                         if (whiteSpacePos==copyPos)
@@ -899,7 +905,7 @@ namespace SOAPe
             catch { }
         }
 
-        public void LogCookies(CookieCollection Cookies, string Description)
+        public void LogCookies(CookieCollection Cookies, string Description, string ClientRequestId = "")
         {
             // Log cookies
             try
@@ -910,7 +916,7 @@ namespace SOAPe
                 {
                     sCookies += cookie.ToString() + Environment.NewLine;
                 }
-                Log(sCookies, Description);
+                Log(sCookies, Description, ClientRequestId);
             }
             catch { }
         }
