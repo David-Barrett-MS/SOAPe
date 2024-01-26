@@ -48,6 +48,7 @@
             this.syntaxHighlightingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xmlFormattingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.validateXmlincludingCharacterTestingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenuLogXml.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,6 +69,8 @@
             // 
             this.contextMenuLogXml.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuLogXml.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addExtendedPropertyToolStripMenuItem,
+            this.toolStripSeparator3,
             this.selectXMLElementToolStripMenuItem,
             this.selectXmlValueToolStripMenuItem,
             this.selectXmlAttributeToolStripMenuItem,
@@ -80,13 +83,12 @@
             this.copyItemIdwithoutChangeKeyToolStripMenuItem,
             this.copyItemIdIdOnlyToolStripMenuItem,
             this.SendItemIdToTemplateToolStripMenuItem,
-            this.addExtendedPropertyToolStripMenuItem,
             this.toolStripSeparator2,
             this.syntaxHighlightingToolStripMenuItem,
             this.xmlFormattingToolStripMenuItem,
             this.validateXmlincludingCharacterTestingToolStripMenuItem});
             this.contextMenuLogXml.Name = "contextMenuLogXml";
-            this.contextMenuLogXml.Size = new System.Drawing.Size(286, 352);
+            this.contextMenuLogXml.Size = new System.Drawing.Size(286, 358);
             this.contextMenuLogXml.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuLogXml_Opening);
             // 
             // selectXMLElementToolStripMenuItem
@@ -205,6 +207,11 @@
             this.validateXmlincludingCharacterTestingToolStripMenuItem.Text = "Validate Xml (includes character testing)";
             this.validateXmlincludingCharacterTestingToolStripMenuItem.Click += new System.EventHandler(this.validateXmlincludingCharacterTestingToolStripMenuItem_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(282, 6);
+            // 
             // XmlEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -240,5 +247,6 @@
         private System.Windows.Forms.ToolStripMenuItem SendItemIdToTemplateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem validateXmlincludingCharacterTestingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addExtendedPropertyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }

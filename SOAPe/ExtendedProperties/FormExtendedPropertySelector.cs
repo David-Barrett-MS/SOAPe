@@ -65,6 +65,8 @@ namespace SOAPe
             comboBoxKnownMAPIProperties.Enabled = radioButtonMAPIProperty.Checked;
             comboBoxPropertyType.Enabled = radioButtonNamedProperty.Checked;
             comboBoxPropertySetId.Enabled = radioButtonNamedProperty.Checked;
+            radioButtonPropertyId.Enabled = radioButtonNamedProperty.Checked;
+            radioButtonPropertyName.Enabled = radioButtonNamedProperty.Checked;
             textBoxPropertyId.Enabled = radioButtonNamedProperty.Checked && radioButtonPropertyId.Checked;
             textBoxPropertyName.Enabled = radioButtonNamedProperty.Checked && radioButtonPropertyName.Checked;
         }
@@ -137,6 +139,8 @@ namespace SOAPe
 
             if (comboBoxPropertyType.SelectedIndex>-1)
                 xml.Append($" PropertyType=\"{comboBoxPropertyType.SelectedItem}\"");
+
+            xml.Append(" xmlns=\"http://schemas.microsoft.com/exchange/services/2006/types\"");
 
             xml.Append("/>");
             return xml.ToString();

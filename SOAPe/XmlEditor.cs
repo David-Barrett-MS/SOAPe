@@ -19,6 +19,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
+using System.Data;
 
 namespace SOAPe
 {
@@ -29,6 +30,7 @@ namespace SOAPe
         private bool _syntaxHighlight = true;
         private bool _indentXml = true;
         private bool _sendItemIdToTemplateEnabled = false;
+        private bool _addExtendedPropertyEnabled = false;
         private bool _updating = false; // Used to suppress TextChanged handling
         private bool _validated = false; // Whether we have validated the Xml or not
         private List<string> _validationErrors; // List of any validation errors
@@ -48,6 +50,8 @@ namespace SOAPe
             richTextBoxXml.ForeColor = this.ForeColor;
             richTextBoxXml.DetectUrls = false; // This seems not to work - URLs are still being detected.  This breaks syntax highlighting.
             SendItemIdToTemplateToolStripMenuItem.Visible = _sendItemIdToTemplateEnabled;
+            _addExtendedPropertyEnabled = this.ReadOnly;
+            addExtendedPropertyToolStripMenuItem.Visible = _addExtendedPropertyEnabled;
         }
 
         public XmlEditor(bool IndentXml): this()
@@ -99,6 +103,16 @@ namespace SOAPe
             set {
                 _sendItemIdToTemplateEnabled = value;
                 SendItemIdToTemplateToolStripMenuItem.Visible = _sendItemIdToTemplateEnabled;
+            }
+        }
+
+        public bool AddExtendedPropertyEnabled
+        {
+            get { return _addExtendedPropertyEnabled; }
+            set
+            {
+                _addExtendedPropertyEnabled = value;
+                addExtendedPropertyToolStripMenuItem.Visible = _addExtendedPropertyEnabled;
             }
         }
 
@@ -656,18 +670,24 @@ namespace SOAPe
                 {
                     errorList.Add(error.Message);
                 }
-                MessageBox.Show(String.Join(Environment.NewLine, errorList), "XML failed validation", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(this, String.Join(Environment.NewLine, errorList), "XML failed validation", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
-                MessageBox.Show("No issues found.", "XML appears to be valid", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "No issues found.", "XML appears to be valid", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
 
         private void addExtendedPropertyToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!XmlIsValid)
+            {
+                MessageBox.Show(this, "The Xml is not valid.  Please create a valid request before adding an extended property.", "Invalid Xml", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             FormExtendedPropertySelector frm = new FormExtendedPropertySelector();
-            frm.ShowDialog(this);
-            AddExtendedPropertyToRequest(frm.ExtendedPropertyXml(), frm.ExtendedPropertyXmlDescription());
+            if (frm.ShowDialog(this) == DialogResult.OK)
+                AddExtendedPropertyToRequest(frm.ExtendedPropertyXml(), frm.ExtendedPropertyXmlDescription());
+
             frm.Dispose();
         }
 
@@ -684,10 +704,58 @@ namespace SOAPe
 
             if (richTextBoxXml.Text.Contains(ExtendedPropertyXml) || richTextBoxXml.Text.Contains(PropXmlWithNS))
             { 
-                MessageBox.Show("This extended property is already in the request.", "Extended property already exists", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "This extended property is already in the request.", "Extended property already exists", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             Console.WriteLine(ExtendedPropertyXml);
+            XmlDocument xmlDoc = new XmlDocument();
+
+            try
+            {
+                xmlDoc.LoadXml(richTextBoxXml.Text);
+            }
+            catch
+            {
+                MessageBox.Show(this, "The Xml is not valid.  Please create a valid request before adding an extended property.", "Invalid Xml", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            //  Check for FolderShape, ItemShape, or AttachmentShape elements
+            string[] shapeElements = { "FolderShape", "ItemShape", "AttachmentShape" };
+            XmlNodeList xmlShapeNode = null;
+            foreach (string shapeElement in shapeElements)
+            {
+                xmlShapeNode = xmlDoc.GetElementsByTagName(shapeElement);
+                if (xmlShapeNode.Count > 0)
+                    break;
+            }
+
+            if (xmlShapeNode.Count > 0)
+            {
+                // We've found a shape element, so add the extended property to it
+                XmlNode xmlShape = xmlShapeNode[0];
+                XmlNode xmlExtendedPropertyParentNode = null;
+                foreach (XmlNode xmlChild in xmlShape.ChildNodes)
+                {
+                    if (xmlChild.Name == "AdditionalProperties")
+                    {
+                        xmlExtendedPropertyParentNode = xmlChild;
+                        break;
+                    }
+                }
+                if (xmlExtendedPropertyParentNode==null)
+                    xmlExtendedPropertyParentNode = xmlShape.AppendChild(xmlDoc.CreateNode(XmlNodeType.Element, "AdditionalProperties", "http://schemas.microsoft.com/exchange/services/2006/types"));
+
+                XmlDocument xmlExtendedPropertyDoc = new XmlDocument();
+                
+                xmlExtendedPropertyDoc.LoadXml(ExtendedPropertyXml);
+                XmlNode newPropNode = xmlExtendedPropertyParentNode.OwnerDocument.ImportNode(xmlExtendedPropertyDoc.DocumentElement, false);
+                xmlExtendedPropertyParentNode.AppendChild(newPropNode);
+                richTextBoxXml.Text = xmlDoc.OuterXml;
+                return;
+            }
+
+            MessageBox.Show(this, "Currently only Shape elements are supported for adding extended properties.", "Unsupported operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 
