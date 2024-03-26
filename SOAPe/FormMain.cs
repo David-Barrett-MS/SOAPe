@@ -725,7 +725,7 @@ namespace SOAPe
         {
             try
             {
-                _httpListener.Dispose();
+                _httpListener?.Dispose();
                 _logger = null;
                 GC.Collect();
             }

@@ -265,9 +265,10 @@ namespace SOAPe
             LogSSLSettings(clientRequestId);
 
             Stream stream = null;
+            TransportContext transportContext = null;
             try
             {
-                stream = oWebRequest.GetRequestStream();
+                stream = oWebRequest.GetRequestStream(out transportContext);
             }
             catch (Exception ex)
             {
@@ -350,10 +351,11 @@ namespace SOAPe
             }
             try
             {
-                using (StreamReader oReader = new StreamReader(oWebResponse.GetResponseStream()))
-                {
-                    sResponse += oReader.ReadToEnd();
-                }
+                if (oWebResponse != null)
+                    using (StreamReader oReader = new StreamReader(oWebResponse.GetResponseStream()))
+                    {
+                        sResponse += oReader.ReadToEnd();
+                    }
             }
             catch { }
 
@@ -380,7 +382,7 @@ namespace SOAPe
 
             try
             {
-                oWebResponse.Close();
+                oWebResponse?.Close();
             }
             catch { }
             Log(sResponse, "Response", clientRequestId);
