@@ -148,8 +148,6 @@ namespace SOAPe.ConfigurationManager
             set { _doNotStoreConfig = !value; }
         }
 
-
-
         public bool SaveConfiguration()
         {
             if (_doNotStoreConfig)

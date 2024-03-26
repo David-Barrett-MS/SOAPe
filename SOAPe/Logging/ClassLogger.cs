@@ -191,7 +191,6 @@ namespace SOAPe
 
         public void ClearHistory()
         {
-
             InitDataTable();
         }
 

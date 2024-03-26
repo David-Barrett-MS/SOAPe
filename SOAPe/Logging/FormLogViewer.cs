@@ -120,8 +120,17 @@ namespace SOAPe
 
             int iTraceCount = _logger.LogDataTable.Rows.Count;
 
-            if (iTraceCount==0)
+            if (iTraceCount == 0)
+            {
+                Action clearListViewAction = new Action(() => {
+                    listViewLogIndex.Items.Clear();
+                });
+                if (listViewLogIndex.InvokeRequired)
+                    listViewLogIndex.Invoke(clearListViewAction);
+                else
+                    clearListViewAction();
                 return;
+            }
 
             DataRow[] logRows = null;
             string sFilter = GetLogFilter();
