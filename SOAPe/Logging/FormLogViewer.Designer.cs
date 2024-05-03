@@ -157,6 +157,7 @@
             // 
             // xmlEditor1
             // 
+            this.xmlEditor1.AddExtendedPropertyEnabled = false;
             this.xmlEditor1.BackColor = System.Drawing.SystemColors.Window;
             this.xmlEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.xmlEditor1.IndentXml = true;
@@ -193,7 +194,7 @@
             // buttonSaveAs
             // 
             this.buttonSaveAs.Location = new System.Drawing.Point(353, 3);
-            this.buttonSaveAs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonSaveAs.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSaveAs.Name = "buttonSaveAs";
             this.buttonSaveAs.Size = new System.Drawing.Size(64, 23);
             this.buttonSaveAs.TabIndex = 13;
@@ -293,6 +294,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(814, 282);
             this.Name = "FormLogViewer";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Log Viewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormLogViewer_FormClosing);
             this.splitContainer1.Panel1.ResumeLayout(false);

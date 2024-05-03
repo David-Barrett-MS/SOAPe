@@ -55,12 +55,11 @@
             // buttonClose
             // 
             this.buttonClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClose.Location = new System.Drawing.Point(693, 755);
-            this.buttonClose.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonClose.Location = new System.Drawing.Point(462, 491);
             this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(112, 35);
+            this.buttonClose.Size = new System.Drawing.Size(75, 23);
             this.buttonClose.TabIndex = 2;
-            this.buttonClose.Text = "Ok";
+            this.buttonClose.Text = "Update";
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
@@ -69,8 +68,7 @@
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(18, 98);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.splitContainer1.Location = new System.Drawing.Point(12, 64);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -81,9 +79,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.xmlEditor1);
-            this.splitContainer1.Size = new System.Drawing.Size(909, 643);
-            this.splitContainer1.SplitterDistance = 359;
-            this.splitContainer1.SplitterWidth = 6;
+            this.splitContainer1.Size = new System.Drawing.Size(606, 418);
+            this.splitContainer1.SplitterDistance = 233;
             this.splitContainer1.TabIndex = 3;
             // 
             // dataGridViewFields
@@ -113,12 +110,11 @@
             this.dataGridViewFields.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewFields.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewFields.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewFields.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataGridViewFields.MultiSelect = false;
             this.dataGridViewFields.Name = "dataGridViewFields";
             this.dataGridViewFields.RowHeadersVisible = false;
             this.dataGridViewFields.RowHeadersWidth = 62;
-            this.dataGridViewFields.Size = new System.Drawing.Size(909, 359);
+            this.dataGridViewFields.Size = new System.Drawing.Size(606, 233);
             this.dataGridViewFields.TabIndex = 2;
             this.dataGridViewFields.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewFields_CellValueChanged);
             this.dataGridViewFields.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewFields_CurrentCellDirtyStateChanged);
@@ -141,32 +137,32 @@
             // 
             // xmlEditor1
             // 
+            this.xmlEditor1.AddExtendedPropertyEnabled = false;
             this.xmlEditor1.BackColor = System.Drawing.SystemColors.Control;
             this.xmlEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.xmlEditor1.IndentXml = true;
             this.xmlEditor1.Location = new System.Drawing.Point(0, 0);
-            this.xmlEditor1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.xmlEditor1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.xmlEditor1.Name = "xmlEditor1";
             this.xmlEditor1.ReadOnly = true;
             this.xmlEditor1.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.22000}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
             this.xmlEditor1.SelectionLength = 0;
             this.xmlEditor1.SelectionStart = 0;
             this.xmlEditor1.SendItemIdToTemplateEnabled = false;
-            this.xmlEditor1.Size = new System.Drawing.Size(909, 278);
+            this.xmlEditor1.Size = new System.Drawing.Size(606, 181);
             this.xmlEditor1.SyntaxHighlight = true;
             this.xmlEditor1.TabIndex = 0;
             // 
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(814, 755);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonCancel.Location = new System.Drawing.Point(543, 491);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(112, 35);
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
-            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.Text = "Close";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
@@ -177,11 +173,9 @@
             this.groupBox1.Controls.Add(this.buttonLoad);
             this.groupBox1.Controls.Add(this.comboBoxTemplate);
             this.groupBox1.Controls.Add(this.comboBoxTemplateFolder);
-            this.groupBox1.Location = new System.Drawing.Point(18, 18);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox1.Size = new System.Drawing.Size(909, 71);
+            this.groupBox1.Size = new System.Drawing.Size(606, 46);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Template";
@@ -189,10 +183,9 @@
             // buttonLoad
             // 
             this.buttonLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLoad.Location = new System.Drawing.Point(788, 28);
-            this.buttonLoad.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonLoad.Location = new System.Drawing.Point(525, 18);
             this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(112, 35);
+            this.buttonLoad.Size = new System.Drawing.Size(75, 23);
             this.buttonLoad.TabIndex = 2;
             this.buttonLoad.Text = "Load";
             this.buttonLoad.UseVisualStyleBackColor = true;
@@ -204,10 +197,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTemplate.FormattingEnabled = true;
-            this.comboBoxTemplate.Location = new System.Drawing.Point(196, 29);
-            this.comboBoxTemplate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBoxTemplate.Location = new System.Drawing.Point(131, 19);
             this.comboBoxTemplate.Name = "comboBoxTemplate";
-            this.comboBoxTemplate.Size = new System.Drawing.Size(580, 28);
+            this.comboBoxTemplate.Size = new System.Drawing.Size(388, 21);
             this.comboBoxTemplate.TabIndex = 1;
             this.comboBoxTemplate.SelectedIndexChanged += new System.EventHandler(this.comboBoxTemplate_SelectedIndexChanged);
             // 
@@ -215,10 +207,9 @@
             // 
             this.comboBoxTemplateFolder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTemplateFolder.FormattingEnabled = true;
-            this.comboBoxTemplateFolder.Location = new System.Drawing.Point(9, 29);
-            this.comboBoxTemplateFolder.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBoxTemplateFolder.Location = new System.Drawing.Point(6, 19);
             this.comboBoxTemplateFolder.Name = "comboBoxTemplateFolder";
-            this.comboBoxTemplateFolder.Size = new System.Drawing.Size(176, 28);
+            this.comboBoxTemplateFolder.Size = new System.Drawing.Size(119, 21);
             this.comboBoxTemplateFolder.TabIndex = 0;
             this.comboBoxTemplateFolder.SelectedIndexChanged += new System.EventHandler(this.comboBoxTemplateFolder_SelectedIndexChanged);
             // 
@@ -234,10 +225,9 @@
             // buttonOpenHTTPListener
             // 
             this.buttonOpenHTTPListener.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonOpenHTTPListener.Location = new System.Drawing.Point(18, 755);
-            this.buttonOpenHTTPListener.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonOpenHTTPListener.Location = new System.Drawing.Point(12, 491);
             this.buttonOpenHTTPListener.Name = "buttonOpenHTTPListener";
-            this.buttonOpenHTTPListener.Size = new System.Drawing.Size(238, 35);
+            this.buttonOpenHTTPListener.Size = new System.Drawing.Size(159, 23);
             this.buttonOpenHTTPListener.TabIndex = 6;
             this.buttonOpenHTTPListener.Text = "Open HTTP Listener";
             this.buttonOpenHTTPListener.UseVisualStyleBackColor = true;
@@ -245,16 +235,15 @@
             // 
             // FormReplaceTemplateFields
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(945, 802);
+            this.ClientSize = new System.Drawing.Size(630, 521);
             this.Controls.Add(this.buttonOpenHTTPListener);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.buttonClose);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormReplaceTemplateFields";

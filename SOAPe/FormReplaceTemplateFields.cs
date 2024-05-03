@@ -26,7 +26,7 @@ namespace SOAPe
         private static string _templatePath = "";
         private string _currentTemplateName = "";
         private string _templateXML = "";
-        private Form _owner = null;
+        private FormMain _owner = null;
         private string[] _distinguishedFolders = {"calendar","contacts","deleteditems","drafts","inbox","journal","notes","outbox","sentitems",
                                                      "tasks","msgfolderroot","publicfoldersroot","root", "junkemail", "searchfolders","voicemail","recoverableitemsroot",
                                                      "recoverableitemsdeletions", "recoverableitemsversions","recoverableitemspurges","archiveroot",
@@ -195,17 +195,30 @@ namespace SOAPe
             return ReadTemplateByName(comboBoxTemplate.Text, comboBoxTemplateFolder.Text);
         }
 
-        public string ReadTemplate(Form Owner)
+        public void ReadTemplate(FormMain Owner)
         {
             _owner = Owner;
             _cancel = false;
-            this.ShowDialog(Owner);
+            this.Location = new System.Drawing.Point(_owner.Location.X - (this.Size.Width/2), _owner.Location.Y - (this.Size.Height/2));
+            buttonClose.Text = "Apply";
+            buttonCancel.Text = "Close";
+            this.Show(_owner);
+        }
+
+        public string ReadTemplateModal(FormMain Owner)
+        {
+            _owner = Owner;
+            _cancel = false;
+            this.Location = new System.Drawing.Point(_owner.Location.X - (this.Size.Width / 2), _owner.Location.Y - (this.Size.Height / 2));
+            buttonClose.Text = "Ok";
+            buttonCancel.Text = "Cancel";
+            this.ShowDialog(_owner);
             if (_cancel) return null;
             ReplaceFields();
             return _xml;
         }
 
-        public string ReplaceTemplateFields(string TemplateXML, Form Owner, bool remove)
+        public string ReplaceTemplateFields(string TemplateXML, FormMain Owner, bool remove)
         {
             // Replace any fields in the template as per the user configuration
             _templateXML = TemplateXML;
@@ -696,7 +709,13 @@ namespace SOAPe
 
         private void buttonClose_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            if (buttonClose.Text == "Ok")
+            {
+                this.Hide();
+                return;
+            }
+            ReplaceFields();
+            _owner.UpdateRequest(_xml);
         }
 
         private string GetListenerUrl()

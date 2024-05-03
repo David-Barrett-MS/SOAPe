@@ -31,14 +31,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAzureApplicationRegistration));
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBoxResourceUrl = new System.Windows.Forms.TextBox();
+            this.labelRedirectURL = new System.Windows.Forms.Label();
             this.textBoxTenantId = new System.Windows.Forms.TextBox();
+            this.textBoxRedirectUrl = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxApplicationId = new System.Windows.Forms.TextBox();
             this.groupBoxAuth = new System.Windows.Forms.GroupBox();
-            this.labelRedirectURL = new System.Windows.Forms.Label();
-            this.textBoxRedirectUrl = new System.Windows.Forms.TextBox();
+            this.radioButtonROPCAuth = new System.Windows.Forms.RadioButton();
             this.radioButtonIntegratedWindowsAuth = new System.Windows.Forms.RadioButton();
             this.radioButtonAuthAsNativeApp = new System.Windows.Forms.RadioButton();
             this.textBoxAuthCertificate = new System.Windows.Forms.TextBox();
@@ -48,7 +49,6 @@
             this.textBoxClientSecret = new System.Windows.Forms.TextBox();
             this.buttonAcquireToken = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
-            this.radioButtonROPCAuth = new System.Windows.Forms.RadioButton();
             this.groupBox2.SuspendLayout();
             this.groupBoxAuth.SuspendLayout();
             this.SuspendLayout();
@@ -83,6 +83,15 @@
             this.textBoxResourceUrl.Text = "https://outlook.office365.com/";
             this.textBoxResourceUrl.Validated += new System.EventHandler(this.textBoxResourceUrl_Validated);
             // 
+            // labelRedirectURL
+            // 
+            this.labelRedirectURL.AutoSize = true;
+            this.labelRedirectURL.Location = new System.Drawing.Point(7, 103);
+            this.labelRedirectURL.Name = "labelRedirectURL";
+            this.labelRedirectURL.Size = new System.Drawing.Size(75, 13);
+            this.labelRedirectURL.TabIndex = 35;
+            this.labelRedirectURL.Text = "Redirect URL:";
+            // 
             // textBoxTenantId
             // 
             this.textBoxTenantId.Location = new System.Drawing.Point(123, 20);
@@ -91,6 +100,15 @@
             this.textBoxTenantId.Size = new System.Drawing.Size(403, 20);
             this.textBoxTenantId.TabIndex = 20;
             this.textBoxTenantId.Text = "common";
+            // 
+            // textBoxRedirectUrl
+            // 
+            this.textBoxRedirectUrl.Location = new System.Drawing.Point(124, 100);
+            this.textBoxRedirectUrl.Name = "textBoxRedirectUrl";
+            this.textBoxRedirectUrl.Size = new System.Drawing.Size(402, 20);
+            this.textBoxRedirectUrl.TabIndex = 34;
+            this.textBoxRedirectUrl.Text = "http://localhost/SOAPe";
+            this.textBoxRedirectUrl.Validated += new System.EventHandler(this.textBoxRedirectUrl_Validated);
             // 
             // label1
             // 
@@ -130,7 +148,7 @@
             this.textBoxApplicationId.Name = "textBoxApplicationId";
             this.textBoxApplicationId.Size = new System.Drawing.Size(403, 20);
             this.textBoxApplicationId.TabIndex = 21;
-            this.textBoxApplicationId.Text = "4a03b746-45be-488c-bfe5-0ffdac557d68";
+            this.textBoxApplicationId.Text = "00d8c1e0-fe3c-40d3-8791-0f1132fed50b";
             // 
             // groupBoxAuth
             // 
@@ -152,23 +170,16 @@
             this.groupBoxAuth.Tag = "NoConfigSave";
             this.groupBoxAuth.Text = "Authentication Flow";
             // 
-            // labelRedirectURL
+            // radioButtonROPCAuth
             // 
-            this.labelRedirectURL.AutoSize = true;
-            this.labelRedirectURL.Location = new System.Drawing.Point(7, 103);
-            this.labelRedirectURL.Name = "labelRedirectURL";
-            this.labelRedirectURL.Size = new System.Drawing.Size(75, 13);
-            this.labelRedirectURL.TabIndex = 35;
-            this.labelRedirectURL.Text = "Redirect URL:";
-            // 
-            // textBoxRedirectUrl
-            // 
-            this.textBoxRedirectUrl.Location = new System.Drawing.Point(124, 100);
-            this.textBoxRedirectUrl.Name = "textBoxRedirectUrl";
-            this.textBoxRedirectUrl.Size = new System.Drawing.Size(402, 20);
-            this.textBoxRedirectUrl.TabIndex = 34;
-            this.textBoxRedirectUrl.Text = "http://localhost/SOAPe";
-            this.textBoxRedirectUrl.Validated += new System.EventHandler(this.textBoxRedirectUrl_Validated);
+            this.radioButtonROPCAuth.AutoSize = true;
+            this.radioButtonROPCAuth.Location = new System.Drawing.Point(9, 103);
+            this.radioButtonROPCAuth.Name = "radioButtonROPCAuth";
+            this.radioButtonROPCAuth.Size = new System.Drawing.Size(55, 17);
+            this.radioButtonROPCAuth.TabIndex = 36;
+            this.radioButtonROPCAuth.TabStop = true;
+            this.radioButtonROPCAuth.Text = "ROPC";
+            this.radioButtonROPCAuth.UseVisualStyleBackColor = true;
             // 
             // radioButtonIntegratedWindowsAuth
             // 
@@ -271,17 +282,6 @@
             this.buttonClose.Text = "Close";
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
-            // 
-            // radioButtonROPCAuth
-            // 
-            this.radioButtonROPCAuth.AutoSize = true;
-            this.radioButtonROPCAuth.Location = new System.Drawing.Point(9, 103);
-            this.radioButtonROPCAuth.Name = "radioButtonROPCAuth";
-            this.radioButtonROPCAuth.Size = new System.Drawing.Size(55, 17);
-            this.radioButtonROPCAuth.TabIndex = 36;
-            this.radioButtonROPCAuth.TabStop = true;
-            this.radioButtonROPCAuth.Text = "ROPC";
-            this.radioButtonROPCAuth.UseVisualStyleBackColor = true;
             // 
             // FormAzureApplicationRegistration
             // 

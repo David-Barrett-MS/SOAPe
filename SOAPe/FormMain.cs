@@ -444,19 +444,44 @@ namespace SOAPe
             buttonChooseCertificate.Visible = bCertAuthVisible;
         }
 
-        private string LoadTemplate(string ItemId = "", string FolderId = "", string TemplateName = "", string ChangeKey = "")
+        private void LoadTemplate(string ItemId = "", string FolderId = "", string TemplateName = "", string ChangeKey = "")
         {
-            // Reads the XML template
+            // Open the XML template editor
             string sTemplateContent = String.Empty;
             FormReplaceTemplateFields oForm = new FormReplaceTemplateFields(ItemId, FolderId, TemplateName, ChangeKey);
-            sTemplateContent = oForm.ReadTemplate(this);
-            oForm.Dispose();
+            oForm.ReadTemplate(this);
 
-            if (String.IsNullOrEmpty(sTemplateContent))
-                return xmlEditorRequest.Text;
+            //if (String.IsNullOrEmpty(sTemplateContent))
+            //    return xmlEditorRequest.Text;
 
-            this.Activate(); // To stop the main window from disappearing behind other applications (Windows 10 z-order issues)
-            return sTemplateContent;
+            //this.Activate(); // To stop the main window from disappearing behind other applications (Windows 10 z-order issues)
+            //return sTemplateContent;
+        }
+
+        private string LoadTemplateModal(string ItemId = "", string FolderId = "", string TemplateName = "", string ChangeKey = "")
+        {
+            // Open the XML template editor
+            string sTemplateContent = String.Empty;
+            FormReplaceTemplateFields oForm = new FormReplaceTemplateFields(ItemId, FolderId, TemplateName, ChangeKey); ;
+            try
+            {
+                sTemplateContent = oForm.ReadTemplateModal(this);
+
+                if (String.IsNullOrEmpty(sTemplateContent))
+                    return xmlEditorRequest.Text;
+
+                this.Activate(); // To stop the main window from disappearing behind other applications (Windows 10 z-order issues)
+                return sTemplateContent;
+            }
+            finally
+            {
+                oForm.Dispose();
+            }
+        }
+
+        public void UpdateRequest(string RequestXml)
+        {
+            xmlEditorRequest.Text = RequestXml;
         }
 
         private void UpdateSOAPHeader()
@@ -639,7 +664,7 @@ namespace SOAPe
 
         private void buttonLoadTemplate_Click(object sender, EventArgs e)
         {
-            xmlEditorRequest.Text = LoadTemplate();
+            LoadTemplate();
         }
 
         private void hTTPListenerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1005,7 +1030,7 @@ namespace SOAPe
 
         private void xmlEditorResponse_SendItemIdToTemplate(object sender, SendItemIdEventArgs e)
         {
-            xmlEditorRequest.Text = LoadTemplate(e.ItemId, e.FolderId, "", e.ChangeKey);
+            xmlEditorRequest.Text = LoadTemplateModal(e.ItemId, e.FolderId, "", e.ChangeKey);
         }
 
         private void HighlightResponseGroupbox(bool ShowError, string AdditionalInfo = "", string ToolTip = "")
@@ -1193,7 +1218,7 @@ namespace SOAPe
 
         private void toolStripMenuItemConvertId_Click(object sender, EventArgs e)
         {
-            xmlEditorRequest.Text = LoadTemplate("", "", "ConvertId");
+            LoadTemplate("", "", "ConvertId");
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
@@ -1256,12 +1281,12 @@ namespace SOAPe
 
         private void GetFolderByIdToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TryXmlRequest(LoadTemplate("", "", "GetFolder"));
+            TryXmlRequest(LoadTemplateModal("", "", "GetFolder"));
         }
 
         private void GetItemByIdToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TryXmlRequest(LoadTemplate("", "", "GetItem"));
+            TryXmlRequest(LoadTemplateModal("", "", "GetItem"));
         }
 
         private void ConfigurationManagerToolStripMenuItem1_Click(object sender, EventArgs e)

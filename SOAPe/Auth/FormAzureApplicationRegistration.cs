@@ -37,6 +37,10 @@ namespace SOAPe.Auth
             _formConfig.ExcludedControls.Add(textBoxAuthCertificate);
             ClassFormConfig.ApplyConfiguration();
             UpdateAuthUI();
+
+            // SOAPe is no longer registered in the Microsoft tenant, so if that app Id is being used then update it
+            if (textBoxApplicationId.Text== "4a03b746-45be-488c-bfe5-0ffdac557d68")
+                textBoxApplicationId.Text = "00d8c1e0-fe3c-40d3-8791-0f1132fed50b"; // Default SOAPe App Id
         }
 
         public string AccessToken
